@@ -28,13 +28,15 @@ class TokenInput(ModalScreen[Optional[str]]):
         width: 40%;
         height: auto;
         background: $surface;
-        border: panel $panel;
+        border: panel $error;
         border-title-color: $text;
     }
 
     TokenInput Label {
         width: 1fr;
         height: auto;
+        padding-left: 1;
+        padding-right: 1;
         margin-bottom: 1;
     }
 
@@ -45,7 +47,7 @@ class TokenInput(ModalScreen[Optional[str]]):
     }
 
     TokenInput Button {
-        margin-left: 1;
+        margin-right: 1;
     }
     """
 
@@ -64,8 +66,8 @@ class TokenInput(ModalScreen[Optional[str]]):
             )
             yield Input(placeholder="Paste the token here")
             with Horizontal():
-                yield Button("Connect", id="connect")
-                yield Button("Cancel", id="cancel")
+                yield Button("Connect", id="connect", variant="primary")
+                yield Button("Cancel", id="cancel", variant="error")
 
     @on(Button.Pressed, "#connect")
     @on(Input.Submitted)
