@@ -13,6 +13,7 @@ black = "*"
 mypy = "*"
 build = "*"
 twine = "*"
+textual-dev = "*"
 
 [requires]
 python_version = "3.9"
