@@ -4,6 +4,7 @@
 # Textual imports.
 from textual import on, work
 from textual.app import ComposeResult
+from textual.binding import Binding
 from textual.containers import Horizontal
 from textual.screen import Screen
 from textual.widgets import Footer, Header
@@ -59,6 +60,16 @@ class Main(Screen):
     }
     """
 
+    BINDINGS = [
+        Binding("a", "show_all", "All", key_display="a"),
+        Binding("p", "show_public", "Public", key_display="p"),
+        Binding("P", "show_private", "Private", key_display="P"),
+        Binding("u", "show_unread", "Unread", key_display="u"),
+        Binding("r", "show_read", "Read", key_display="r"),
+        Binding("t", "show_tagged", "Tagged", key_display="t"),
+        Binding("T", "show_untagged", "Untagged", key_display="T"),
+    ]
+
     def __init__(self, api_token: str) -> None:
         """Initialise the main screen.
 
@@ -112,37 +123,37 @@ class Main(Screen):
         self.query_one(Details).show(event.option)
 
     @on(Menu.ShowAll)
-    def show_all(self) -> None:
+    def action_show_all(self) -> None:
         """Show all bookmarks."""
         self.query_one(Bookmarks).show_all()
 
     @on(Menu.ShowPublic)
-    def show_public(self) -> None:
+    def action_show_public(self) -> None:
         """Show all public bookmarks."""
         self.query_one(Bookmarks).show_public()
 
     @on(Menu.ShowPrivate)
-    def show_private(self) -> None:
+    def action_show_private(self) -> None:
         """Show all private bookmarks."""
         self.query_one(Bookmarks).show_private()
 
     @on(Menu.ShowUnread)
-    def show_unread(self) -> None:
+    def action_show_unread(self) -> None:
         """Show all unread bookmarks."""
         self.query_one(Bookmarks).show_unread()
 
     @on(Menu.ShowRead)
-    def show_read(self) -> None:
+    def action_show_read(self) -> None:
         """Show all read bookmarks."""
         self.query_one(Bookmarks).show_read()
 
     @on(Menu.ShowUntagged)
-    def show_untagged(self) -> None:
+    def action_show_untagged(self) -> None:
         """Show all untagged bookmarks."""
         self.query_one(Bookmarks).show_untagged()
 
     @on(Menu.ShowTagged)
-    def show_tagged(self) -> None:
+    def action_show_tagged(self) -> None:
         """Show all tagged bookmarks."""
         self.query_one(Bookmarks).show_tagged()
 
