@@ -2,6 +2,7 @@
 
 ##############################################################################
 # Python imports.
+from typing import cast, Any
 from webbrowser import open as open_url
 
 ##############################################################################
@@ -39,6 +40,20 @@ class Bookmark(Option):
         """The flag to say if the bookmark is public or private."""
         super().__init__(bookmark.title, id=bookmark.hash)
 
+    @property
+    def as_json(self) -> dict[str, Any]:
+        """The bookmark as a JSON-friendly dictionary."""
+        return {
+            "hash": self.hash,
+            "href": self.href,
+            "title": self.title,
+            "description": self.description,
+            "last_modified": self.last_modified.isoformat(),
+            "tags": self.tags,
+            "unread": self.unread,
+            "shared": self.shared,
+        }
+
 
 ##############################################################################
 class Bookmarks(OptionList):
@@ -65,6 +80,11 @@ class Bookmarks(OptionList):
             assert isinstance(bookmark, Bookmark)
             tags |= set(bookmark.tags)
         return sorted(list(tags))
+
+    @property
+    def as_json(self) -> list[dict[str, Any]]:
+        """The collection of bookmarks as a JSON-friendly list."""
+        return [cast(Bookmark, bookmark).as_json for bookmark in self._options]
 
 
 ### bookmarks.py ends here

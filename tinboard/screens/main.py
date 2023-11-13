@@ -1,6 +1,10 @@
 """The main screen for the application."""
 
 ##############################################################################
+# Python imports.
+from json import dumps
+
+##############################################################################
 # Textual imports.
 from textual import on, work
 from textual.app import ComposeResult
@@ -15,6 +19,7 @@ from aiopinboard import API
 ##############################################################################
 # Local imports.
 from ..widgets import Bookmarks, Bookmark, Details, Menu
+from ..utils import bookmarks_file
 
 
 ##############################################################################
@@ -92,6 +97,11 @@ class Main(Screen):
         bookmarks_display.add_options(Bookmark(bookmark) for bookmark in bookmarks)
         bookmarks_display.border_title = "All"
         self.query_one(Menu).refresh_options(bookmarks_display)
+        # Temporary write of the bookmarks to a file. I'm going to make this
+        # a lot smarter; this will be using a local cache with a check of
+        # last update, and all that, but for now I just want to get saving
+        # going to check it's all making sense.
+        bookmarks_file().write_text(dumps(bookmarks_display.as_json, indent=4))
 
     @on(Bookmarks.OptionHighlighted, "Bookmarks")
     def refresh_details(self, event: Bookmarks.OptionHighlighted) -> None:
