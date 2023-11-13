@@ -59,7 +59,7 @@ class TokenInput(ModalScreen[Optional[str]]):
             dialog.border_title = "API Token Required"
             yield Label(
                 "To use the [i]pinboard.in[/] API you will need an API token. "
-                "You can get your API token from your account page on [i]pinboard.in[/]:\n"
+                "You can get your API token from your account page on [i]pinboard.in[/]:\n\n"
                 "https://pinboard.in/settings/password"
             )
             yield Input(placeholder="Paste the token here")
