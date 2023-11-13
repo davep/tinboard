@@ -182,7 +182,7 @@ class Bookmarks(OptionList):
 
     def save(self) -> Self:
         """Save the bookmarks to the local file."""
-        bookmarks_file().write_text(dumps(self.as_json, indent=4))
+        bookmarks_file().write_text(dumps(self.as_json, indent=4), encoding="utf-8")
         return self
 
     async def download_all(self, api: API) -> Self:
