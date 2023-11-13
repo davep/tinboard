@@ -2,7 +2,7 @@
 
 ##############################################################################
 # Python imports.
-from json import dumps
+from json import dumps, loads
 
 ##############################################################################
 # Textual imports.
@@ -86,7 +86,17 @@ class Main(Screen):
         """Start the process of loading the bookmarks."""
         self.query_one(Bookmarks).border_title = "Loading..."
         self.query_one(Bookmarks).loading = True
-        self.get_bookmarks()
+        # TODO: a lot of tidying up of this. This is just an iterative step
+        # towards where I want to be.
+        if bookmarks_file().exists():
+            self.query_one(Bookmarks).load_json(
+                loads(bookmarks_file().read_text(encoding="utf-8"))
+            )
+            self.query_one(Bookmarks).loading = False
+            self.query_one(Bookmarks).border_title = "All"
+            self.query_one(Menu).refresh_options(self.query_one(Bookmarks))
+        else:
+            self.get_bookmarks()
 
     @work
     async def get_bookmarks(self) -> None:

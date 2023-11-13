@@ -2,6 +2,7 @@
 
 ##############################################################################
 # Python imports.
+from datetime import datetime
 from typing import cast, Any
 from webbrowser import open as open_url
 
@@ -54,6 +55,20 @@ class Bookmark(Option):
             "shared": self.shared,
         }
 
+    @classmethod
+    def from_json(cls, data: dict[str, Any]) -> "Bookmark":
+        """Create a bookmark from some JSON data.
+
+        Args:
+            data: The data to create the bookmark from.
+
+        Returns:
+            The `Bookmark` instance.
+        """
+        data = data.copy()
+        data["last_modified"] = datetime.fromisoformat(data["last_modified"])
+        return cls(BookmarkData(**data))
+
 
 ##############################################################################
 class Bookmarks(OptionList):
@@ -85,6 +100,16 @@ class Bookmarks(OptionList):
     def as_json(self) -> list[dict[str, Any]]:
         """The collection of bookmarks as a JSON-friendly list."""
         return [cast(Bookmark, bookmark).as_json for bookmark in self._options]
+
+    def load_json(self, data: list[dict[str, Any]]) -> None:
+        """Load the bookmarks from the given JSON data.
+
+        Args:
+            data: The data to load.
+        """
+        self.clear_options().add_options(
+            [Bookmark.from_json(bookmark) for bookmark in data]
+        )
 
 
 ### bookmarks.py ends here
