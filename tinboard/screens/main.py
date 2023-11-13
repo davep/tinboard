@@ -2,6 +2,7 @@
 
 ##############################################################################
 # Textual imports.
+from textual import work
 from textual.app import ComposeResult
 from textual.screen import Screen
 from textual.widgets import Footer, Header
@@ -12,7 +13,7 @@ from aiopinboard import API
 
 ##############################################################################
 # Local imports.
-from ..widgets import Bookmarks
+from ..widgets import Bookmarks, Bookmark
 
 
 ##############################################################################
@@ -42,6 +43,19 @@ class Main(Screen):
         yield Header()
         yield Bookmarks()
         yield Footer()
+
+    def on_mount(self) -> None:
+        """Start the process of loading the bookmarks."""
+        self.query_one(Bookmarks).loading = True
+        self.get_bookmarks()
+
+    @work
+    async def get_bookmarks(self) -> None:
+        """Get all the bookmarks from pinboard."""
+        bookmarks = await self._api.bookmark.async_get_all_bookmarks()
+        bookmarks_display = self.query_one(Bookmarks)
+        bookmarks_display.loading = False
+        bookmarks_display.add_options(Bookmark(bookmark) for bookmark in bookmarks)
 
 
 ### main.py ends here
