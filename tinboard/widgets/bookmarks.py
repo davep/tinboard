@@ -56,5 +56,15 @@ class Bookmarks(OptionList):
             if bookmark.href:
                 open_url(bookmark.href)
 
+    @property
+    def tags(self) -> list[str]:
+        """All known tags."""
+        tags = set()
+        for n in range(self.option_count):
+            bookmark = self.get_option_at_index(n)
+            assert isinstance(bookmark, Bookmark)
+            tags |= set(bookmark.tags)
+        return sorted(list(tags))
+
 
 ### bookmarks.py ends here
