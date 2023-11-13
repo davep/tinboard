@@ -28,11 +28,13 @@ class Main(Screen):
     *:can-focus {
         border: none;
         border-left: tall $accent 50%;
+        background: $boost;
     }
 
     *:focus {
         border: none;
         border-left: thick $accent;
+        background: $panel;
     }
 
     Menu {
