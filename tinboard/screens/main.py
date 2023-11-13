@@ -111,5 +111,40 @@ class Main(Screen):
         assert isinstance(event.option, Bookmark)
         self.query_one(Details).show(event.option)
 
+    @on(Menu.ShowAll)
+    def show_all(self) -> None:
+        """Show all bookmarks."""
+        self.query_one(Bookmarks).show_all()
+
+    @on(Menu.ShowPublic)
+    def show_public(self) -> None:
+        """Show all public bookmarks."""
+        self.query_one(Bookmarks).show_public()
+
+    @on(Menu.ShowPrivate)
+    def show_private(self) -> None:
+        """Show all private bookmarks."""
+        self.query_one(Bookmarks).show_private()
+
+    @on(Menu.ShowUnread)
+    def show_unread(self) -> None:
+        """Show all unread bookmarks."""
+        self.query_one(Bookmarks).show_unread()
+
+    @on(Menu.ShowRead)
+    def show_read(self) -> None:
+        """Show all read bookmarks."""
+        self.query_one(Bookmarks).show_read()
+
+    @on(Menu.ShowUntagged)
+    def show_untagged(self) -> None:
+        """Show all untagged bookmarks."""
+        self.query_one(Bookmarks).show_untagged()
+
+    @on(Menu.ShowTagged)
+    def show_tagged(self) -> None:
+        """Show all tagged bookmarks."""
+        self.query_one(Bookmarks).show_tagged()
+
 
 ### main.py ends here

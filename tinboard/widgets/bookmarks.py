@@ -115,6 +115,46 @@ class Bookmarks(OptionList):
         self.border_title = f"{description} ({len(bookmarks)})"
         return self.clear_options().add_options(bookmarks)
 
+    def show_all(self) -> None:
+        """Show all bookmarks."""
+        self.show_bookmarks(self.bookmarks)
+
+    def show_public(self) -> None:
+        """Show public bookmarks."""
+        self.show_bookmarks(
+            [bookmark for bookmark in self.bookmarks if bookmark.shared], "Public"
+        )
+
+    def show_private(self) -> None:
+        """Show private bookmarks."""
+        self.show_bookmarks(
+            [bookmark for bookmark in self.bookmarks if not bookmark.shared], "Private"
+        )
+
+    def show_unread(self) -> None:
+        """Show unread bookmarks."""
+        self.show_bookmarks(
+            [bookmark for bookmark in self.bookmarks if bookmark.unread], "Unread"
+        )
+
+    def show_read(self) -> None:
+        """Show read bookmarks."""
+        self.show_bookmarks(
+            [bookmark for bookmark in self.bookmarks if not bookmark.unread], "Read"
+        )
+
+    def show_untagged(self) -> None:
+        """Show untagged bookmarks."""
+        self.show_bookmarks(
+            [bookmark for bookmark in self.bookmarks if not bookmark.tags], "Untagged"
+        )
+
+    def show_tagged(self) -> None:
+        """Show tagged bookmarks."""
+        self.show_bookmarks(
+            [bookmark for bookmark in self.bookmarks if bookmark.tags], "Tagged"
+        )
+
     def _watch_bookmarks(self) -> None:
         """Refresh the display when all bookmarks are updated."""
         self.show_bookmarks(self.bookmarks)
