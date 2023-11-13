@@ -65,8 +65,9 @@ class Bookmark(Option):
         Returns:
             The `Bookmark` instance.
         """
-        data = data.copy()
-        data["last_modified"] = datetime.fromisoformat(data["last_modified"])
+        (data := data.copy())["last_modified"] = datetime.fromisoformat(
+            data["last_modified"]
+        )
         return cls(BookmarkData(**data))
 
 
