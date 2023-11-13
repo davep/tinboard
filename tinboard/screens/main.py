@@ -1,10 +1,6 @@
 """The main screen for the application."""
 
 ##############################################################################
-# Python imports.
-from json import dumps, loads
-
-##############################################################################
 # Textual imports.
 from textual import on, work
 from textual.app import ComposeResult
@@ -19,7 +15,6 @@ from aiopinboard import API
 ##############################################################################
 # Local imports.
 from ..widgets import Bookmarks, Bookmark, Details, Menu
-from ..utils import bookmarks_file
 
 
 ##############################################################################
@@ -82,36 +77,33 @@ class Main(Screen):
             yield Details()
         yield Footer()
 
+    def _bookmarks_changed(self) -> None:
+        """Refresh the display when an update happens."""
+        bookmarks = self.query_one(Bookmarks)
+        bookmarks.loading = False
+        self.query_one(Menu).refresh_options(bookmarks)
+
     def on_mount(self) -> None:
         """Start the process of loading the bookmarks."""
-        self.query_one(Bookmarks).border_title = "Loading..."
-        self.query_one(Bookmarks).loading = True
-        # TODO: a lot of tidying up of this. This is just an iterative step
-        # towards where I want to be.
-        if bookmarks_file().exists():
-            self.query_one(Bookmarks).load_json(
-                loads(bookmarks_file().read_text(encoding="utf-8"))
-            )
-            self.query_one(Bookmarks).loading = False
-            self.query_one(Bookmarks).border_title = "All"
-            self.query_one(Menu).refresh_options(self.query_one(Bookmarks))
+        bookmarks = self.query_one(Bookmarks)
+        bookmarks.border_title = "Loading..."
+        bookmarks.loading = True
+        if bookmarks.load():
+            self._bookmarks_changed()
+            # TODO: look for newer stuff.
         else:
-            self.get_bookmarks()
+            self.download_bookmarks()
 
     @work
-    async def get_bookmarks(self) -> None:
-        """Get all the bookmarks from pinboard."""
-        bookmarks = await self._api.bookmark.async_get_all_bookmarks()
-        bookmarks_display = self.query_one(Bookmarks)
-        bookmarks_display.loading = False
-        bookmarks_display.add_options(Bookmark(bookmark) for bookmark in bookmarks)
-        bookmarks_display.border_title = "All"
-        self.query_one(Menu).refresh_options(bookmarks_display)
-        # Temporary write of the bookmarks to a file. I'm going to make this
-        # a lot smarter; this will be using a local cache with a check of
-        # last update, and all that, but for now I just want to get saving
-        # going to check it's all making sense.
-        bookmarks_file().write_text(dumps(bookmarks_display.as_json, indent=4))
+    async def download_bookmarks(self) -> None:
+        """Get all the bookmarks from pinboard.
+
+        Note:
+            As a side-effect of calling this method, the local copy of all
+            the bookmarks will be overwritten.
+        """
+        (await self.query_one(Bookmarks).download_all(self._api)).save()
+        self._bookmarks_changed()
 
     @on(Bookmarks.OptionHighlighted, "Bookmarks")
     def refresh_details(self, event: Bookmarks.OptionHighlighted) -> None:
