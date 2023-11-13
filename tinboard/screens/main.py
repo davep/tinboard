@@ -78,7 +78,7 @@ class Main(Screen):
         yield Header()
         with Horizontal():
             yield Menu()
-            yield Bookmarks(classes="focus")
+            yield Bookmarks()
             yield Details()
         yield Footer()
 
