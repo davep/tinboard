@@ -68,6 +68,7 @@ class Main(Screen):
         Binding("r", "show_read", "Read", key_display="r"),
         Binding("t", "show_tagged", "Tagged", key_display="t"),
         Binding("T", "show_untagged", "Untagged", key_display="T"),
+        Binding("ctrl+r", "redownload", "Re-download"),
     ]
 
     def __init__(self, api_token: str) -> None:
@@ -121,6 +122,14 @@ class Main(Screen):
         """Show the details of a highlighted bookmark."""
         assert isinstance(event.option, Bookmark)
         self.query_one(Details).show(event.option)
+
+    def action_redownload(self) -> None:
+        """Freshly download the bookmarks."""
+        self.query_one(Menu).refresh_options()
+        bookmarks = self.query_one(Bookmarks)
+        bookmarks.border_title = "Loading..."
+        bookmarks.loading = True
+        self.download_bookmarks()
 
     @on(Menu.ShowAll)
     def action_show_all(self) -> None:
