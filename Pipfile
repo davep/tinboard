@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 textual = "*"
 aiopinboard = "*"
+xdg-base-dirs = "*"
 
 [dev-packages]
 pre-commit = "*"
