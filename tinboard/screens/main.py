@@ -2,7 +2,7 @@
 
 ##############################################################################
 # Textual imports.
-from textual import work
+from textual import on, work
 from textual.app import ComposeResult
 from textual.containers import Horizontal
 from textual.screen import Screen
@@ -14,7 +14,7 @@ from aiopinboard import API
 
 ##############################################################################
 # Local imports.
-from ..widgets import Bookmarks, Bookmark, Menu
+from ..widgets import Bookmarks, Bookmark, Details, Menu
 
 
 ##############################################################################
@@ -41,7 +41,12 @@ class Main(Screen):
 
     Bookmarks {
         height: 1fr;
-        width: 9fr
+        width: 6fr
+    }
+
+    Details {
+        height: 1fr;
+        width: 3fr;
     }
     """
 
@@ -60,6 +65,7 @@ class Main(Screen):
         with Horizontal():
             yield Menu()
             yield Bookmarks(classes="focus")
+            yield Details()
         yield Footer()
 
     def on_mount(self) -> None:
@@ -74,6 +80,12 @@ class Main(Screen):
         bookmarks_display = self.query_one(Bookmarks)
         bookmarks_display.loading = False
         bookmarks_display.add_options(Bookmark(bookmark) for bookmark in bookmarks)
+
+    @on(Bookmarks.OptionHighlighted, "Bookmarks")
+    def refresh_details(self, event: Bookmarks.OptionHighlighted) -> None:
+        """Show the details of a highlighted bookmark."""
+        assert isinstance(event.option, Bookmark)
+        self.query_one(Details).show(event.option)
 
 
 ### main.py ends here
