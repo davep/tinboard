@@ -1,7 +1,12 @@
 """Provides a widget for displaying the bookmarks."""
 
 ##############################################################################
+# Python imports.
+from webbrowser import open as open_url
+
+##############################################################################
 # Textual imports.
+from textual.binding import Binding
 from textual.widgets import OptionList
 from textual.widgets.option_list import Option
 
@@ -38,6 +43,18 @@ class Bookmark(Option):
 ##############################################################################
 class Bookmarks(OptionList):
     """The list of bookmarks."""
+
+    BINDINGS = [
+        Binding("enter", "visit", "Visit"),
+    ]
+
+    def action_visit(self) -> None:
+        """Visit the highlighted bookmark."""
+        if self.highlighted is not None:
+            bookmark = self.get_option_at_index(self.highlighted)
+            assert isinstance(bookmark, Bookmark)
+            if bookmark.href:
+                open_url(bookmark.href)
 
 
 ### bookmarks.py ends here
