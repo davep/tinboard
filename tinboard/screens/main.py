@@ -82,6 +82,7 @@ class Main(Screen):
         bookmarks_display = self.query_one(Bookmarks)
         bookmarks_display.loading = False
         bookmarks_display.add_options(Bookmark(bookmark) for bookmark in bookmarks)
+        self.query_one(Menu).refresh_options(bookmarks_display)
 
     @on(Bookmarks.OptionHighlighted, "Bookmarks")
     def refresh_details(self, event: Bookmarks.OptionHighlighted) -> None:
