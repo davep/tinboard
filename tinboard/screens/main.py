@@ -43,7 +43,14 @@ class Main(Screen):
 
     Bookmarks {
         height: 1fr;
-        width: 6fr
+        width: 6fr;
+        border-top: panel $accent 50% !important;
+        border-title-align: center;
+        border-title-color: $text;
+    }
+
+    Bookmarks:focus {
+        border-top: panel $accent !important;
     }
 
     Details {
@@ -72,6 +79,7 @@ class Main(Screen):
 
     def on_mount(self) -> None:
         """Start the process of loading the bookmarks."""
+        self.query_one(Bookmarks).border_title = "Loading..."
         self.query_one(Bookmarks).loading = True
         self.get_bookmarks()
 
@@ -82,6 +90,7 @@ class Main(Screen):
         bookmarks_display = self.query_one(Bookmarks)
         bookmarks_display.loading = False
         bookmarks_display.add_options(Bookmark(bookmark) for bookmark in bookmarks)
+        bookmarks_display.border_title = "All"
         self.query_one(Menu).refresh_options(bookmarks_display)
 
     @on(Bookmarks.OptionHighlighted, "Bookmarks")
