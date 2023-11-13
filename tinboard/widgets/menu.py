@@ -12,6 +12,7 @@ class Menu(OptionList):
     def on_mount(self) -> None:
         """Populate the menu."""
         self.add_options(["All", "Unread", "Public", "Private", "Untagged", "Tagged"])
+        self.highlighted = 0
 
 
 ### menu.py ends here
