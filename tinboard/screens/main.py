@@ -4,6 +4,7 @@
 # Textual imports.
 from textual import work
 from textual.app import ComposeResult
+from textual.containers import Horizontal
 from textual.screen import Screen
 from textual.widgets import Footer, Header
 
@@ -13,7 +14,7 @@ from aiopinboard import API
 
 ##############################################################################
 # Local imports.
-from ..widgets import Bookmarks, Bookmark
+from ..widgets import Bookmarks, Bookmark, Menu
 
 
 ##############################################################################
@@ -24,8 +25,23 @@ class Main(Screen):
     SUB_TITLE = "A pinboard.in client"
 
     CSS = """
+    *:can-focus {
+        border: none;
+        border-left: tall $accent 50%;
+    }
+
+    *:focus {
+        border: none;
+        border-left: thick $accent;
+    }
+
+    Menu {
+        height: 1fr;
+    }
+
     Bookmarks {
         height: 1fr;
+        width: 9fr
     }
     """
 
@@ -41,7 +57,9 @@ class Main(Screen):
     def compose(self) -> ComposeResult:
         """Lay out the content of the screen."""
         yield Header()
-        yield Bookmarks()
+        with Horizontal():
+            yield Menu()
+            yield Bookmarks(classes="focus")
         yield Footer()
 
     def on_mount(self) -> None:
