@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+textual = "*"
+aiopinboard = "*"
+
+[dev-packages]
+pre-commit = "*"
+black = "*"
+mypy = "*"
+build = "*"
+twine = "*"
+
+[requires]
+python_version = "3.9"
+python_full_version = "3.9.18"
