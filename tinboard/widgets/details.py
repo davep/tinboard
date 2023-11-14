@@ -1,8 +1,13 @@
 """The details display widget."""
 
 ##############################################################################
+# Python imports.
+from webbrowser import open as open_url
+
+##############################################################################
 # Textual imports.
 from textual.app import ComposeResult
+from textual.binding import Binding
 from textual.containers import VerticalScroll
 from textual.reactive import var
 from textual.widgets import Markdown
@@ -15,6 +20,8 @@ from .bookmarks import Bookmark
 ##############################################################################
 class Details(VerticalScroll):
     """A widget for displaying details of a bookmark."""
+
+    BINDINGS = [Binding("enter", "visit_bookmark", "Visit")]
 
     bookmark: var[Bookmark | None] = var(None)
     """The current bookmark."""
@@ -38,6 +45,11 @@ class Details(VerticalScroll):
                 f"## Public\n{self.bookmark.shared}\n"
             )
         )
+
+    def action_visit_bookmark(self) -> None:
+        """Visit the current bookmark, if there is one."""
+        if self.bookmark is not None:
+            open_url(self.bookmark.href)
 
 
 ### details.py ends here
