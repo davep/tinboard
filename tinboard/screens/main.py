@@ -40,6 +40,7 @@ class Main(Screen):
 
     Menu {
         height: 1fr;
+        min-width: 20;
     }
 
     Bookmarks {
