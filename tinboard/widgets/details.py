@@ -6,6 +6,7 @@ from webbrowser import open as open_url
 
 ##############################################################################
 # Textual imports.
+from textual import on
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import VerticalScroll
@@ -50,6 +51,15 @@ class Details(VerticalScroll):
         """Visit the current bookmark, if there is one."""
         if self.bookmark is not None:
             open_url(self.bookmark.href)
+
+    @on(Markdown.LinkClicked)
+    def visit_link(self, event: Markdown.LinkClicked) -> None:
+        """Visit any link clicked on the markdown.
+
+        Args:
+            event: The click event.
+        """
+        open_url(event.href)
 
 
 ### details.py ends here
