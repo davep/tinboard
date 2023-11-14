@@ -13,11 +13,20 @@ from typing_extensions import Self
 from pytz import UTC
 
 ##############################################################################
+# Humanize imports.
+from humanize import naturaltime
+
+##############################################################################
 # Textual imports.
 from textual.binding import Binding
 from textual.reactive import var
 from textual.widgets import OptionList
 from textual.widgets.option_list import Option
+
+##############################################################################
+# Rich imports.
+from rich.console import Group
+from rich.text import Text
 
 ##############################################################################
 # Pinboard API imports.
@@ -52,7 +61,15 @@ class Bookmark(Option):  # pylint:disable=too-many-instance-attributes
         """The unread status of the bookmark."""
         self.shared = bookmark.shared
         """The flag to say if the bookmark is public or private."""
-        super().__init__(bookmark.title, id=bookmark.hash)
+        super().__init__(
+            Group(
+                bookmark.title,
+                Text.from_markup(
+                    f"[dim]{naturaltime(self.last_modified)}[/]", justify="right"
+                ),
+            ),
+            id=bookmark.hash,
+        )
 
     @property
     def as_json(self) -> dict[str, Any]:
@@ -87,6 +104,12 @@ class Bookmark(Option):  # pylint:disable=too-many-instance-attributes
 ##############################################################################
 class Bookmarks(OptionList):
     """The list of bookmarks."""
+
+    DEFAULT_CSS = """
+    Bookmarks > .option-list--option {
+        padding: 0 1 0 1;
+    }
+    """
 
     BINDINGS = [
         Binding("enter", "visit", "Visit"),
