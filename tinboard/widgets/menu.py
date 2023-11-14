@@ -24,6 +24,7 @@ class Menu(OptionList):
     """The core options of the menu."""
 
     _CORE_PREFIX = "core-"
+    """The prefix given to each core filter option."""
 
     def refresh_options(self, bookmarks: Bookmarks | None = None) -> None:
         """Refresh the options in the menu.
