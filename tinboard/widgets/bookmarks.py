@@ -108,6 +108,18 @@ class Bookmarks(OptionList):
             tags |= set(bookmark.tags)
         return sorted(list(tags))
 
+    @property
+    def latest_modification(self) -> datetime | None:
+        """The latest modification time found in all the bookmarks.
+
+        If there are no bookmarks this will be `None`.
+        """
+        return (
+            sorted([bookmark.last_modified for bookmark in self.bookmarks])[-1]
+            if self.bookmarks
+            else None
+        )
+
     def show_bookmarks(
         self, bookmarks: list[Bookmark], description: str = "All"
     ) -> Self:
