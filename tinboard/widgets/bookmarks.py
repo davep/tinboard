@@ -171,6 +171,13 @@ class Bookmarks(OptionList):
             [bookmark for bookmark in self.bookmarks if bookmark.tags], "Tagged"
         )
 
+    def show_tagged_with(self, tag: str) -> None:
+        """Show bookmarks tagged with a given tag."""
+        self.show_bookmarks(
+            [bookmark for bookmark in self.bookmarks if tag in bookmark.tags],
+            f"Tagged with '{tag}'",
+        )
+
     def _watch_bookmarks(self) -> None:
         """Refresh the display when all bookmarks are updated."""
         self.show_bookmarks(self.bookmarks)

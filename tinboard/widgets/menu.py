@@ -6,6 +6,7 @@ from __future__ import annotations
 
 ##############################################################################
 # Python imports.
+from dataclasses import dataclass
 from typing_extensions import Final
 
 ##############################################################################
@@ -38,6 +39,9 @@ class Menu(OptionList):
     _CORE_PREFIX: Final[str] = "core-"
     """The prefix given to each core filter option."""
 
+    _TAG_PREFIX: Final[str] = "tag-"
+    """The prefix given to each tag filter option."""
+
     def refresh_options(self, bookmarks: Bookmarks | None = None) -> None:
         """Refresh the options in the menu.
 
@@ -51,13 +55,54 @@ class Menu(OptionList):
         if bookmarks:
             if tags := bookmarks.tags:
                 options.append(Separator())
-                options.extend(Option(tag, id=f"tag-{tag}") for tag in tags)
+                options.extend(
+                    Option(tag, id=f"{self._TAG_PREFIX}{tag}") for tag in tags
+                )
         self.clear_options().add_options(options)
         self.highlighted = 0
 
     def on_mount(self) -> None:
         """Initialise the menu once the DOM is ready."""
         self.refresh_options()
+
+    @classmethod
+    def is_core_filter(cls, option: Option) -> bool:
+        """Is the given option a core filter?
+
+        Args:
+            option: The option to check.
+
+        Returns:
+            `True` if it's a core filter option, `False` if not.
+        """
+        return option.id is not None and option.id.startswith(cls._CORE_PREFIX)
+
+    @classmethod
+    def is_tag_filter(cls, option: Option) -> bool:
+        """Is the given option a tag filter?
+
+        Args:
+            option: The option to check.
+
+        Returns:
+            `True` if it's a tag filter option, `False` if not.
+        """
+        return option.id is not None and option.id.startswith(cls._TAG_PREFIX)
+
+    @staticmethod
+    def filter_value(prefix: str, option: Option) -> str:
+        """Get the filtering value for the given option.
+
+        Args:
+            prefix: The prefix for the filter option type.
+            option: The option to get the value from.
+
+        Returns:
+            The value to filter with.
+        """
+        assert option.id is not None
+        *_, value = option.id.partition(prefix)
+        return value
 
     class CoreFilter(Message):
         """Base class for the core filters."""
@@ -83,6 +128,13 @@ class Menu(OptionList):
     class ShowUntagged(CoreFilter):
         """Show the bookmarks that have no tags."""
 
+    @dataclass
+    class ShowTaggedWith(Message):
+        """Filter with the given tag."""
+
+        tag: str
+        """The tag to filter on."""
+
     @on(OptionList.OptionSelected)
     def handle_selection(self, event: OptionList.OptionSelected) -> None:
         """Handle a menu option selection.
@@ -91,20 +143,22 @@ class Menu(OptionList):
             event: The event to handle.
         """
         event.stop()
-        if event.option.id:
-            if event.option.id.startswith(self._CORE_PREFIX):
-                *_, core = event.option.id.partition(self._CORE_PREFIX)
-                self.post_message(
-                    {
-                        "all": self.ShowAll,
-                        "unread": self.ShowUnread,
-                        "read": self.ShowRead,
-                        "public": self.ShowPublic,
-                        "private": self.ShowPrivate,
-                        "tagged": self.ShowTagged,
-                        "untagged": self.ShowUntagged,
-                    }[core]()
-                )
+        if self.is_core_filter(event.option):
+            self.post_message(
+                {
+                    "all": self.ShowAll,
+                    "unread": self.ShowUnread,
+                    "read": self.ShowRead,
+                    "public": self.ShowPublic,
+                    "private": self.ShowPrivate,
+                    "tagged": self.ShowTagged,
+                    "untagged": self.ShowUntagged,
+                }[self.filter_value(self._CORE_PREFIX, event.option)]()
+            )
+        elif self.is_tag_filter(event.option):
+            self.post_message(
+                self.ShowTaggedWith(self.filter_value(self._TAG_PREFIX, event.option))
+            )
 
 
 ### menu.py ends here
