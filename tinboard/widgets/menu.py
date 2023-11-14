@@ -5,6 +5,10 @@
 from __future__ import annotations
 
 ##############################################################################
+# Python imports.
+from typing_extensions import Final
+
+##############################################################################
 # Textual imports.
 from textual import on
 from textual.message import Message
@@ -20,10 +24,18 @@ from .bookmarks import Bookmarks
 class Menu(OptionList):
     """The main menu for the application."""
 
-    _CORE_OPTIONS = ["All", "Unread", "Read", "Public", "Private", "Untagged", "Tagged"]
+    _CORE_OPTIONS: Final[list[str]] = [
+        "All",
+        "Unread",
+        "Read",
+        "Public",
+        "Private",
+        "Untagged",
+        "Tagged",
+    ]
     """The core options of the menu."""
 
-    _CORE_PREFIX = "core-"
+    _CORE_PREFIX: Final[str] = "core-"
     """The prefix given to each core filter option."""
 
     def refresh_options(self, bookmarks: Bookmarks | None = None) -> None:
