@@ -4,10 +4,13 @@
 # Python imports.
 from datetime import datetime
 from json import loads, dumps
-from pytz import UTC
 from typing import Any
 from webbrowser import open as open_url
 from typing_extensions import Self
+
+##############################################################################
+# pytz imports.
+from pytz import UTC
 
 ##############################################################################
 # Textual imports.
