@@ -129,7 +129,12 @@ class Bookmarks(OptionList):
     ) -> Self:
         """Show the given list of bookmarks."""
         self.border_title = f"{description} ({len(bookmarks)})"
-        return self.clear_options().add_options(bookmarks)
+        try:
+            return self.clear_options().add_options(bookmarks)
+        finally:
+            self.focus()
+            if len(bookmarks):
+                self.highlighted = 0
 
     def show_all(self) -> None:
         """Show all bookmarks."""
