@@ -17,6 +17,7 @@ build = "*"
 twine = "*"
 textual-dev = "*"
 pylint = "*"
+types-pytz = "*"
 
 [requires]
 python_version = "3.10"
