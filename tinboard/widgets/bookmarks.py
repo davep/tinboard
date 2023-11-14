@@ -30,7 +30,8 @@ from ..utils import bookmarks_file
 
 
 ##############################################################################
-class Bookmark(Option):
+class Bookmark(Option):  # pylint:disable=too-many-instance-attributes
+
     """An individual bookmark."""
 
     def __init__(self, bookmark: BookmarkData) -> None:
@@ -131,6 +132,7 @@ class Bookmarks(OptionList):
         self, bookmarks: list[Bookmark], description: str = "All"
     ) -> Self:
         """Show the given list of bookmarks."""
+        # pylint:disable=attribute-defined-outside-init
         self.screen.sub_title = f"{description} ({len(bookmarks)})"
         try:
             return self.clear_options().add_options(bookmarks)
