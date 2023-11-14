@@ -56,6 +56,8 @@ class Details(VerticalScroll):
 
     @dataclass
     class ShowTaggedWith(Message):
+        """Message to request that the bookmarks filter on a tag."""
+
         tag: str
         """The tag to filter the bookmarks with."""
 
