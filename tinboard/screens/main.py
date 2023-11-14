@@ -19,7 +19,7 @@ from ..widgets import Bookmarks, Bookmark, Details, Menu
 
 
 ##############################################################################
-class Main(Screen):
+class Main(Screen[None]):
     """The main application screen."""
 
     TITLE = "TinBoard"
