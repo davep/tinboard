@@ -55,6 +55,7 @@ class Main(Screen[None]):
     Details {
         height: 1fr;
         width: 3fr;
+        min-width: 30;
     }
     """
 
