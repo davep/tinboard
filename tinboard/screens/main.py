@@ -174,7 +174,10 @@ class Main(Screen):
         self.query_one(Bookmarks).show_tagged()
 
     @on(Menu.ShowTaggedWith)
-    def show_tagged_with(self, event: Menu.ShowTaggedWith) -> None:
+    @on(Details.ShowTaggedWith)
+    def show_tagged_with(
+        self, event: Menu.ShowTaggedWith | Details.ShowTaggedWith
+    ) -> None:
         """Show all bookmarks tagged with a given tag."""
         self.query_one(Bookmarks).show_tagged_with(event.tag)
 

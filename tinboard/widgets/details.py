@@ -2,6 +2,7 @@
 
 ##############################################################################
 # Python imports.
+from dataclasses import dataclass
 from webbrowser import open as open_url
 
 ##############################################################################
@@ -10,6 +11,7 @@ from textual import on
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import VerticalScroll
+from textual.message import Message
 from textual.reactive import var
 from textual.widgets import Markdown
 
@@ -41,7 +43,7 @@ class Details(VerticalScroll):
                 f"{self.bookmark.description}\n"
                 f"## Link\n[{self.bookmark.href}]({self.bookmark.href})\n"
                 f"## Last Modified\n{self.bookmark.last_modified}\n"
-                f"## Tags\n{', '.join(self.bookmark.tags)}\n"
+                f"## Tags\n{', '.join(f'[{tag}](tag:{tag})' for tag in self.bookmark.tags)}\n"
                 f"## Read\n{not self.bookmark.unread}\n"
                 f"## Public\n{self.bookmark.shared}\n"
             )
@@ -52,6 +54,11 @@ class Details(VerticalScroll):
         if self.bookmark is not None:
             open_url(self.bookmark.href)
 
+    @dataclass
+    class ShowTaggedWith(Message):
+        tag: str
+        """The tag to filter the bookmarks with."""
+
     @on(Markdown.LinkClicked)
     def visit_link(self, event: Markdown.LinkClicked) -> None:
         """Visit any link clicked on the markdown.
@@ -59,7 +66,11 @@ class Details(VerticalScroll):
         Args:
             event: The click event.
         """
-        open_url(event.href)
+        if event.href.startswith("tag:"):
+            *_, tag = event.href.partition("tag:")
+            self.post_message(self.ShowTaggedWith(tag))
+        else:
+            open_url(event.href)
 
 
 ### details.py ends here
