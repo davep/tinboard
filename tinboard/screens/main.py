@@ -133,7 +133,11 @@ class Main(Screen[None]):
 
     @on(Bookmarks.OptionHighlighted, "Bookmarks")
     def refresh_details(self, event: Bookmarks.OptionHighlighted) -> None:
-        """Show the details of a highlighted bookmark."""
+        """Show the details of a highlighted bookmark.
+
+        Args:
+            event: The event causing the refresh.
+        """
         assert isinstance(event.option, Bookmark)
         self.query_one(Details).bookmark = event.option
 
