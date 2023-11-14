@@ -1,6 +1,10 @@
 """The main screen for the application."""
 
 ##############################################################################
+# Python imports.
+from webbrowser import open as open_url
+
+##############################################################################
 # Textual imports.
 from textual import on, work
 from textual.app import ComposeResult
@@ -55,6 +59,7 @@ class Main(Screen[None]):
     """
 
     BINDINGS = [
+        Binding("f2", "goto_pinboard", "pinboard.in"),
         Binding("a", "show_all", "All", key_display="a"),
         Binding("p", "show_public", "Public", key_display="p"),
         Binding("P", "show_private", "Private", key_display="P"),
@@ -130,6 +135,10 @@ class Main(Screen[None]):
         """Show the details of a highlighted bookmark."""
         assert isinstance(event.option, Bookmark)
         self.query_one(Details).bookmark = event.option
+
+    def action_goto_pinboard(self) -> None:
+        """Open Pinbaord in the user's web browser."""
+        open_url("https://pinboard.in")
 
     def action_redownload(self) -> None:
         """Freshly download the bookmarks."""
