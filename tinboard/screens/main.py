@@ -63,6 +63,7 @@ class Main(Screen):
         Binding("t", "show_tagged", "Tagged", key_display="t"),
         Binding("T", "show_untagged", "Untagged", key_display="T"),
         Binding("ctrl+r", "redownload", "Re-download"),
+        Binding("ctrl+q", "quit", "Quit"),
     ]
 
     def __init__(self, api_token: str) -> None:
