@@ -59,7 +59,7 @@ class Menu(OptionList):
         """Initialise the menu once the DOM is ready."""
         self.refresh_options()
 
-    class CoreFilter(Message, bubble=False):
+    class CoreFilter(Message):
         """Base class for the core filters."""
 
     class ShowAll(CoreFilter):
