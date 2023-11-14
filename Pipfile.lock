@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "dbc03efae0e18a37b854a2575fdb4988c7992afd49540d7db80eb122538eb75c"
+            "sha256": "588e47a32d5d041eb2754f4d2220fab1290359f6d803c6bdd213cbb255fdc8b8"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -111,12 +111,12 @@
         },
         "aiopinboard": {
             "hashes": [
-                "sha256:39daa42e5d863664296952ebc884bb937a4c9607771d1f24e1a88e4ec3ab1d93",
-                "sha256:dc8191ab238342449db00caff90e9dce06fd0acc244cea126b18a6fceb485080"
+                "sha256:5404ee4cb677ac27db86fd755e68bfb08e6b25073786849c1d5a9cf0916eac9b",
+                "sha256:81f3e5ba54ca8e58a4d7f3c419d6a5d95f97d1fe1c70af7355343a10f1fbb5f8"
             ],
             "index": "pypi",
             "markers": "python_full_version >= '3.9.0' and python_full_version < '4.0.0'",
-            "version": "==2023.8.0"
+            "version": "==2023.11.0"
         },
         "aiosignal": {
             "hashes": [
@@ -334,6 +334,7 @@
                 "sha256:8bc9e2bb9315e61ec06bf690151ae35aeb65651ab091266941edf97c90836404",
                 "sha256:9783373bf1eec713a770ecaa7c2d7a7902c98398009dfa3d8a2df91eec9311e8"
             ],
+            "index": "pypi",
             "markers": "python_version >= '3.8'",
             "version": "==4.8.0"
         },
@@ -634,14 +635,6 @@
             ],
             "markers": "python_full_version >= '3.7.0'",
             "version": "==13.6.0"
-        },
-        "setuptools": {
-            "hashes": [
-                "sha256:4ac1475276d2f1c48684874089fefcd83bd7162ddaafb81fac866ba0db282a87",
-                "sha256:b454a35605876da60632df1a60f736524eb73cc47bbc9f3f1ef1b644de74fd2a"
-            ],
-            "markers": "python_version >= '3.8'",
-            "version": "==68.2.2"
         },
         "six": {
             "hashes": [

@@ -8,6 +8,7 @@ textual = "*"
 aiopinboard = "*"
 xdg-base-dirs = "*"
 pytz = "*"
+humanize = "*"
 
 [dev-packages]
 pre-commit = "*"
