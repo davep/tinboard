@@ -3,6 +3,7 @@
 ##############################################################################
 # Python imports.
 from typing import Optional
+from webbrowser import open as open_url
 
 ##############################################################################
 # Textual imports.
@@ -40,10 +41,15 @@ class TokenInput(ModalScreen[Optional[str]]):
         margin-bottom: 1;
     }
 
-    TokenInput Horizontal {
+    TokenInput > Vertical > Horizontal {
         margin-top: 1;
         height: auto;
         align-horizontal: right;
+    }
+
+    TokenInput > Vertical > Horizontal > Horizontal {
+        margin-left: 1;
+        height: auto;
     }
 
     TokenInput Button {
@@ -61,11 +67,13 @@ class TokenInput(ModalScreen[Optional[str]]):
             dialog.border_title = "API Token Required"
             yield Label(
                 "To use the [i]pinboard.in[/] API you will need an API token. "
-                "You can get your API token from your account page on [i]pinboard.in[/]:\n\n"
-                "https://pinboard.in/settings/password"
+                "You can [@click=screen.get_token]get your API token from your "
+                "account page on [i]pinboard.in[/][/]."
             )
             yield Input(placeholder="Paste the token here")
             with Horizontal():
+                with Horizontal():
+                    yield Button("Go to token", id="get-token")
                 yield Button("Connect", id="connect", variant="primary")
                 yield Button("Cancel", id="cancel", variant="error")
 
@@ -82,6 +90,12 @@ class TokenInput(ModalScreen[Optional[str]]):
     def cancel(self) -> None:
         """React to the user cancelling the dialog."""
         self.dismiss(None)
+
+    @on(Button.Pressed, "#get-token")
+    def action_get_token(self) -> None:
+        """Open the page for getting an API token."""
+        open_url("https://pinboard.in/settings/password")
+        self.query_one(Input).focus()
 
     def action_cancel(self) -> None:
         """Cancel binding action."""
