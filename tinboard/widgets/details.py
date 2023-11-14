@@ -29,7 +29,7 @@ class Details(VerticalScroll):
             f"{bookmark.description}\n"
             f"## Link\n[{bookmark.href}]({bookmark.href})\n"
             f"## Last Modified\n{bookmark.last_modified}\n"
-            f"## Tags\n{bookmark.tags}\n"
+            f"## Tags\n{', '.join(bookmark.tags)}\n"
             f"## Read\n{not bookmark.unread}\n"
             f"## Public\n{bookmark.shared}\n"
         )
