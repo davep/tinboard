@@ -90,6 +90,9 @@ class Bookmarks(OptionList):
     bookmarks: var[list[Bookmark]] = var([])
     """The list of all known bookmarks."""
 
+    last_downloaded: var[datetime | None] = var(None)
+    """When the bookmarks were last downloaded."""
+
     def action_visit(self) -> None:
         """Visit the highlighted bookmark."""
         if self.highlighted is not None:
@@ -172,17 +175,25 @@ class Bookmarks(OptionList):
         self.show_bookmarks(self.bookmarks)
 
     @property
-    def as_json(self) -> list[dict[str, Any]]:
+    def as_json(self) -> dict[str, Any]:
         """All the bookmarks as a JSON-friendly list."""
-        return [bookmark.as_json for bookmark in self.bookmarks]
+        return {
+            "last_downloaded": None
+            if self.last_downloaded is None
+            else self.last_downloaded.isoformat(),
+            "bookmarks": [bookmark.as_json for bookmark in self.bookmarks],
+        }
 
-    def load_json(self, data: list[dict[str, Any]]) -> None:
+    def load_json(self, data: dict[str, Any]) -> None:
         """Load the bookmarks from the given JSON data.
 
         Args:
             data: The data to load.
         """
-        self.bookmarks = [Bookmark.from_json(bookmark) for bookmark in data]
+        self.last_downloaded = datetime.fromisoformat(data["last_downloaded"])
+        self.bookmarks = [
+            Bookmark.from_json(bookmark) for bookmark in data["bookmarks"]
+        ]
 
     def load(self) -> bool:
         """Load the bookmarks from the local file."""
@@ -207,6 +218,7 @@ class Bookmarks(OptionList):
             Bookmark(bookmark)
             for bookmark in await api.bookmark.async_get_all_bookmarks()
         ]
+        self.last_downloaded = datetime.now()
         return self
 
 
