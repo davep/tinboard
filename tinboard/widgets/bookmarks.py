@@ -200,7 +200,6 @@ class Bookmarks(OptionList):
         """Load the bookmarks from the local file."""
         if bookmarks_file().exists():
             self.load_json(loads(bookmarks_file().read_text(encoding="utf-8")))
-            self.loading = False
             return True
         return False
 
