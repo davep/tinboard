@@ -102,7 +102,7 @@ class Main(Screen):
         bookmarks.loading = True
         if bookmarks.load():
             self._bookmarks_changed()
-            # TODO: look for newer stuff.
+            self.maybe_redownload()
         else:
             self.download_bookmarks()
 
@@ -116,6 +116,19 @@ class Main(Screen):
         """
         (await self.query_one(Bookmarks).download_all(self._api)).save()
         self._bookmarks_changed()
+
+    @work
+    async def maybe_redownload(self) -> None:
+        """Redownload the bookmarks if they look newer on the server."""
+        if last_download := self.query_one(Bookmarks).last_downloaded:
+            if (
+                await self._api.bookmark.async_get_last_change_datetime()
+                > last_download
+            ):
+                self.notify(
+                    "Bookmarks on the server appear newer; downloading a fresh copy."
+                )
+                self.action_redownload()
 
     @on(Bookmarks.OptionHighlighted, "Bookmarks")
     def refresh_details(self, event: Bookmarks.OptionHighlighted) -> None:
