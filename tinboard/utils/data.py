@@ -34,4 +34,14 @@ def bookmarks_file() -> Path:
     return data_dir() / "bookmarks.json"
 
 
+##############################################################################
+def token_file() -> Path:
+    """The file where the API token is held.
+
+    Returns:
+        The path to the token file.
+    """
+    return data_dir() / ".token"
+
+
 ### data.py ends here
