@@ -4,6 +4,7 @@
 # Python imports.
 from datetime import datetime
 from json import loads, dumps
+from pytz import UTC
 from typing import Any
 from webbrowser import open as open_url
 from typing_extensions import Self
@@ -218,7 +219,7 @@ class Bookmarks(OptionList):
             Bookmark(bookmark)
             for bookmark in await api.bookmark.async_get_all_bookmarks()
         ]
-        self.last_downloaded = datetime.now()
+        self.last_downloaded = datetime.now(UTC)
         return self
 
 
