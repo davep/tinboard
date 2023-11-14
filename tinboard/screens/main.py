@@ -129,7 +129,7 @@ class Main(Screen):
     def refresh_details(self, event: Bookmarks.OptionHighlighted) -> None:
         """Show the details of a highlighted bookmark."""
         assert isinstance(event.option, Bookmark)
-        self.query_one(Details).show(event.option)
+        self.query_one(Details).bookmark = event.option
 
     def action_redownload(self) -> None:
         """Freshly download the bookmarks."""
