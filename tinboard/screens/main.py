@@ -34,7 +34,7 @@ class Main(Screen):
 
     *:focus {
         border: none;
-        border-left: thick $accent;
+        border-left: tall $accent;
         background: $panel;
     }
 
@@ -46,13 +46,6 @@ class Main(Screen):
     Bookmarks {
         height: 1fr;
         width: 6fr;
-        border-top: panel $accent 50% !important;
-        border-title-align: center;
-        border-title-color: $text;
-    }
-
-    Bookmarks:focus {
-        border-top: panel $accent !important;
     }
 
     Details {
@@ -98,8 +91,8 @@ class Main(Screen):
 
     def on_mount(self) -> None:
         """Start the process of loading the bookmarks."""
+        self.sub_title = "Loading..."
         bookmarks = self.query_one(Bookmarks)
-        bookmarks.border_title = "Loading..."
         bookmarks.loading = True
         if bookmarks.load():
             self._bookmarks_changed()
@@ -139,10 +132,9 @@ class Main(Screen):
 
     def action_redownload(self) -> None:
         """Freshly download the bookmarks."""
+        self.sub_title = "Loading..."
         self.query_one(Menu).refresh_options()
-        bookmarks = self.query_one(Bookmarks)
-        bookmarks.border_title = "Loading..."
-        bookmarks.loading = True
+        self.query_one(Bookmarks).loading = True
         self.download_bookmarks()
 
     @on(Menu.ShowAll)

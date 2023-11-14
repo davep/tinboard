@@ -128,7 +128,7 @@ class Bookmarks(OptionList):
         self, bookmarks: list[Bookmark], description: str = "All"
     ) -> Self:
         """Show the given list of bookmarks."""
-        self.border_title = f"{description} ({len(bookmarks)})"
+        self.screen.sub_title = f"{description} ({len(bookmarks)})"
         try:
             return self.clear_options().add_options(bookmarks)
         finally:
