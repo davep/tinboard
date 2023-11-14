@@ -23,6 +23,19 @@ from ..widgets import Bookmarks, Bookmark, Details, Menu
 
 
 ##############################################################################
+def filter_binding(name: str) -> Binding:
+    """Create a binding for one of the core filters.
+
+    Args:
+        name: The name of the filter.
+
+    Returns:
+        A binding for the filter.
+    """
+    return Binding(Menu.shortcut(name), f"show_{name.lower()}")
+
+
+##############################################################################
 class Main(Screen[None]):
     """The main application screen."""
 
@@ -60,14 +73,14 @@ class Main(Screen[None]):
     """
 
     BINDINGS = [
+        filter_binding("All"),
+        filter_binding("Public"),
+        filter_binding("Private"),
+        filter_binding("Unread"),
+        filter_binding("Read"),
+        filter_binding("Tagged"),
+        filter_binding("Untagged"),
         Binding("f2", "goto_pinboard", "pinboard.in"),
-        Binding("a", "show_all", "All", key_display="a"),
-        Binding("p", "show_public", "Public", key_display="p"),
-        Binding("P", "show_private", "Private", key_display="P"),
-        Binding("u", "show_unread", "Unread", key_display="u"),
-        Binding("r", "show_read", "Read", key_display="r"),
-        Binding("t", "show_tagged", "Tagged", key_display="t"),
-        Binding("T", "show_untagged", "Untagged", key_display="T"),
         Binding("ctrl+r", "redownload", "Re-download"),
         Binding("ctrl+q", "quit", "Quit"),
     ]

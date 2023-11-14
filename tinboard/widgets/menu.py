@@ -17,6 +17,10 @@ from textual.widgets import OptionList
 from textual.widgets.option_list import Option, Separator
 
 ##############################################################################
+# Rich imports.
+from rich.table import Table
+
+##############################################################################
 # Local imports.
 from .bookmarks import Bookmarks
 
@@ -25,15 +29,15 @@ from .bookmarks import Bookmarks
 class Menu(OptionList):
     """The main menu for the application."""
 
-    _CORE_OPTIONS: Final[list[str]] = [
-        "All",
-        "Unread",
-        "Read",
-        "Public",
-        "Private",
-        "Untagged",
-        "Tagged",
-    ]
+    _CORE_OPTIONS: Final[dict[str, str]] = {
+        "All": "a",
+        "Unread": "R",
+        "Read": "r",
+        "Private": "P",
+        "Public": "p",
+        "Untagged": "T",
+        "Tagged": "t",
+    }
     """The core options of the menu."""
 
     _CORE_PREFIX: Final[str] = "core-"
@@ -42,6 +46,34 @@ class Menu(OptionList):
     _TAG_PREFIX: Final[str] = "tag-"
     """The prefix given to each tag filter option."""
 
+    @classmethod
+    def shortcut(cls, option: str) -> str:
+        """Get the shortcut for a given filter menu option.
+
+        Args:
+            option: The option to get the shortcut for.
+
+        Returns:
+            The shortcut for the option.
+        """
+        return cls._CORE_OPTIONS[option]
+
+    @classmethod
+    def _main_filter_prompt(cls, name: str) -> Table:
+        """Create a prompt for a main filter.
+
+        Args:
+            name: The name of the filter.
+
+        Returns:
+            A renderable to use in the menu display.
+        """
+        prompt = Table.grid(expand=True)
+        prompt.add_column(no_wrap=True, ratio=1)
+        prompt.add_column(no_wrap=True, justify="left")
+        prompt.add_row(name, f"[dim]({cls.shortcut(name)})[/] ")
+        return prompt
+
     def refresh_options(self, bookmarks: Bookmarks | None = None) -> None:
         """Refresh the options in the menu.
 
@@ -49,8 +81,11 @@ class Menu(OptionList):
             bookmarks: The bookmarks to take data from.
         """
         options: list[Option | Separator] = [
-            Option(prompt, id=f"{self._CORE_PREFIX}{prompt.lower()}")
-            for prompt in self._CORE_OPTIONS
+            Option(
+                self._main_filter_prompt(prompt),
+                id=f"{self._CORE_PREFIX}{prompt.lower()}",
+            )
+            for prompt in self._CORE_OPTIONS.keys()
         ]
         if bookmarks:
             if tags := bookmarks.tags:
