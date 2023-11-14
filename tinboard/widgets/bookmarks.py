@@ -65,7 +65,11 @@ class Bookmark(Option):  # pylint:disable=too-many-instance-attributes
             Group(
                 bookmark.title,
                 Text.from_markup(
-                    f"[dim]{naturaltime(self.last_modified)}[/]", justify="right"
+                    (
+                        f"[dim][i]{' '.join(f'#{tag}' for tag in self.tags)}[/]"
+                        f" {naturaltime(self.last_modified)}[/]"
+                    ),
+                    justify="right",
                 ),
             ),
             id=bookmark.hash,
