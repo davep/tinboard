@@ -83,6 +83,7 @@ class Main(Screen[None]):
         Binding("f2", "goto_pinboard", "pinboard.in"),
         Binding("ctrl+r", "redownload", "Re-download"),
         Binding("ctrl+q", "quit", "Quit"),
+        Binding("escape", "escape"),
     ]
 
     def __init__(self, api_token: str) -> None:
@@ -161,6 +162,13 @@ class Main(Screen[None]):
         self.query_one(Menu).refresh_options()
         self.query_one(Bookmarks).loading = True
         self.download_bookmarks()
+
+    def action_escape(self) -> None:
+        """Give some context to banging the escape key."""
+        if isinstance(self.screen.focused, Details):
+            self.query_one(Bookmarks).focus()
+        elif isinstance(self.screen.focused, Bookmarks):
+            self.query_one(Menu).focus()
 
     @on(Menu.ShowAll)
     def action_show_all(self) -> None:
