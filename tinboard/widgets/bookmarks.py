@@ -76,7 +76,7 @@ class Bookmark(Option):  # pylint:disable=too-many-instance-attributes
         details.add_column(no_wrap=True, justify="left")
         details.add_row(
             f"[dim][i]{naturaltime(self.last_modified)}[/][/]",
-            f"[dim]{', '.join(self.tags)}[/]",
+            f"[dim]{', '.join(sorted(self.tags, key=str.casefold))}[/]",
         )
         return Group(self.title, details, Rule(style="dim"))
 

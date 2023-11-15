@@ -43,7 +43,7 @@ class Details(VerticalScroll):
                 f"{self.bookmark.description}\n"
                 f"## Link\n[{self.bookmark.href}]({self.bookmark.href})\n"
                 f"## Last Modified\n{self.bookmark.last_modified}\n"
-                f"## Tags\n{', '.join(f'[{tag}](tag:{tag})' for tag in self.bookmark.tags)}\n"
+                f"## Tags\n{', '.join(f'[{tag}](tag:{tag})' for tag in sorted(self.bookmark.tags, key=str.casefold))}\n"
                 f"## Read\n{not self.bookmark.unread}\n"
                 f"## Public\n{self.bookmark.shared}\n"
             )
