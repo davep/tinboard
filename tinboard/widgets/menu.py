@@ -105,12 +105,24 @@ class Menu(OptionList):
         return prompt
 
     @classmethod
+    def core_filter_id(cls, name: str) -> str:
+        """Get the filter ID for a core filter.
+
+        Args:
+            name: The name of the filter.
+
+        Returns:
+            An ID for the filter.
+        """
+        return f"{cls._CORE_PREFIX}{name.lower()}"
+
+    @classmethod
     def core_filter_options(cls) -> list[Option | Separator]:
         """The core filtering options."""
         return [
             Option(
                 cls._main_filter_prompt(prompt),
-                id=f"{cls._CORE_PREFIX}{prompt.lower()}",
+                id=cls.core_filter_id(prompt),
             )
             for prompt in cls.CORE_OPTIONS
         ]
