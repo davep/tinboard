@@ -11,6 +11,7 @@ import os
 ##############################################################################
 # Textual imports.
 from textual.app import App
+from textual.binding import Binding
 
 ##############################################################################
 # Local imports.
@@ -21,6 +22,11 @@ from .utils import token_file
 ##############################################################################
 class TinBoard(App[None]):
     """The application."""
+
+    BINDINGS = [
+        Binding("ctrl+backslash", "gndn"),
+        Binding("ctrl+p", "command_palette", "Commands", priority=True),
+    ]
 
     def token_bounce(self, token: str | None) -> None:
         """Handle the result of asking the user for their API token.
