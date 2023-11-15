@@ -104,19 +104,24 @@ class Menu(OptionList):
         prompt.add_row(tag, "[dim]\\[+][/]")
         return prompt
 
+    @classmethod
+    def core_filter_options(cls) -> list[Option | Separator]:
+        """The core filtering options."""
+        return [
+            Option(
+                cls._main_filter_prompt(prompt),
+                id=f"{cls._CORE_PREFIX}{prompt.lower()}",
+            )
+            for prompt in cls._CORE_OPTIONS
+        ]
+
     def refresh_options(self, bookmarks: Bookmarks | None = None) -> None:
         """Refresh the options in the menu.
 
         Args:
             bookmarks: The bookmarks to take data from.
         """
-        options: list[Option | Separator] = [
-            Option(
-                self._main_filter_prompt(prompt),
-                id=f"{self._CORE_PREFIX}{prompt.lower()}",
-            )
-            for prompt in self._CORE_OPTIONS
-        ]
+        options: list[Option | Separator] = self.core_filter_options()
         if bookmarks:
             if tags := bookmarks.tags:
                 options.append(Separator())
