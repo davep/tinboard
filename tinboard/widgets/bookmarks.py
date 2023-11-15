@@ -21,7 +21,7 @@ from humanize import naturaltime
 from textual.binding import Binding
 from textual.reactive import var
 from textual.widgets import OptionList
-from textual.widgets.option_list import Option
+from textual.widgets.option_list import Option, OptionDoesNotExist
 
 ##############################################################################
 # Rich imports.
@@ -176,12 +176,20 @@ class Bookmarks(OptionList):
         """Show the given list of bookmarks."""
         # pylint:disable=attribute-defined-outside-init
         self.screen.sub_title = f"{description} ({len(bookmarks)})"
+        was_highlighted = (
+            self.get_option_at_index(self.highlighted).id
+            if self.highlighted is not None
+            else None
+        )
         try:
             return self.clear_options().add_options(bookmarks)
         finally:
             self.focus()
             if len(bookmarks):
-                self.highlighted = 0
+                try:
+                    self.highlighted = self.get_option_index(was_highlighted)
+                except OptionDoesNotExist:
+                    self.highlighted = 0
 
     def show_all(self) -> None:
         """Show all bookmarks."""
