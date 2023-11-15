@@ -26,7 +26,8 @@ from textual.widgets.option_list import Option
 ##############################################################################
 # Rich imports.
 from rich.console import Group
-from rich.text import Text
+from rich.rule import Rule
+from rich.table import Table
 
 ##############################################################################
 # Pinboard API imports.
@@ -64,19 +65,19 @@ class Bookmark(Option):  # pylint:disable=too-many-instance-attributes
         """The unread status of the bookmark."""
         self.shared = bookmark.shared
         """The flag to say if the bookmark is public or private."""
-        super().__init__(
-            Group(
-                bookmark.title,
-                Text.from_markup(
-                    (
-                        f"[dim][i]{' '.join(f'#{tag}' for tag in self.tags)}[/]"
-                        f" {naturaltime(self.last_modified)}[/]"
-                    ),
-                    justify="right",
-                ),
-            ),
-            id=bookmark.hash,
+        super().__init__(self.prompt, id=bookmark.hash)
+
+    @property
+    def prompt(self) -> Group:
+        """The prompt for the bookmark."""
+        details = Table.grid(expand=True)
+        details.add_column(no_wrap=True, ratio=1)
+        details.add_column(no_wrap=True, justify="left")
+        details.add_row(
+            f"[dim][i]{naturaltime(self.last_modified)}[/][/]",
+            f"[dim]{', '.join(self.tags)}[/]",
         )
+        return Group(self.title, details, Rule(style="dim"))
 
     @property
     def as_json(self) -> dict[str, Any]:
