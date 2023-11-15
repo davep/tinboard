@@ -7,11 +7,13 @@ from __future__ import annotations
 ##############################################################################
 # Python imports.
 from dataclasses import dataclass
+from typing import cast
 from typing_extensions import Final
 
 ##############################################################################
 # Textual imports.
 from textual import on
+from textual.binding import Binding
 from textual.message import Message
 from textual.widgets import OptionList
 from textual.widgets.option_list import Option, Separator
@@ -22,7 +24,7 @@ from rich.table import Table
 
 ##############################################################################
 # Local imports.
-from .bookmarks import Bookmarks
+from .bookmarks import Bookmark, Bookmarks
 
 
 ##############################################################################
@@ -52,6 +54,8 @@ class Menu(OptionList):
     _TAG_PREFIX: Final[str] = "tag-"
     """The prefix given to each tag filter option."""
 
+    BINDINGS = [Binding("+", "also_tagged")]
+
     @classmethod
     def shortcut(cls, option: str) -> str:
         """Get the shortcut for a given filter menu option.
@@ -80,6 +84,22 @@ class Menu(OptionList):
         prompt.add_row(name, f"[dim]\\[{cls.shortcut(name)}][/]")
         return prompt
 
+    @classmethod
+    def _tag_filter_prompt(cls, tag: str) -> Table:
+        """Create a prompt for a tag filter.
+
+        Args:
+            tag: The tag to filter with.
+
+        Returns:
+            A renderable to use in the menu display.
+        """
+        prompt = Table.grid(expand=True)
+        prompt.add_column(no_wrap=True, ratio=1)
+        prompt.add_column(no_wrap=True, justify="left")
+        prompt.add_row(tag, "[dim]\\[+][/]")
+        return prompt
+
     def refresh_options(self, bookmarks: Bookmarks | None = None) -> None:
         """Refresh the options in the menu.
 
@@ -97,7 +117,8 @@ class Menu(OptionList):
             if tags := bookmarks.tags:
                 options.append(Separator())
                 options.extend(
-                    Option(tag, id=f"{self._TAG_PREFIX}{tag}") for tag in tags
+                    Option(self._tag_filter_prompt(tag), id=f"{self._TAG_PREFIX}{tag}")
+                    for tag in tags
                 )
         self.clear_options().add_options(options)
         self.highlighted = 0
@@ -200,6 +221,23 @@ class Menu(OptionList):
             self.post_message(
                 self.ShowTaggedWith(self.filter_value(self._TAG_PREFIX, event.option))
             )
+
+    @dataclass
+    class ShowAlsoTaggedWith(Message):
+        """Add a tag to the current tag filter."""
+
+        tag: str
+        """The tag to add."""
+
+    def action_also_tagged(self) -> None:
+        """Add the highlighted tag to the current tag filter."""
+        if self.highlighted is not None:
+            if self.is_tag_filter(
+                option := cast(Bookmark, self.get_option_at_index(self.highlighted))
+            ):
+                self.post_message(
+                    self.ShowAlsoTaggedWith(self.filter_value(self._TAG_PREFIX, option))
+                )
 
 
 ### menu.py ends here

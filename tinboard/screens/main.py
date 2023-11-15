@@ -103,22 +103,13 @@ class Main(Screen[None]):
             yield Details()
         yield Footer()
 
-    def _bookmarks_changed(self) -> None:
-        """Refresh the display when an update happens."""
-        bookmarks = self.query_one(Bookmarks)
-        bookmarks.loading = False
-        self.query_one(Menu).refresh_options(bookmarks)
-
     def on_mount(self) -> None:
         """Start the process of loading the bookmarks."""
         self.sub_title = "Loading..."
         bookmarks = self.query_one(Bookmarks)
         bookmarks.loading = True
         if bookmarks.load():
-            self._bookmarks_changed()
             self.maybe_redownload()
-        else:
-            self.download_bookmarks()
 
     @work
     async def download_bookmarks(self) -> None:
@@ -129,7 +120,6 @@ class Main(Screen[None]):
             the bookmarks will be overwritten.
         """
         (await self.query_one(Bookmarks).download_all(self._api)).save()
-        self._bookmarks_changed()
 
     @work
     async def maybe_redownload(self) -> None:
@@ -143,6 +133,13 @@ class Main(Screen[None]):
                     "Bookmarks on the server appear newer; downloading a fresh copy."
                 )
                 self.action_redownload()
+
+    @on(Bookmarks.Changed)
+    def _bookmarks_changed(self) -> None:
+        """Refresh the display when an update happens."""
+        bookmarks = self.query_one(Bookmarks)
+        bookmarks.loading = False
+        self.query_one(Menu).refresh_options(bookmarks)
 
     @on(Bookmarks.OptionHighlighted, "Bookmarks")
     def refresh_details(self, event: Bookmarks.OptionHighlighted) -> None:
@@ -211,6 +208,15 @@ class Main(Screen[None]):
             event: The event that contains the tag to show.
         """
         self.query_one(Bookmarks).show_tagged_with(event.tag)
+
+    @on(Menu.ShowAlsoTaggedWith)
+    def show_also_tagged_with(self, event: Menu.ShowAlsoTaggedWith) -> None:
+        """Add a tag to any current tag filter and show the matching bookmarks.
+
+        Args:
+            event: The event that contains the tag to add.
+        """
+        self.query_one(Bookmarks).show_also_tagged_with(event.tag)
 
 
 ### main.py ends here

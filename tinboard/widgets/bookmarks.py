@@ -19,6 +19,7 @@ from humanize import naturaltime
 ##############################################################################
 # Textual imports.
 from textual.binding import Binding
+from textual.message import Message
 from textual.reactive import var
 from textual.widgets import OptionList
 from textual.widgets.option_list import Option, OptionDoesNotExist
@@ -79,16 +80,18 @@ class Bookmark(Option):  # pylint:disable=too-many-instance-attributes
         )
         return Group(self.title, details, Rule(style="dim"))
 
-    def is_tagged(self, tag: str) -> bool:
-        """Is this bookmark tagged with the given tag?
+    def is_tagged(self, *tags: str) -> bool:
+        """Is this bookmark tagged with the given tags?
 
         Args:
-            tag: The tag to check for.
+            tags: The tags to check for.
 
         Returns:
-            `True` if the bookmark has the tag, `False` if not.
+            `True` if the bookmark has all the tags, `False` if not.
         """
-        return tag.casefold() in {tag.casefold() for tag in self.tags}
+        return {tag.casefold() for tag in tags}.issubset(
+            {tag.casefold() for tag in self.tags}
+        )
 
     @property
     def as_json(self) -> dict[str, Any]:
@@ -140,6 +143,9 @@ class Bookmarks(OptionList):
     last_downloaded: var[datetime | None] = var(None)
     """When the bookmarks were last downloaded."""
 
+    _tags: var[set[str]] = var(set())
+    """Keeps track of the additive list of tags."""
+
     def action_visit(self) -> None:
         """Visit the highlighted bookmark."""
         if self.highlighted is not None:
@@ -170,11 +176,15 @@ class Bookmarks(OptionList):
             else None
         )
 
+    class Changed(Message):
+        """Message to say the visible collection of bookmarks has changed."""
+
     def show_bookmarks(
         self, bookmarks: list[Bookmark], description: str = "All"
     ) -> Self:
         """Show the given list of bookmarks."""
         # pylint:disable=attribute-defined-outside-init
+        self._tags = set()
         self.screen.sub_title = f"{description} ({len(bookmarks)})"
         was_highlighted = (
             self.get_option_at_index(self.highlighted).id
@@ -184,6 +194,7 @@ class Bookmarks(OptionList):
         try:
             return self.clear_options().add_options(bookmarks)
         finally:
+            self.post_message(self.Changed())
             self.focus()
             if len(bookmarks):
                 try:
@@ -233,10 +244,21 @@ class Bookmarks(OptionList):
 
     def show_tagged_with(self, tag: str) -> None:
         """Show bookmarks tagged with a given tag."""
+        self._tags = set()
+        self.show_also_tagged_with(tag)
+
+    def show_also_tagged_with(self, tag: str) -> None:
+        """Start/extend a tag filter.
+
+        Args:
+            tag: The tag to filter on, or add to an existing tag filter.
+        """
+        tags = self._tags | {tag}
         self.show_bookmarks(
-            [bookmark for bookmark in self.bookmarks if bookmark.is_tagged(tag)],
-            f"Tagged with '{tag}'",
+            [bookmark for bookmark in self.bookmarks if bookmark.is_tagged(*tags)],
+            f"Tagged with {', '.join(tags)}",
         )
+        self._tags = tags
 
     def _watch_bookmarks(self) -> None:
         """Refresh the display when all bookmarks are updated."""
