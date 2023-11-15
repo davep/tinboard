@@ -57,7 +57,7 @@ class Main(Screen[None]):
 
     Menu {
         height: 1fr;
-        min-width: 20;
+        min-width: 25;
     }
 
     Bookmarks {
