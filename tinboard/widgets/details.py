@@ -33,6 +33,18 @@ class Details(VerticalScroll):
         """Compose the widget."""
         yield Markdown()
 
+    @property
+    def _tags(self) -> str:
+        """The collection of tags as a displayable string."""
+        return (
+            ", ".join(
+                f"[{tag}](tag:{tag})"
+                for tag in sorted(self.bookmark.tags, key=str.casefold)
+            )
+            if self.bookmark is not None
+            else ""
+        )
+
     def _watch_bookmark(self) -> None:
         """React to the bookmark being changed."""
         self.query_one(Markdown).update(
@@ -43,7 +55,7 @@ class Details(VerticalScroll):
                 f"{self.bookmark.description}\n"
                 f"## Link\n[{self.bookmark.href}]({self.bookmark.href})\n"
                 f"## Last Modified\n{self.bookmark.last_modified}\n"
-                f"## Tags\n{', '.join(f'[{tag}](tag:{tag})' for tag in sorted(self.bookmark.tags, key=str.casefold))}\n"
+                f"## Tags\n{self._tags}\n"
                 f"## Read\n{not self.bookmark.unread}\n"
                 f"## Public\n{self.bookmark.shared}\n"
             )
