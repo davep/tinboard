@@ -115,7 +115,7 @@ class Menu(OptionList):
                 self._main_filter_prompt(prompt),
                 id=f"{self._CORE_PREFIX}{prompt.lower()}",
             )
-            for prompt in self._CORE_OPTIONS.keys()
+            for prompt in self._CORE_OPTIONS
         ]
         if bookmarks:
             if tags := bookmarks.tags:
