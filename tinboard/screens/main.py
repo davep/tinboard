@@ -45,13 +45,17 @@ class Main(Screen[None]):
     COMMANDS = {CoreFilteringCommands}
 
     CSS = """
-    *:can-focus {
+    Main {
+        layout: horizontal;
+    }
+
+    Main > *:can-focus {
         border: none;
         border-left: tall $accent 50%;
         background: $boost;
     }
 
-    *:focus {
+    Main > *:focus, Main > *:focus-within {
         border: none;
         border-left: tall $accent;
         background: $panel;
@@ -100,10 +104,9 @@ class Main(Screen[None]):
     def compose(self) -> ComposeResult:
         """Lay out the content of the screen."""
         yield Header()
-        with Horizontal():
-            yield Menu()
-            yield Bookmarks()
-            yield Details()
+        yield Menu()
+        yield Bookmarks()
+        yield Details()
         yield Footer()
 
     def on_mount(self) -> None:
