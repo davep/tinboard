@@ -43,7 +43,11 @@ class Bookmark(Option):  # pylint:disable=too-many-instance-attributes
     """An individual bookmark."""
 
     def __init__(self, bookmark: BookmarkData) -> None:
-        """Initialise the bookmark."""
+        """Initialise the bookmark.
+
+        Args:
+            bookmark: The bookmark data gathered from the server.
+        """
         self.hash = bookmark.hash
         """The hash of the bookmark"""
         self.href = bookmark.href
