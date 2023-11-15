@@ -29,6 +29,12 @@ from .bookmarks import Bookmarks
 class Menu(OptionList):
     """The main menu for the application."""
 
+    DEFAULT_CSS = """
+    Menu > .option-list--option {
+        padding: 0 1;
+    }
+    """
+
     _CORE_OPTIONS: Final[dict[str, str]] = {
         "All": "a",
         "Unread": "R",
@@ -71,7 +77,7 @@ class Menu(OptionList):
         prompt = Table.grid(expand=True)
         prompt.add_column(no_wrap=True, ratio=1)
         prompt.add_column(no_wrap=True, justify="left")
-        prompt.add_row(name, f"[dim]({cls.shortcut(name)})[/] ")
+        prompt.add_row(name, f"[dim]\\[{cls.shortcut(name)}][/]")
         return prompt
 
     def refresh_options(self, bookmarks: Bookmarks | None = None) -> None:
