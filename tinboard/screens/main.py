@@ -19,6 +19,7 @@ from aiopinboard import API
 
 ##############################################################################
 # Local imports.
+from ..commands import CoreFilteringCommands
 from ..widgets import Bookmarks, Bookmark, Details, Menu
 
 
@@ -41,6 +42,7 @@ class Main(Screen[None]):
 
     TITLE = "TinBoard"
     SUB_TITLE = "A pinboard.in client"
+    COMMANDS = {CoreFilteringCommands}
 
     CSS = """
     *:can-focus {

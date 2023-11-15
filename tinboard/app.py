@@ -15,7 +15,6 @@ from textual.binding import Binding
 
 ##############################################################################
 # Local imports.
-from .commands import CoreFilteringCommands
 from .screens import Main, TokenInput
 from .utils import token_file
 
@@ -28,8 +27,6 @@ class TinBoard(App[None]):
         Binding("ctrl+backslash", "gndn"),
         Binding("ctrl+p", "command_palette", "Commands", priority=True),
     ]
-
-    COMMANDS = {CoreFilteringCommands} | App.COMMANDS
 
     def token_bounce(self, token: str | None) -> None:
         """Handle the result of asking the user for their API token.

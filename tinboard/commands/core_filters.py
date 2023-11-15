@@ -10,7 +10,6 @@ from textual.command import Hit, Hits, Provider
 
 ##############################################################################
 # Local imports.
-from ..screens import Main
 from ..widgets import Menu
 
 
@@ -27,8 +26,6 @@ class CoreFilteringCommands(Provider):
         Yields:
             Command hits for the command palette.
         """
-        if not isinstance(self.screen, Main):
-            return
         matcher = self.matcher(query)
         for command in Menu.CORE_OPTIONS:
             full_command = f"Show {command}"
