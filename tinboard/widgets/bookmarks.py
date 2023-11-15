@@ -72,8 +72,8 @@ class Bookmark(Option):  # pylint:disable=too-many-instance-attributes
     def prompt(self) -> Group:
         """The prompt for the bookmark."""
         details = Table.grid(expand=True)
-        details.add_column(no_wrap=True, ratio=1)
-        details.add_column(no_wrap=True, justify="left")
+        details.add_column(ratio=1)
+        details.add_column()
         details.add_row(
             f"[dim][i]{naturaltime(self.last_modified)}[/][/]",
             f"[dim]{', '.join(sorted(self.tags, key=str.casefold))}[/]",
