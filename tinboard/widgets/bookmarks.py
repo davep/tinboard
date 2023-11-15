@@ -6,7 +6,7 @@ from datetime import datetime
 from json import loads, dumps
 from typing import Any
 from webbrowser import open as open_url
-from typing_extensions import Self
+from typing_extensions import Final, Self
 
 ##############################################################################
 # pytz imports.
@@ -27,6 +27,7 @@ from textual.widgets.option_list import Option, OptionDoesNotExist
 ##############################################################################
 # Rich imports.
 from rich.console import Group
+from rich.emoji import Emoji
 from rich.rule import Rule
 from rich.table import Table
 
@@ -43,6 +44,12 @@ from ..utils import bookmarks_file
 ##############################################################################
 class Bookmark(Option):  # pylint:disable=too-many-instance-attributes
     """An individual bookmark."""
+
+    PRIVATE_ICON: Final[str] = Emoji.replace(":lock:")
+    """The icon to use for a private bookmark."""
+
+    UNREAD_ICON: Final[str] = Emoji.replace(":see-no-evil_monkey:")
+    """The icon to use for an unread bookmark."""
 
     def __init__(self, bookmark: BookmarkData) -> None:
         """Initialise the bookmark.
@@ -71,6 +78,15 @@ class Bookmark(Option):  # pylint:disable=too-many-instance-attributes
     @property
     def prompt(self) -> Group:
         """The prompt for the bookmark."""
+        # Create the title and icons line.
+        title = Table.grid(expand=True)
+        title.add_column(ratio=1)
+        title.add_column(justify="right")
+        title.add_row(
+            self.title,
+            f"  {'' if self.shared else self.PRIVATE_ICON}{self.UNREAD_ICON if self.unread else ''}",
+        )
+        # Create the details line.
         details = Table.grid(expand=True)
         details.add_column(ratio=1)
         details.add_column()
@@ -78,7 +94,8 @@ class Bookmark(Option):  # pylint:disable=too-many-instance-attributes
             f"[dim][i]{naturaltime(self.last_modified)}[/][/]",
             f"[dim]{', '.join(sorted(self.tags, key=str.casefold))}[/]",
         )
-        return Group(self.title, details, Rule(style="dim"))
+        # Combine them and add a rule afterwards.
+        return Group(title, details, Rule(style="dim"))
 
     def is_tagged(self, *tags: str) -> bool:
         """Is this bookmark tagged with the given tags?
