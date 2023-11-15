@@ -40,7 +40,6 @@ from ..utils import bookmarks_file
 
 ##############################################################################
 class Bookmark(Option):  # pylint:disable=too-many-instance-attributes
-
     """An individual bookmark."""
 
     def __init__(self, bookmark: BookmarkData) -> None:
