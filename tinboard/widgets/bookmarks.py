@@ -79,6 +79,17 @@ class Bookmark(Option):  # pylint:disable=too-many-instance-attributes
         )
         return Group(self.title, details, Rule(style="dim"))
 
+    def is_tagged(self, tag: str) -> bool:
+        """Is this bookmark tagged with the given tag?
+
+        Args:
+            tag: The tag to check for.
+
+        Returns:
+            `True` if the bookmark has the tag, `False` if not.
+        """
+        return tag.casefold() in {tag.casefold() for tag in self.tags}
+
     @property
     def as_json(self) -> dict[str, Any]:
         """The bookmark as a JSON-friendly dictionary."""
@@ -144,7 +155,7 @@ class Bookmarks(OptionList):
         for n in range(self.option_count):
             bookmark = self.get_option_at_index(n)
             assert isinstance(bookmark, Bookmark)
-            tags |= set(bookmark.tags)
+            tags |= set(tag.lower() for tag in bookmark.tags)
         return sorted(list(tags))
 
     @property
@@ -215,7 +226,7 @@ class Bookmarks(OptionList):
     def show_tagged_with(self, tag: str) -> None:
         """Show bookmarks tagged with a given tag."""
         self.show_bookmarks(
-            [bookmark for bookmark in self.bookmarks if tag in bookmark.tags],
+            [bookmark for bookmark in self.bookmarks if bookmark.is_tagged(tag)],
             f"Tagged with '{tag}'",
         )
 
