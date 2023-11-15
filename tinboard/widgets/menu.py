@@ -41,7 +41,7 @@ class Menu(OptionList):
     }
     """
 
-    _CORE_OPTIONS: Final[dict[str, str]] = {
+    CORE_OPTIONS: Final[dict[str, str]] = {
         "All": "a",
         "Unread": "R",
         "Read": "r",
@@ -70,7 +70,7 @@ class Menu(OptionList):
         Returns:
             The shortcut for the option.
         """
-        return cls._CORE_OPTIONS[option]
+        return cls.CORE_OPTIONS[option]
 
     @classmethod
     def _main_filter_prompt(cls, name: str) -> Table:
@@ -112,7 +112,7 @@ class Menu(OptionList):
                 cls._main_filter_prompt(prompt),
                 id=f"{cls._CORE_PREFIX}{prompt.lower()}",
             )
-            for prompt in cls._CORE_OPTIONS
+            for prompt in cls.CORE_OPTIONS
         ]
 
     def refresh_options(self, bookmarks: Bookmarks | None = None) -> None:
@@ -161,19 +161,17 @@ class Menu(OptionList):
         return option.id is not None and option.id.startswith(cls._TAG_PREFIX)
 
     @staticmethod
-    def filter_value(prefix: str, option: Option) -> str:
+    def filter_value(prefix: str, filter_id: str) -> str:
         """Get the filtering value for the given option.
 
         Args:
             prefix: The prefix for the filter option type.
-            option: The option to get the value from.
+            filter_id: The ID of a filter to get the value for.
 
         Returns:
             The value to filter with.
         """
-        assert option.id is not None
-        *_, value = option.id.partition(prefix)
-        return value
+        return filter_id.partition(prefix)[-1]
 
     class CoreFilter(Message):
         """Base class for the core filters."""
@@ -206,6 +204,26 @@ class Menu(OptionList):
         tag: str
         """The tag to filter on."""
 
+    @classmethod
+    def core_filter_message(cls, name: str) -> CoreFilter:
+        """Get a core filter message based off its name.
+
+        Args:
+            name: The name of the filter.
+
+        Returns:
+            A message to request that filter be used.
+        """
+        return {
+            "all": cls.ShowAll,
+            "unread": cls.ShowUnread,
+            "read": cls.ShowRead,
+            "public": cls.ShowPublic,
+            "private": cls.ShowPrivate,
+            "tagged": cls.ShowTagged,
+            "untagged": cls.ShowUntagged,
+        }[cls.filter_value(cls._CORE_PREFIX, name.lower())]()
+
     @on(OptionList.OptionSelected)
     def handle_selection(self, event: OptionList.OptionSelected) -> None:
         """Handle a menu option selection.
@@ -214,21 +232,14 @@ class Menu(OptionList):
             event: The event to handle.
         """
         event.stop()
+        assert event.option.id is not None
         if self.is_core_filter(event.option):
-            self.post_message(
-                {
-                    "all": self.ShowAll,
-                    "unread": self.ShowUnread,
-                    "read": self.ShowRead,
-                    "public": self.ShowPublic,
-                    "private": self.ShowPrivate,
-                    "tagged": self.ShowTagged,
-                    "untagged": self.ShowUntagged,
-                }[self.filter_value(self._CORE_PREFIX, event.option)]()
-            )
+            self.post_message(self.core_filter_message(event.option.id))
         elif self.is_tag_filter(event.option):
             self.post_message(
-                self.ShowTaggedWith(self.filter_value(self._TAG_PREFIX, event.option))
+                self.ShowTaggedWith(
+                    self.filter_value(self._TAG_PREFIX, event.option.id)
+                )
             )
 
     @dataclass
@@ -244,8 +255,11 @@ class Menu(OptionList):
             if self.is_tag_filter(
                 option := cast(Bookmark, self.get_option_at_index(self.highlighted))
             ):
+                assert option.id is not None
                 self.post_message(
-                    self.ShowAlsoTaggedWith(self.filter_value(self._TAG_PREFIX, option))
+                    self.ShowAlsoTaggedWith(
+                        self.filter_value(self._TAG_PREFIX, option.id)
+                    )
                 )
 
 
