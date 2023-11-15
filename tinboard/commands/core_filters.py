@@ -31,7 +31,7 @@ class CoreFilteringCommands(Provider):
             return
         matcher = self.matcher(query)
         for command in Menu.CORE_OPTIONS:
-            full_command = f"Show all {command}"
+            full_command = f"Show {command}"
             if match := matcher.match(full_command):
                 yield Hit(
                     match,
@@ -39,6 +39,11 @@ class CoreFilteringCommands(Provider):
                     partial(
                         self.screen.post_message,
                         Menu.core_filter_message(Menu.core_filter_id(command)),
+                    ),
+                    help=(
+                        "Show all bookmarks"
+                        if command == "All"
+                        else f"Show all bookmarks that are {command.lower()}"
                     ),
                 )
 
