@@ -128,6 +128,10 @@ class Bookmarks(OptionList):
     """The list of bookmarks."""
 
     DEFAULT_CSS = """
+    Bookmarks {
+        scrollbar-gutter: stable;
+    }
+
     Bookmarks > .option-list--option {
         padding: 0 1 0 1;
     }

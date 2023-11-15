@@ -32,6 +32,10 @@ class Menu(OptionList):
     """The main menu for the application."""
 
     DEFAULT_CSS = """
+    Menu {
+        scrollbar-gutter: stable;
+    }
+
     Menu > .option-list--option {
         padding: 0 1;
     }
