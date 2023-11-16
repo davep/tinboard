@@ -19,7 +19,7 @@ from aiopinboard import API
 ##############################################################################
 # Local imports.
 from ..commands import CoreFilteringCommands
-from ..widgets import Bookmarks, Bookmark, Details, Menu
+from ..widgets import Bookmarks, Bookmark, Details, Menu, Tags
 
 
 ##############################################################################
@@ -210,9 +210,9 @@ class Main(Screen[None]):
         self.query_one(Bookmarks).show_tagged()
 
     @on(Menu.ShowTaggedWith)
-    @on(Details.ShowTaggedWith)
+    @on(Tags.ShowTaggedWith)
     def show_tagged_with(
-        self, event: Menu.ShowTaggedWith | Details.ShowTaggedWith
+        self, event: Menu.ShowTaggedWith | Tags.ShowTaggedWith
     ) -> None:
         """Show all bookmarks tagged with a given tag.
 
@@ -222,9 +222,9 @@ class Main(Screen[None]):
         self.query_one(Bookmarks).show_tagged_with(event.tag)
 
     @on(Menu.ShowAlsoTaggedWith)
-    @on(Details.ShowAlsoTaggedWith)
+    @on(Tags.ShowAlsoTaggedWith)
     def show_also_tagged_with(
-        self, event: Menu.ShowAlsoTaggedWith | Details.ShowAlsoTaggedWith
+        self, event: Menu.ShowAlsoTaggedWith | Tags.ShowAlsoTaggedWith
     ) -> None:
         """Add a tag to any current tag filter and show the matching bookmarks.
 

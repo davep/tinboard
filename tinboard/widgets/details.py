@@ -2,7 +2,6 @@
 
 ##############################################################################
 # Python imports.
-from dataclasses import dataclass
 from webbrowser import open as open_url
 
 ##############################################################################
@@ -11,46 +10,17 @@ from humanize import naturaltime
 
 ##############################################################################
 # Textual imports.
-from textual import on
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import VerticalScroll
-from textual.message import Message
 from textual.reactive import var
-from textual.widgets import Label, OptionList
+from textual.widgets import Label
 from textual.widgets.option_list import Option
 
 ##############################################################################
 # Local imports.
 from .bookmarks import Bookmark
-
-
-##############################################################################
-class Tags(OptionList):
-    """A widget for displaying tags."""
-
-    BINDINGS = [
-        Binding("enter", "select", "Show tagged", show=True),
-        Binding("+", "also_tagged", "Show also tagged"),
-    ]
-
-    def on_focus(self) -> None:
-        """Ensure that something is highlighted, if possible"""
-        if self.option_count and self.highlighted is None:
-            self.highlighted = 0
-
-    @dataclass
-    class ShowAlsoTaggedWith(Message):
-        """Message to request that the bookmarks filter also include this tag."""
-
-        tag: str
-        """The tag to add to the filter."""
-
-    def action_also_tagged(self) -> None:
-        """Handle a request to add a tag to a tag filter."""
-        if self.highlighted is not None:
-            if (tag := self.get_option_at_index(self.highlighted).id) is not None:
-                self.post_message(self.ShowAlsoTaggedWith(tag))
+from .tags import Tags
 
 
 ##############################################################################
@@ -148,11 +118,8 @@ class Details(VerticalScroll):
             self.query_one("#is-public", Label).update(
                 f"The bookmark is {'[bold]public[/]' if self.bookmark.shared else '[dim]private[/]'}"
             )
-            self.query_one(Tags).clear_options().add_options(
-                [
-                    Option(tag, id=tag)
-                    for tag in sorted(self.bookmark.tags, key=str.casefold)
-                ]
+            self.query_one(Tags).show(
+                sorted(self.bookmark.tags, key=str.casefold)
             ).set_class(not bool(self.bookmark.tags), "empty")
 
         finally:
@@ -162,31 +129,6 @@ class Details(VerticalScroll):
         """Visit the current bookmark, if there is one."""
         if self.bookmark is not None:
             open_url(self.bookmark.href)
-
-    @dataclass
-    class ShowTaggedWith(Message):
-        """Message to request that the bookmarks filter on a tag."""
-
-        tag: str
-        """The tag to filter the bookmarks with."""
-
-    @on(Tags.OptionSelected)
-    def show_tagged(self, event: Tags.OptionSelected) -> None:
-        """Request that bookmarks with this tag be shown."""
-        if event.option_id is not None:
-            self.post_message(self.ShowTaggedWith(event.option_id))
-
-    @dataclass
-    class ShowAlsoTaggedWith(Message):
-        """Message to request that the bookmarks filter also include this tag."""
-
-        tag: str
-        """The tag to add to the filter."""
-
-    @on(Tags.ShowAlsoTaggedWith)
-    def show_also_tagged(self, event: Tags.ShowAlsoTaggedWith) -> None:
-        """Request that a tag be added to any existing tag filter."""
-        self.post_message(self.ShowAlsoTaggedWith(event.tag))
 
 
 ### details.py ends here
