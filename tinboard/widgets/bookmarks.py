@@ -217,7 +217,7 @@ class Bookmarks(OptionList):
         finally:
             self.post_message(self.Changed())
             self.focus()
-            if len(bookmarks):
+            if bookmarks:
                 try:
                     self.highlighted = self.get_option_index(was_highlighted)
                 except OptionDoesNotExist:
