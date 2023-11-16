@@ -4,11 +4,11 @@
 # Local imports.
 from .bookmarks import Bookmark, Bookmarks
 from .details import Details
-from .menu import Menu
+from .filters import Filters
 from .tags import Tags
 
 ##############################################################################
 # Public symbols.
-__all__ = ["Bookmark", "Bookmarks", "Details", "Menu", "Tags"]
+__all__ = ["Bookmark", "Bookmarks", "Details", "Filters", "Tags"]
 
 ### __init__.py ends here

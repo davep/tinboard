@@ -23,6 +23,10 @@ class Tags(OptionList):
     """A menu of tags."""
 
     DEFAULT_CSS = """
+    Tags, Tags:focus {
+        border: blank;
+    }
+
     Tags > .option-list--option {
         padding: 0 1;
     }
@@ -42,6 +46,7 @@ class Tags(OptionList):
         Returns:
             Self.
         """
+        self.can_focus = bool(tags)
         return self.clear_options().add_options([Option(tag, id=tag) for tag in tags])
 
     @dataclass

@@ -15,7 +15,6 @@ from textual.binding import Binding
 from textual.containers import VerticalScroll
 from textual.reactive import var
 from textual.widgets import Label
-from textual.widgets.option_list import Option
 
 ##############################################################################
 # Local imports.
@@ -71,7 +70,6 @@ class Details(VerticalScroll):
     }
 
     Details Tags, Details Tags:focus {
-        border: blank;
         margin: 0 2 1 2;
     }
     """

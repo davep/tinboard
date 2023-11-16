@@ -10,7 +10,7 @@ from textual.command import Hit, Hits, Provider
 
 ##############################################################################
 # Local imports.
-from ..widgets import Menu
+from ..widgets import Filters
 
 
 ##############################################################################
@@ -27,7 +27,7 @@ class CoreFilteringCommands(Provider):
             Command hits for the command palette.
         """
         matcher = self.matcher(query)
-        for command in Menu.CORE_OPTIONS:
+        for command in Filters.OPTIONS:
             full_command = f"Show {command}"
             if match := matcher.match(full_command):
                 yield Hit(
@@ -35,7 +35,7 @@ class CoreFilteringCommands(Provider):
                     matcher.highlight(full_command),
                     partial(
                         self.screen.post_message,
-                        Menu.core_filter_message(Menu.core_filter_id(command)),
+                        Filters.core_filter_message(command),
                     ),
                     help=(
                         "Show all bookmarks"

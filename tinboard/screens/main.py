@@ -8,9 +8,10 @@ from webbrowser import open as open_url
 # Textual imports.
 from textual import on, work
 from textual.app import ComposeResult
+from textual.containers import Vertical
 from textual.binding import Binding
 from textual.screen import Screen
-from textual.widgets import Footer, Header
+from textual.widgets import Footer, Header, Rule
 
 ##############################################################################
 # Pinboard API library.
@@ -19,7 +20,7 @@ from aiopinboard import API
 ##############################################################################
 # Local imports.
 from ..commands import CoreFilteringCommands
-from ..widgets import Bookmarks, Bookmark, Details, Menu, Tags
+from ..widgets import Bookmarks, Bookmark, Details, Filters, Tags
 
 
 ##############################################################################
@@ -32,7 +33,7 @@ def filter_binding(name: str) -> Binding:
     Returns:
         A binding for the filter.
     """
-    return Binding(Menu.shortcut(name), f"show_{name.lower()}")
+    return Binding(Filters.shortcut(name), f"show_{name.lower()}")
 
 
 ##############################################################################
@@ -48,21 +49,43 @@ class Main(Screen[None]):
         layout: horizontal;
     }
 
-    Main > *:can-focus {
+    Main > .focus {
         border: none;
         border-left: tall $accent 50%;
         background: $boost;
     }
 
-    Main > *:focus, Main > *:focus-within {
+    Main > .focus:focus, Main > .focus:focus-within {
         border: none;
         border-left: tall $accent;
         background: $panel;
     }
 
-    Menu {
+    #menu {
+        padding: 0;
+        margin: 0;
         height: 1fr;
         min-width: 25;
+    }
+
+    #menu Filters {
+        padding-left: 1;
+    }
+
+    #menu Tags {
+        height: 1fr;
+    }
+
+    #menu Rule {
+        height: 1;
+        margin: 0 0 0 0;
+        background: $boost;
+        color: $accent 50%;
+    }
+
+    #menu:focus-within Rule {
+        background: $boost;
+        color: $accent;
     }
 
     Bookmarks {
@@ -103,9 +126,12 @@ class Main(Screen[None]):
     def compose(self) -> ComposeResult:
         """Lay out the content of the screen."""
         yield Header()
-        yield Menu()
-        yield Bookmarks()
-        yield Details()
+        with Vertical(id="menu", classes="focus"):
+            yield Filters()
+            yield Rule()
+            yield Tags()
+        yield Bookmarks(classes="focus")
+        yield Details(classes="focus")
         yield Footer()
 
     def on_mount(self) -> None:
@@ -144,7 +170,7 @@ class Main(Screen[None]):
         """Refresh the display when an update happens."""
         bookmarks = self.query_one(Bookmarks)
         bookmarks.loading = False
-        self.query_one(Menu).refresh_options(bookmarks)
+        self.query_one("#menu Tags", Tags).show(bookmarks.tags)
 
     @on(Bookmarks.OptionHighlighted, "Bookmarks")
     def refresh_details(self, event: Bookmarks.OptionHighlighted) -> None:
@@ -163,7 +189,7 @@ class Main(Screen[None]):
     def action_redownload(self) -> None:
         """Freshly download the bookmarks."""
         self.sub_title = "Loading..."
-        self.query_one(Menu).refresh_options()
+        self.query_one("#menu Tags", Tags).show([])
         self.query_one(Bookmarks).loading = True
         self.download_bookmarks()
 
@@ -172,48 +198,45 @@ class Main(Screen[None]):
         if isinstance(self.screen.focused, Details):
             self.query_one(Bookmarks).focus()
         elif isinstance(self.screen.focused, Bookmarks):
-            self.query_one(Menu).focus()
+            self.query_one(Filters).focus()
 
-    @on(Menu.ShowAll)
+    @on(Filters.ShowAll)
     def action_show_all(self) -> None:
         """Show all bookmarks."""
         self.query_one(Bookmarks).show_all()
 
-    @on(Menu.ShowPublic)
+    @on(Filters.ShowPublic)
     def action_show_public(self) -> None:
         """Show all public bookmarks."""
         self.query_one(Bookmarks).show_public()
 
-    @on(Menu.ShowPrivate)
+    @on(Filters.ShowPrivate)
     def action_show_private(self) -> None:
         """Show all private bookmarks."""
         self.query_one(Bookmarks).show_private()
 
-    @on(Menu.ShowUnread)
+    @on(Filters.ShowUnread)
     def action_show_unread(self) -> None:
         """Show all unread bookmarks."""
         self.query_one(Bookmarks).show_unread()
 
-    @on(Menu.ShowRead)
+    @on(Filters.ShowRead)
     def action_show_read(self) -> None:
         """Show all read bookmarks."""
         self.query_one(Bookmarks).show_read()
 
-    @on(Menu.ShowUntagged)
+    @on(Filters.ShowUntagged)
     def action_show_untagged(self) -> None:
         """Show all untagged bookmarks."""
         self.query_one(Bookmarks).show_untagged()
 
-    @on(Menu.ShowTagged)
+    @on(Filters.ShowTagged)
     def action_show_tagged(self) -> None:
         """Show all tagged bookmarks."""
         self.query_one(Bookmarks).show_tagged()
 
-    @on(Menu.ShowTaggedWith)
     @on(Tags.ShowTaggedWith)
-    def show_tagged_with(
-        self, event: Menu.ShowTaggedWith | Tags.ShowTaggedWith
-    ) -> None:
+    def show_tagged_with(self, event: Tags.ShowTaggedWith) -> None:
         """Show all bookmarks tagged with a given tag.
 
         Args:
@@ -221,11 +244,8 @@ class Main(Screen[None]):
         """
         self.query_one(Bookmarks).show_tagged_with(event.tag)
 
-    @on(Menu.ShowAlsoTaggedWith)
     @on(Tags.ShowAlsoTaggedWith)
-    def show_also_tagged_with(
-        self, event: Menu.ShowAlsoTaggedWith | Tags.ShowAlsoTaggedWith
-    ) -> None:
+    def show_also_tagged_with(self, event: Tags.ShowAlsoTaggedWith) -> None:
         """Add a tag to any current tag filter and show the matching bookmarks.
 
         Args:
