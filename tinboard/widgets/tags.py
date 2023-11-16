@@ -15,7 +15,7 @@ from textual import on
 from textual.binding import Binding
 from textual.message import Message
 from textual.widgets import OptionList
-from textual.widgets.option_list import Option
+from textual.widgets.option_list import Option, OptionDoesNotExist
 
 
 ##############################################################################
@@ -47,7 +47,21 @@ class Tags(OptionList):
             Self.
         """
         self.can_focus = bool(tags)
-        return self.clear_options().add_options([Option(tag, id=tag) for tag in tags])
+        was_highlighted = (
+            self.get_option_at_index(self.highlighted).id
+            if self.highlighted is not None
+            else None
+        )
+        try:
+            return self.clear_options().add_options(
+                [Option(tag, id=tag) for tag in tags]
+            )
+        finally:
+            if tags:
+                try:
+                    self.highlighted = self.get_option_index(was_highlighted)
+                except OptionDoesNotExist:
+                    self.highlighted = 0
 
     @dataclass
     class TagMessage(Message):
