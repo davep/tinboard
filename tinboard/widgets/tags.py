@@ -34,7 +34,14 @@ class Tags(OptionList):
     ]
 
     def show(self, tags: list[str]) -> Self:
-        """Show the given list of tags."""
+        """Show the given list of tags.
+
+        Args:
+            tags: The tags to show in the widget.
+
+        Returns:
+            Self.
+        """
         return self.clear_options().add_options([Option(tag, id=tag) for tag in tags])
 
     @dataclass
