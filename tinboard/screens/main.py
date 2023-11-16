@@ -195,9 +195,13 @@ class Main(Screen[None]):
 
     def action_escape(self) -> None:
         """Give some context to banging the escape key."""
-        if isinstance(self.screen.focused, Details):
+        if self.screen.focused is None:
+            return
+        if isinstance(self.screen.focused, Details) or isinstance(
+            self.screen.focused.parent, Details
+        ):
             self.query_one(Bookmarks).focus()
-        elif isinstance(self.screen.focused, Bookmarks):
+        elif isinstance(self.screen.focused, (Bookmarks, Tags)):
             self.query_one(Filters).focus()
 
     @on(Filters.ShowAll)
