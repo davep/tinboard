@@ -222,7 +222,10 @@ class Main(Screen[None]):
         self.query_one(Bookmarks).show_tagged_with(event.tag)
 
     @on(Menu.ShowAlsoTaggedWith)
-    def show_also_tagged_with(self, event: Menu.ShowAlsoTaggedWith) -> None:
+    @on(Details.ShowAlsoTaggedWith)
+    def show_also_tagged_with(
+        self, event: Menu.ShowAlsoTaggedWith | Details.ShowAlsoTaggedWith
+    ) -> None:
         """Add a tag to any current tag filter and show the matching bookmarks.
 
         Args:
