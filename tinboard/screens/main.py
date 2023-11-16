@@ -9,7 +9,6 @@ from webbrowser import open as open_url
 from textual import on, work
 from textual.app import ComposeResult
 from textual.binding import Binding
-from textual.containers import Horizontal
 from textual.screen import Screen
 from textual.widgets import Footer, Header
 
