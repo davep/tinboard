@@ -10,9 +10,11 @@ from humanize import naturaltime
 
 ##############################################################################
 # Textual imports.
+from textual import on
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import VerticalScroll
+from textual.message import Message
 from textual.reactive import var
 from textual.widgets import Label
 
@@ -20,6 +22,24 @@ from textual.widgets import Label
 # Local imports.
 from .bookmarks import Bookmark
 from .tags import Tags
+
+
+##############################################################################
+class Link(Label):
+    """Widget for showing the link.
+
+    This is here mostly to work around the fact that a click action doesn't
+    propagate in the way you'd expect.
+
+    https://github.com/Textualize/textual/issues/3690
+    """
+
+    class Visit(Message):
+        """Message to indicate that the link should be visited."""
+
+    def action_visit(self) -> None:
+        """Handle a UI request to visit the link."""
+        self.post_message(self.Visit())
 
 
 ##############################################################################
@@ -83,7 +103,7 @@ class Details(VerticalScroll):
         """Compose the widget."""
         yield Label(id="title")
         yield Label(id="description", classes="detail empty")
-        yield Label(id="link", classes="detail")
+        yield Link(id="link", classes="detail")
         yield Label(id="last-modified-ish", classes="detail")
         yield Label(id="last-modified-exact", classes="detail")
         yield Label(id="is-read", classes="detail")
@@ -100,10 +120,7 @@ class Details(VerticalScroll):
             self.query_one("#description", Label).set_class(
                 not bool(self.bookmark.description), "empty"
             )
-            # TODO: This doesn't find the correct action.
-            self.query_one("#link", Label).update(
-                f"[@click=visit_bookmark]{self.bookmark.href}[/]"
-            )
+            self.query_one(Link).update(f"[@click=visit]{self.bookmark.href}[/]")
             self.query_one("#last-modified-ish", Label).update(
                 f"Last updated {naturaltime(self.bookmark.last_modified)}"
             )
@@ -123,7 +140,8 @@ class Details(VerticalScroll):
         finally:
             self.query("*").set_class(not bool(self.bookmark), "hidden")
 
-    def action_visit_bookmark(self) -> None:
+    @on(Link.Visit)
+    def visit_bookmark(self) -> None:
         """Visit the current bookmark, if there is one."""
         if self.bookmark is not None:
             open_url(self.bookmark.href)
