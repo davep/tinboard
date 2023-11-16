@@ -141,7 +141,7 @@ class Details(VerticalScroll):
             self.query("*").set_class(not bool(self.bookmark), "hidden")
 
     @on(Link.Visit)
-    def visit_bookmark(self) -> None:
+    def action_visit_bookmark(self) -> None:
         """Visit the current bookmark, if there is one."""
         if self.bookmark is not None:
             open_url(self.bookmark.href)
