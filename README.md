@@ -1,6 +1,6 @@
 # TinBoard
 
-![TinBoard](./tinboard.png)
+![TinBoard](https://raw.githubusercontent.com/davep/tinboard/main/tinboard.png)
 
 A very early work in progress. This will be turning into a full
 terminal-based Pinboard client. At the moment this is a read-only client;
