@@ -60,7 +60,13 @@ class TinBoard(App[None]):
         return None
 
     def on_mount(self) -> None:
-        """Display the main screen."""
+        """Display the main screen.
+
+        Note:
+            If the Pinboard API token isn't known, the token input dialog
+            will first be shown; the main screen will then only be shown
+            once the token has been acquired.
+        """
         if token := self.api_token:
             self.push_screen(Main(token))
         else:
