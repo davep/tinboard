@@ -28,5 +28,12 @@ Things to do:
 - [ ] Add the ability to "logout" (IOW forget the API token).
 - [ ] Add a bookmark export facility.
 - [ ] Add tag counts to the tag list.
+- [ ] Add tag searching to the command palette.
+- [ ] Add a show/hide toggle for the details pane.
+- [ ] Add saving of various states to resume when next ran.
+  - [ ] Dark/light mode.
+  - [ ] The show/hide state of the details pane.
+  - [ ] The main filter?
+  - [ ] The selected tag(s)?
 
 [//]: # (README.md ends here)
