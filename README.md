@@ -8,7 +8,8 @@ something to let me riff on the interface and decide what I like. Once that
 has settled down I'll be adding full write capability too.
 
 All application data lives in `~/.local/share/tinboard`; if you want to wipe
-it out just nuke that directory.
+it out just nuke that directory. Likewise, application configuration data
+lives in `~/.config/tinboard`.
 
 As for bugs and feature requests and stuff... not yet thanks; that time will
 come. :-)
@@ -31,7 +32,7 @@ Things to do:
 - [ ] Add tag searching to the command palette.
 - [ ] Add a show/hide toggle for the details pane.
 - [ ] Add saving of various states to resume when next ran.
-  - [ ] Dark/light mode.
+  - [X] Dark/light mode.
   - [ ] The show/hide state of the details pane.
   - [ ] The main filter?
   - [ ] The selected tag(s)?

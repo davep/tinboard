@@ -16,7 +16,7 @@ from textual.binding import Binding
 ##############################################################################
 # Local imports.
 from .screens import Main, TokenInput
-from .data import token_file
+from .data import load_configuration, save_configuration, token_file
 
 
 ##############################################################################
@@ -27,6 +27,11 @@ class TinBoard(App[None]):
         Binding("ctrl+backslash", "gndn"),
         Binding("ctrl+p", "command_palette", "Commands", priority=True),
     ]
+
+    def __init__(self) -> None:
+        """Initialise the application."""
+        super().__init__()
+        self.dark = load_configuration().dark_mode
 
     def token_bounce(self, token: str | None) -> None:
         """Handle the result of asking the user for their API token.
@@ -71,6 +76,12 @@ class TinBoard(App[None]):
             self.push_screen(Main(token))
         else:
             self.push_screen(TokenInput(), callback=self.token_bounce)
+
+    def _watch_dark(self) -> None:
+        """Save the light/dark mode configuration choice."""
+        configuration = load_configuration()
+        configuration.dark_mode = self.dark
+        save_configuration(configuration)
 
 
 ### app.py ends here
