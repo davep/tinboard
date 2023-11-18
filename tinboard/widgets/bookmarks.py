@@ -38,7 +38,7 @@ from aiopinboard.bookmark import Bookmark as BookmarkData
 
 ##############################################################################
 # Local imports.
-from ..utils import bookmarks_file
+from ..data import bookmarks_file
 
 
 ##############################################################################

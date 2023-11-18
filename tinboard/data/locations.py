@@ -1,4 +1,4 @@
-"""Utility code for dealing with the data."""
+"""Functions for getting the locations of data."""
 
 ##############################################################################
 # Python imports.
@@ -24,24 +24,4 @@ def data_dir() -> Path:
     return save_to
 
 
-##############################################################################
-def bookmarks_file() -> Path:
-    """The path to the file that the local bookmarks are held in.
-
-    Returns:
-        The path to the bookmarks file.
-    """
-    return data_dir() / "bookmarks.json"
-
-
-##############################################################################
-def token_file() -> Path:
-    """The file where the API token is held.
-
-    Returns:
-        The path to the token file.
-    """
-    return data_dir() / ".token"
-
-
-### data.py ends here
+### locations.py ends here

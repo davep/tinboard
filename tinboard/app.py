@@ -16,7 +16,7 @@ from textual.binding import Binding
 ##############################################################################
 # Local imports.
 from .screens import Main, TokenInput
-from .utils import token_file
+from .data import token_file
 
 
 ##############################################################################
