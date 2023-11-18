@@ -48,7 +48,7 @@ class Tags(OptionList):
             Self.
         """
         self.can_focus = bool(tags)
-        was_highlighted = (
+        highlighted_tag = (
             self.get_option_at_index(self.highlighted).id
             if self.highlighted is not None
             else None
@@ -60,7 +60,7 @@ class Tags(OptionList):
         finally:
             if tags:
                 try:
-                    self.highlighted = self.get_option_index(was_highlighted)
+                    self.highlighted = self.get_option_index(highlighted_tag)
                 except OptionDoesNotExist:
                     self.highlighted = 0
 

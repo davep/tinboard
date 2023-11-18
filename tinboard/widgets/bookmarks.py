@@ -207,7 +207,7 @@ class Bookmarks(OptionList):
         # pylint:disable=attribute-defined-outside-init
         self._tags = set()
         self.screen.sub_title = f"{description} ({len(bookmarks)})"
-        was_highlighted = (
+        highlighted_bookmark = (
             self.get_option_at_index(self.highlighted).id
             if self.highlighted is not None
             else None
@@ -219,7 +219,7 @@ class Bookmarks(OptionList):
             self.focus()
             if bookmarks:
                 try:
-                    self.highlighted = self.get_option_index(was_highlighted)
+                    self.highlighted = self.get_option_index(highlighted_bookmark)
                 except OptionDoesNotExist:
                     self.highlighted = 0
 
