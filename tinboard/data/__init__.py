@@ -1,4 +1,4 @@
-"""Utility code for the application."""
+"""Code relating to the data stored by the application."""
 
 ##############################################################################
 # Local imports.
