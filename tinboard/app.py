@@ -56,10 +56,7 @@ class TinBoard(App[None]):
         if token := os.environ.get("TINBOARD_API_TOKEN"):
             return token
         try:
-            if token_file().exists() and (
-                token := token_file().read_text(encoding="utf-8")
-            ):
-                return token
+            return token_file().read_text(encoding="utf-8")
         except IOError:
             pass
         return None
