@@ -53,10 +53,10 @@ class TinBoard(App[None]):
         saved token will be looked for and used. If one doesn't exist the
         value will be `None`.
         """
-        if token := os.environ.get("TINBOARD_API_TOKEN"):
-            return token
         try:
-            return token_file().read_text(encoding="utf-8")
+            return os.environ.get("TINBOARD_API_TOKEN") or token_file().read_text(
+                encoding="utf-8"
+            )
         except IOError:
             pass
         return None
