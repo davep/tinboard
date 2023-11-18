@@ -13,6 +13,7 @@ from typing_extensions import Self
 # Textual imports.
 from textual import on
 from textual.binding import Binding
+from textual.events import Focus
 from textual.message import Message
 from textual.widgets import OptionList
 from textual.widgets.option_list import Option, OptionDoesNotExist
@@ -76,7 +77,7 @@ class Tags(OptionList):
     class ShowAlsoTaggedWith(TagMessage):
         """Message to say bookmarks also of this tag should be shown."""
 
-    def _on_focus(self) -> None:
+    def _on_focus(self, _: Focus) -> None:
         """Highlight the first item on focus, if none highlighted."""
         if self.option_count and self.highlighted is None:
             self.highlighted = 0
