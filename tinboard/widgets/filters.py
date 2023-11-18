@@ -82,7 +82,7 @@ class Filters(OptionList):
     def __init__(
         self,
         name: str | None = None,
-        id: str | None = None,
+        id: str | None = None,  # pylint:disable=redefined-builtin
         classes: str | None = None,
         disabled: bool = False,
     ):
