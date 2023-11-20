@@ -19,7 +19,7 @@ from aiopinboard import API
 
 ##############################################################################
 # Local imports.
-from ..commands import CoreFilteringCommands
+from ..commands import CoreFilteringCommands, TagCommands
 from ..widgets import Bookmarks, Bookmark, Details, Filters, Tags
 
 
@@ -42,7 +42,7 @@ class Main(Screen[None]):
 
     TITLE = "TinBoard"
     SUB_TITLE = "A pinboard.in client"
-    COMMANDS = {CoreFilteringCommands}
+    COMMANDS = {CoreFilteringCommands, TagCommands}
 
     CSS = """
     Main {
@@ -139,6 +139,8 @@ class Main(Screen[None]):
         self.sub_title = "Loading..."
         bookmarks = self.query_one(Bookmarks)
         bookmarks.loading = True
+        TagCommands.show_tagged = self.query_one(Bookmarks).show_tagged_with
+        TagCommands.show_also_tagged = self.query_one(Bookmarks).show_also_tagged_with
         if bookmarks.load():
             self.maybe_redownload()
 
@@ -171,6 +173,7 @@ class Main(Screen[None]):
         bookmarks = self.query_one(Bookmarks)
         bookmarks.loading = False
         self.query_one("#menu Tags", Tags).show(bookmarks.tags)
+        TagCommands.current_tags = bookmarks.tags
 
     @on(Bookmarks.OptionHighlighted, "Bookmarks")
     def refresh_details(self, event: Bookmarks.OptionHighlighted) -> None:
