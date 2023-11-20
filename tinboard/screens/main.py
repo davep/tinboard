@@ -173,7 +173,7 @@ class Main(Screen[None]):
         bookmarks = self.query_one(Bookmarks)
         bookmarks.loading = False
         self.query_one("#menu Tags", Tags).show(bookmarks.tags)
-        TagCommands.current_tags = bookmarks.tags
+        TagCommands.current_tags = list(bookmarks.tags)
 
     @on(Bookmarks.OptionHighlighted, "Bookmarks")
     def refresh_details(self, event: Bookmarks.OptionHighlighted) -> None:
