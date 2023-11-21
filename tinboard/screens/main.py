@@ -141,8 +141,8 @@ class Main(Screen[None]):
         bookmarks.loading = True
         TagCommands.show_tagged = self.query_one(Bookmarks).show_tagged_with
         TagCommands.show_also_tagged = self.query_one(Bookmarks).show_also_tagged_with
-        if bookmarks.load():
-            self.maybe_redownload()
+        bookmarks.load()
+        self.maybe_redownload()
 
     @work
     async def download_bookmarks(self) -> None:
@@ -166,6 +166,9 @@ class Main(Screen[None]):
                     "Bookmarks on the server appear newer; downloading a fresh copy."
                 )
                 self.action_redownload()
+        else:
+            self.notify("No local bookmarks found; checking with the server.")
+            self.action_redownload()
 
     @on(Bookmarks.Changed)
     def _bookmarks_changed(self) -> None:
