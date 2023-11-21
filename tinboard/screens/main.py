@@ -16,9 +16,11 @@ from textual.widgets import Footer, Header, Rule
 ##############################################################################
 # Pinboard API library.
 from aiopinboard import API
+from aiopinboard.bookmark import Bookmark as BookmarkData
 
 ##############################################################################
 # Local imports.
+from .bookmark_input import BookmarkInput
 from ..commands import CoreFilteringCommands, TagCommands
 from ..widgets import Bookmarks, Bookmark, Details, Filters, Tags
 
@@ -112,6 +114,7 @@ class Main(Screen[None]):
         Binding("ctrl+r", "redownload", "Re-download"),
         Binding("ctrl+q", "quit", "Quit"),
         Binding("escape", "escape"),
+        Binding("e", "edit", "Edit"),
     ]
 
     def __init__(self, api_token: str) -> None:
@@ -262,6 +265,27 @@ class Main(Screen[None]):
             event: The event that contains the tag to add.
         """
         self.query_one(Bookmarks).show_also_tagged_with(event.tag)
+
+    def edit_result(self, result: BookmarkData | None) -> None:
+        """Handle the result of an edit of a bookmark.
+
+        Args:
+            result: The result data, or `None` if the edit was cancelled.
+        """
+        if result:
+            self.notify("TODO: Use the result.")
+
+    def action_edit(self) -> None:
+        """Edit the current bookmark, if there is one."""
+        bookmark = self.query_one(Bookmarks).highlighted
+        if bookmark is None:
+            self.app.bell()
+        else:
+            data = self.query_one(Bookmarks).get_option_at_index(bookmark)
+            assert isinstance(data, Bookmark)
+            self.app.push_screen(
+                BookmarkInput(data.as_bookmark), callback=self.edit_result
+            )
 
 
 ### main.py ends here

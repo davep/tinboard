@@ -139,6 +139,13 @@ class Bookmark(Option):  # pylint:disable=too-many-instance-attributes
         )
         return cls(BookmarkData(**data))
 
+    @property
+    def as_bookmark(self) -> BookmarkData:
+        """The bookmark as the underlying bookmark data."""
+        data = self.as_json
+        data["last_modified"] = datetime.fromisoformat(data["last_modified"])
+        return BookmarkData(**data)
+
 
 ##############################################################################
 class Bookmarks(OptionList):
