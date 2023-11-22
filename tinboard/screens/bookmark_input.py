@@ -24,6 +24,8 @@ from ..widgets import TextArea
 
 ##############################################################################
 class BookmarkInput(ModalScreen[BookmarkData | None]):
+    """The bookmark editing dialog."""
+
     DEFAULT_CSS = """
     BookmarkInput {
         align: center middle;
