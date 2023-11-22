@@ -143,8 +143,6 @@ class Main(Screen[None]):
         self.sub_title = "Loading..."
         bookmarks = self.query_one(Bookmarks)
         bookmarks.loading = True
-        TagCommands.show_tagged = self.query_one(Bookmarks).show_tagged_with
-        TagCommands.show_also_tagged = self.query_one(Bookmarks).show_also_tagged_with
         bookmarks.load()
         self.maybe_redownload()
 
