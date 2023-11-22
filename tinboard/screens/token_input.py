@@ -90,7 +90,7 @@ class TokenInput(ModalScreen[str | None]):
             self.notify("Please provide a token", severity="error")
 
     @on(Button.Pressed, "#cancel")
-    def cancel(self) -> None:
+    def action_cancel(self) -> None:
         """React to the user cancelling the dialog."""
         self.dismiss(None)
 
@@ -99,10 +99,6 @@ class TokenInput(ModalScreen[str | None]):
         """Open the page for getting an API token."""
         open_url("https://pinboard.in/settings/password")
         self.query_one(Input).focus()
-
-    def action_cancel(self) -> None:
-        """Cancel binding action."""
-        self.cancel()
 
 
 ### token_input.py ends here
