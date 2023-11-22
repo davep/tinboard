@@ -23,9 +23,14 @@ class TextArea(BaseTextArea):
     }
     """
 
+    def _retheme(self) -> None:
+        """Swap between a dark and light theme when the mode changes."""
+        self.theme = "vscode_dark" if self.app.dark else "github_light"
+
     def on_mount(self) -> None:
         """Configure the text area on mount."""
         self.show_line_numbers = False
+        self.watch(self.app, "dark", self._retheme)
 
     async def _on_key(self, event: Key) -> None:
         """Allow tab to move along the focus chain."""
