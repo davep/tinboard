@@ -265,14 +265,26 @@ class Main(Screen[None]):
         """
         self.query_one(Bookmarks).show_also_tagged_with(event.tag)
 
-    def edit_result(self, result: BookmarkData | None) -> None:
+    async def edit_result(self, result: BookmarkData | None) -> None:
         """Handle the result of an edit of a bookmark.
 
         Args:
             result: The result data, or `None` if the edit was cancelled.
         """
         if result:
-            self.notify("TODO: Use the result.")
+            # TODO: This just dumps the data back on the server, which is
+            # fine, but it doesn't update things locally. We need a local
+            # update too (and not via refresh; that would be rubbish).
+            await self._api.bookmark.async_add_bookmark(
+                url=result.href,
+                title=result.title,
+                description=result.description,
+                tags=result.tags,
+                shared=result.shared,
+                toread=result.unread,
+                replace=True,
+            )
+            self.notify("Updated.")
 
     def action_edit(self) -> None:
         """Edit the current bookmark, if there is one."""

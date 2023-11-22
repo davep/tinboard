@@ -5,6 +5,10 @@
 from __future__ import annotations
 
 ##############################################################################
+# Python imports.
+from datetime import datetime
+
+##############################################################################
 # Textual imports.
 from textual import on
 from textual.app import ComposeResult
@@ -108,7 +112,20 @@ class BookmarkInput(ModalScreen[BookmarkData | None]):
     @on(Button.Pressed, "#save")
     def save(self) -> None:
         """Save the bookmark data."""
-        self.dismiss(None)
+        self.dismiss(
+            BookmarkData(
+                href=self.query_one("#url", Input).value,
+                title=self.query_one("#title", Input).value,
+                description=self.query_one("#description", TextArea).text,
+                tags=self.query_one("#tags", Input).value.split(),
+                shared=not self.query_one("#private", Checkbox).value,
+                unread=self.query_one("#read-later", Checkbox).value,
+                # Nonsense values for these last two, as I'm just borrowing the
+                # aiopinboard Bookmark class to pass the data around.
+                hash="",
+                last_modified=datetime.now(),
+            )
+        )
 
     @on(Button.Pressed, "#cancel")
     def action_cancel(self) -> None:
