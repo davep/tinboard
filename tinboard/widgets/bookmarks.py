@@ -223,7 +223,7 @@ class Bookmarks(OptionList):
             return self.clear_options().add_options(bookmarks)
         finally:
             self.post_message(self.Changed())
-            if bookmarks:
+            if bookmarks and highlighted_bookmark is not None:
                 try:
                     self.highlighted = self.get_option_index(highlighted_bookmark)
                 except OptionDoesNotExist:
