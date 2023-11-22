@@ -223,7 +223,6 @@ class Bookmarks(OptionList):
             return self.clear_options().add_options(bookmarks)
         finally:
             self.post_message(self.Changed())
-            self.focus()
             if bookmarks:
                 try:
                     self.highlighted = self.get_option_index(highlighted_bookmark)
