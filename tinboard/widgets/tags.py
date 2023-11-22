@@ -6,7 +6,6 @@ from __future__ import annotations
 
 ##############################################################################
 # Python imports.
-from dataclasses import dataclass
 from typing_extensions import Self
 
 ##############################################################################
@@ -14,9 +13,12 @@ from typing_extensions import Self
 from textual import on
 from textual.binding import Binding
 from textual.events import Focus
-from textual.message import Message
 from textual.widgets import OptionList
 from textual.widgets.option_list import Option, OptionDoesNotExist
+
+##############################################################################
+# Local imports.
+from ..messages import ShowAlsoTaggedWith, ShowTaggedWith
 
 
 ##############################################################################
@@ -64,19 +66,6 @@ class Tags(OptionList):
                 except OptionDoesNotExist:
                     self.highlighted = 0
 
-    @dataclass
-    class TagMessage(Message):
-        """Base class for the tag messages."""
-
-        tag: str
-        """The tag associated with the message."""
-
-    class ShowTaggedWith(TagMessage):
-        """Message to say bookmarks of this tag should be shown."""
-
-    class ShowAlsoTaggedWith(TagMessage):
-        """Message to say bookmarks also of this tag should be shown."""
-
     def _on_focus(self, _: Focus) -> None:
         """Highlight the first item on focus, if none highlighted."""
         if self.option_count and self.highlighted is None:
@@ -90,13 +79,13 @@ class Tags(OptionList):
             event: The event to handle.
         """
         if event.option.id is not None:
-            self.post_message(self.ShowTaggedWith(event.option.id))
+            self.post_message(ShowTaggedWith(event.option.id))
 
     def action_also_tagged(self) -> None:
         """Request that the current tag is added to any tag filter in place."""
         if self.highlighted is not None:
             if (tag := self.get_option_at_index(self.highlighted).id) is not None:
-                self.post_message(self.ShowAlsoTaggedWith(tag))
+                self.post_message(ShowAlsoTaggedWith(tag))
 
 
 ### tags.py ends here

@@ -22,6 +22,7 @@ from aiopinboard.bookmark import Bookmark as BookmarkData
 # Local imports.
 from .bookmark_input import BookmarkInput
 from ..commands import CoreFilteringCommands, TagCommands
+from ..messages import ShowAlsoTaggedWith, ShowTaggedWith
 from ..widgets import Bookmarks, Bookmark, Details, Filters, Tags
 
 
@@ -248,8 +249,8 @@ class Main(Screen[None]):
         """Show all tagged bookmarks."""
         self.query_one(Bookmarks).show_tagged()
 
-    @on(Tags.ShowTaggedWith)
-    def show_tagged_with(self, event: Tags.ShowTaggedWith) -> None:
+    @on(ShowTaggedWith)
+    def show_tagged_with(self, event: ShowTaggedWith) -> None:
         """Show all bookmarks tagged with a given tag.
 
         Args:
@@ -257,8 +258,8 @@ class Main(Screen[None]):
         """
         self.query_one(Bookmarks).show_tagged_with(event.tag)
 
-    @on(Tags.ShowAlsoTaggedWith)
-    def show_also_tagged_with(self, event: Tags.ShowAlsoTaggedWith) -> None:
+    @on(ShowAlsoTaggedWith)
+    def show_also_tagged_with(self, event: ShowAlsoTaggedWith) -> None:
         """Add a tag to any current tag filter and show the matching bookmarks.
 
         Args:
