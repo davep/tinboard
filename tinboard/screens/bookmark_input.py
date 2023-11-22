@@ -8,6 +8,7 @@ from __future__ import annotations
 # Textual imports.
 from textual import on
 from textual.app import ComposeResult
+from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
 from textual.screen import ModalScreen
 from textual.widgets import Button, Checkbox, Input, Label
@@ -62,6 +63,8 @@ class BookmarkInput(ModalScreen[BookmarkData | None]):
     }
     """
 
+    BINDINGS = [Binding("escape", "cancel")]
+
     def __init__(self, bookmark: BookmarkData | None = None) -> None:
         """Initialise the bookmark input dialog.
 
@@ -106,7 +109,7 @@ class BookmarkInput(ModalScreen[BookmarkData | None]):
         self.dismiss(None)
 
     @on(Button.Pressed, "#cancel")
-    def cancel(self) -> None:
+    def action_cancel(self) -> None:
         """Cancel the edit of the bookmark data."""
         self.dismiss(None)
 
