@@ -177,8 +177,16 @@ class Main(Screen[None]):
         """Refresh the display when an update happens."""
         bookmarks = self.query_one(Bookmarks)
         bookmarks.loading = False
+        # Setting loading to True disables the widget, which is good.
+        # However, setting loading to False means not being disabled is kind
+        # of slow to happen. This means that the focus that's going to
+        # happen in a moment (look below) will fail. call_next, call_later
+        # and call_after_refresh on the focus all fail. A short set_timer
+        # works but that feels icky. So... let's force the issue.
+        bookmarks.disabled = False
         self.query_one("#menu Tags", Tags).show(bookmarks.tags)
         TagCommands.current_tags = list(bookmarks.tags)
+        bookmarks.focus()
 
     @on(Bookmarks.OptionHighlighted, "Bookmarks")
     def refresh_details(self, event: Bookmarks.OptionHighlighted) -> None:
