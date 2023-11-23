@@ -289,7 +289,7 @@ class Main(Screen[None]):
                 toread=result.unread,
                 replace=True,
             )
-            self.query_one(Bookmarks).update_bookmark(result)
+            self.query_one(Bookmarks).update_bookmark(result).save()
             self.notify("Updated.")
 
     def action_edit(self) -> None:
