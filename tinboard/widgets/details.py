@@ -96,7 +96,7 @@ class Details(VerticalScroll):
 
     BINDINGS = [Binding("enter", "visit_bookmark", "Visit")]
 
-    bookmark: var[Bookmark | None] = var(None)
+    bookmark: var[Bookmark | None] = var(None, always_update=True)
     """The current bookmark."""
 
     def compose(self) -> ComposeResult:
