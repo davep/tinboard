@@ -76,12 +76,12 @@ class Details(VerticalScroll):
         padding: 1 2 1 2;
     }
 
-    Details #last-modified-ish {
+    Details #added-ish {
         margin: 0 2 0 2;
         padding: 1 2 0 2;
     }
 
-    Details #last-modified-exact {
+    Details #added-exact {
         margin: 0 2 1 2;
         padding: 0 2 1 2;
         text-align: right;
@@ -104,8 +104,8 @@ class Details(VerticalScroll):
         yield Label(id="title")
         yield Label(id="description", classes="detail empty")
         yield Link(id="link", classes="detail")
-        yield Label(id="last-modified-ish", classes="detail")
-        yield Label(id="last-modified-exact", classes="detail")
+        yield Label(id="added-ish", classes="detail")
+        yield Label(id="added-exact", classes="detail")
         yield Label(id="is-read", classes="detail")
         yield Label(id="is-public", classes="detail")
         yield Tags(classes="empty")
@@ -121,10 +121,10 @@ class Details(VerticalScroll):
                 not bool(self.bookmark.description), "empty"
             )
             self.query_one(Link).update(f"[@click=visit]{self.bookmark.href}[/]")
-            self.query_one("#last-modified-ish", Label).update(
-                f"Last updated {naturaltime(self.bookmark.last_modified)}"
+            self.query_one("#added-ish", Label).update(
+                f"Added {naturaltime(self.bookmark.last_modified)}"
             )
-            self.query_one("#last-modified-exact", Label).update(
+            self.query_one("#added-exact", Label).update(
                 str(self.bookmark.last_modified)
             )
             self.query_one("#is-read", Label).update(
