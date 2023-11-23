@@ -280,9 +280,6 @@ class Main(Screen[None]):
             result: The result data, or `None` if the edit was cancelled.
         """
         if result:
-            # TODO: This just dumps the data back on the server, which is
-            # fine, but it doesn't update things locally. We need a local
-            # update too (and not via refresh; that would be rubbish).
             await self._api.bookmark.async_add_bookmark(
                 url=result.href,
                 title=result.title,
@@ -292,6 +289,7 @@ class Main(Screen[None]):
                 toread=result.unread,
                 replace=True,
             )
+            self.query_one(Bookmarks).update_bookmark(result)
             self.notify("Updated.")
 
     def action_edit(self) -> None:

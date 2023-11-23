@@ -146,6 +146,21 @@ class Bookmark(Option):  # pylint:disable=too-many-instance-attributes
         data["last_modified"] = datetime.fromisoformat(data["last_modified"])
         return BookmarkData(**data)
 
+    def from_bookmark(self, bookmark: BookmarkData) -> None:
+        """Update the bookmark from some bookmark data.
+
+        Args:
+            bookmark: The bookmark data to update from.
+        """
+        self.href = bookmark.href
+        self.title = bookmark.title
+        self.description = bookmark.description
+        self.last_modified = bookmark.last_modified
+        self.tags = bookmark.tags
+        self.unread = bookmark.unread
+        self.shared = bookmark.shared
+        self.set_prompt(self.prompt)
+
 
 ##############################################################################
 class Bookmarks(OptionList):
@@ -337,6 +352,30 @@ class Bookmarks(OptionList):
             for bookmark in await api.bookmark.async_get_all_bookmarks()
         ]
         self.last_downloaded = datetime.now(UTC)
+        return self
+
+    def update_bookmark(self, new_data: BookmarkData) -> Self:
+        """Update the details of the given bookmark.
+
+        Args:
+            new_data: The new data for the bookmark.
+
+        Returns:
+            Self.
+        """
+        if isinstance(bookmark := self.get_option(new_data.hash), Bookmark):
+            bookmark.from_bookmark(new_data)
+            self.replace_option_prompt(new_data.hash, bookmark.prompt)
+            # Assume this edit is the "last download" time. While it is true
+            # that the user may have been editing in another client, or on
+            # the web, meanwhile, in almost every case this will be the
+            # correct approach to take *and* they can do a refresh if they
+            # want anyway.
+            self.last_downloaded = datetime.now(UTC)
+            if self.highlighted is not None:
+                # Fake a highlight, to get anything related to the current
+                # bookmark to refresh.
+                self.post_message(self.OptionHighlighted(self, self.highlighted))
         return self
 
 
