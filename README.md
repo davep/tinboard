@@ -20,7 +20,7 @@ Things to do:
 - [ ] Allow tags to be combined with core filters.
 - [ ] Allow both the above to be combined.
 - [ ] Add the ability to add a bookmark.
-- [ ] Add the ability to edit a bookmark.
+- [X] Add the ability to edit a bookmark.
 - [ ] Add the ability to delete a bookmark.
 - [ ] Add the ability to quickly toggle the unread/read status of a
       bookmark.
