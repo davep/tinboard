@@ -120,10 +120,10 @@ class BookmarkInput(ModalScreen[BookmarkData | None]):
                 tags=self.query_one("#tags", Input).value.split(),
                 shared=not self.query_one("#private", Checkbox).value,
                 unread=self.query_one("#read-later", Checkbox).value,
-                # Nonsense values for these last two, as I'm just borrowing the
-                # aiopinboard Bookmark class to pass the data around.
-                hash="",
-                last_modified=datetime.now(),
+                hash="" if self._bookmark is None else self._bookmark.hash,
+                last_modified=datetime.now()
+                if self._bookmark is None
+                else self._bookmark.last_modified,
             )
         )
 
