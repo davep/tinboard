@@ -30,6 +30,7 @@ class TokenInput(ModalScreen[str | None]):
     TokenInput Vertical {
         padding: 1 2;
         width: 40%;
+        min-width: 70;
         height: auto;
         background: $surface;
         border: panel $error;
