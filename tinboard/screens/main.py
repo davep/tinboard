@@ -21,7 +21,7 @@ from aiopinboard.bookmark import Bookmark as BookmarkData
 ##############################################################################
 # Local imports.
 from .bookmark_input import BookmarkInput
-from ..commands import CoreFilteringCommands, TagCommands
+from ..commands import BookmarkModificationCommands, CoreFilteringCommands, TagCommands
 from ..messages import EditBookmark, ShowAlsoTaggedWith, ShowTaggedWith
 from ..widgets import Bookmarks, Bookmark, Details, Filters, Tags
 
@@ -45,7 +45,7 @@ class Main(Screen[None]):
 
     TITLE = "TinBoard"
     SUB_TITLE = "A pinboard.in client"
-    COMMANDS = {CoreFilteringCommands, TagCommands}
+    COMMANDS = {BookmarkModificationCommands, CoreFilteringCommands, TagCommands}
 
     CSS = """
     Main {
