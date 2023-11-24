@@ -22,7 +22,7 @@ from aiopinboard.bookmark import Bookmark as BookmarkData
 # Local imports.
 from .bookmark_input import BookmarkInput
 from ..commands import CoreFilteringCommands, TagCommands
-from ..messages import ShowAlsoTaggedWith, ShowTaggedWith
+from ..messages import EditBookmark, ShowAlsoTaggedWith, ShowTaggedWith
 from ..widgets import Bookmarks, Bookmark, Details, Filters, Tags
 
 
@@ -115,7 +115,6 @@ class Main(Screen[None]):
         Binding("ctrl+r", "redownload", "Re-download"),
         Binding("ctrl+q", "quit", "Quit"),
         Binding("escape", "escape"),
-        Binding("e", "edit", "Edit"),
     ]
 
     def __init__(self, api_token: str) -> None:
@@ -292,7 +291,8 @@ class Main(Screen[None]):
             self.query_one(Bookmarks).update_bookmark(result).save()
             self.notify("Updated.")
 
-    def action_edit(self) -> None:
+    @on(EditBookmark)
+    def edit(self) -> None:
         """Edit the current bookmark, if there is one."""
         bookmark = self.query_one(Bookmarks).highlighted
         if bookmark is None:

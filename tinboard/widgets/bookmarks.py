@@ -38,6 +38,7 @@ from aiopinboard.bookmark import Bookmark as BookmarkData
 
 ##############################################################################
 # Local imports.
+from ..messages import EditBookmark
 from ..data import bookmarks_file
 
 
@@ -177,6 +178,7 @@ class Bookmarks(OptionList):
     """
 
     BINDINGS = [
+        Binding("e", "edit", "Edit"),
         Binding("enter", "visit", "Visit"),
     ]
 
@@ -196,6 +198,10 @@ class Bookmarks(OptionList):
             assert isinstance(bookmark, Bookmark)
             if bookmark.href:
                 open_url(bookmark.href)
+
+    def action_edit(self) -> None:
+        """Post the edit command."""
+        self.post_message(EditBookmark())
 
     @property
     def tags(self) -> list[str]:

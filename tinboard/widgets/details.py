@@ -20,6 +20,7 @@ from textual.widgets import Label
 
 ##############################################################################
 # Local imports.
+from ..messages import EditBookmark
 from .bookmarks import Bookmark
 from .tags import Tags
 
@@ -94,7 +95,10 @@ class Details(VerticalScroll):
     }
     """
 
-    BINDINGS = [Binding("enter", "visit_bookmark", "Visit")]
+    BINDINGS = [
+        Binding("e", "edit", "Edit"),
+        Binding("enter", "visit_bookmark", "Visit"),
+    ]
 
     bookmark: var[Bookmark | None] = var(None, always_update=True)
     """The current bookmark."""
@@ -139,6 +143,10 @@ class Details(VerticalScroll):
 
         finally:
             self.query("*").set_class(not bool(self.bookmark), "hidden")
+
+    def action_edit(self) -> None:
+        """Post the edit command."""
+        self.post_message(EditBookmark())
 
     @on(Link.Visit)
     def action_visit_bookmark(self) -> None:
