@@ -96,8 +96,8 @@ class Details(VerticalScroll):
     """
 
     BINDINGS = [
-        Binding("e", "edit", "Edit"),
-        Binding("enter", "visit_bookmark", "Visit"),
+        Binding("e", "edit", "Edit Bookmark"),
+        Binding("enter", "visit_bookmark", "Visit Bookmark"),
     ]
 
     bookmark: var[Bookmark | None] = var(None, always_update=True)

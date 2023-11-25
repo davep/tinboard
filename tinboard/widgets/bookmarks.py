@@ -178,8 +178,8 @@ class Bookmarks(OptionList):
     """
 
     BINDINGS = [
-        Binding("e", "edit", "Edit Bookmark"),
-        Binding("enter", "visit", "Visit Bookmark"),
+        Binding("e", "edit", "Edit"),
+        Binding("enter", "visit", "Visit"),
     ]
 
     bookmarks: var[list[Bookmark]] = var([])
