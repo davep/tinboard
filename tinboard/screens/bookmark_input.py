@@ -12,7 +12,6 @@ from datetime import datetime
 # Textual imports.
 from textual import on
 from textual.app import ComposeResult
-from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
 from textual.screen import ModalScreen
 from textual.widgets import Button, Checkbox, Input, Label
@@ -69,7 +68,7 @@ class BookmarkInput(ModalScreen[BookmarkData | None]):
     }
     """
 
-    BINDINGS = [Binding("escape", "cancel"), ("f2", "save")]
+    BINDINGS = [("escape", "cancel"), ("f2", "save")]
 
     def __init__(self, bookmark: BookmarkData | None = None) -> None:
         """Initialise the bookmark input dialog.
