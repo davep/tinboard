@@ -12,7 +12,6 @@ from webbrowser import open as open_url
 # Textual imports.
 from textual import on
 from textual.app import ComposeResult
-from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
 from textual.screen import ModalScreen
 from textual.widgets import Button, Label, Input
@@ -61,9 +60,7 @@ class TokenInput(ModalScreen[str | None]):
     }
     """
 
-    BINDINGS = [
-        Binding("escape", "cancel"),
-    ]
+    BINDINGS = [("escape", "cancel")]
 
     def compose(self) -> ComposeResult:
         """Compose the content of the screen."""
