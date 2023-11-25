@@ -62,7 +62,7 @@ class Tags(OptionList):
         finally:
             if tags:
                 try:
-                    self.highlighted = self.get_option_index(highlighted_tag)
+                    self.highlighted = self.get_option_index(highlighted_tag or "")
                 except OptionDoesNotExist:
                     self.highlighted = 0
 
