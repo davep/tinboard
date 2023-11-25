@@ -69,7 +69,7 @@ class BookmarkInput(ModalScreen[BookmarkData | None]):
     }
     """
 
-    BINDINGS = [Binding("escape", "cancel")]
+    BINDINGS = [Binding("escape", "cancel"), ("f2", "save")]
 
     def __init__(self, bookmark: BookmarkData | None = None) -> None:
         """Initialise the bookmark input dialog.
@@ -96,8 +96,8 @@ class BookmarkInput(ModalScreen[BookmarkData | None]):
                 yield Checkbox("Private", id="private")
                 yield Checkbox("Read Later", id="read-later")
             with Horizontal(id="buttons"):
-                yield Button("Save", id="save")
-                yield Button("Cancel", id="cancel")
+                yield Button("Save [dim]\\[F2][/]", id="save")
+                yield Button("Cancel [dim]\\[Esc][/]", id="cancel")
 
     def on_mount(self) -> None:
         """Configure the dialog once it's in the DOM."""
@@ -110,7 +110,7 @@ class BookmarkInput(ModalScreen[BookmarkData | None]):
             self.query_one("#read-later", Checkbox).value = self._bookmark.unread
 
     @on(Button.Pressed, "#save")
-    def save(self) -> None:
+    def action_save(self) -> None:
         """Save the bookmark data."""
         self.dismiss(
             BookmarkData(
