@@ -60,7 +60,7 @@ class TokenInput(ModalScreen[str | None]):
     }
     """
 
-    BINDINGS = [("escape", "cancel")]
+    BINDINGS = [("escape", "cancel"), ("f1", "get_token")]
 
     def compose(self) -> ComposeResult:
         """Compose the content of the screen."""
@@ -74,9 +74,9 @@ class TokenInput(ModalScreen[str | None]):
             yield Input(placeholder="Paste the token here")
             with Horizontal():
                 with Horizontal():
-                    yield Button("Go to token", id="get-token")
+                    yield Button("Go to token [dim]\\[F1][/]", id="get-token")
                 yield Button("Connect", id="connect", variant="primary")
-                yield Button("Cancel", id="cancel", variant="error")
+                yield Button("Cancel [dim]\\[Esc][/]", id="cancel", variant="error")
 
     @on(Button.Pressed, "#connect")
     @on(Input.Submitted)
