@@ -11,7 +11,7 @@ from xdg_base_dirs import xdg_config_home, xdg_data_home
 
 ##############################################################################
 def _tinboard_dir(root: Path) -> Path:
-    """Given a root, ensure and return the TinBoard directory within it."""
+    """Given a root, ensure and return the Tinboard directory within it."""
     (save_to := root / "tinboard").mkdir(parents=True, exist_ok=True)
     return save_to
 
