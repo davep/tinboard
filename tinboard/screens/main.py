@@ -43,7 +43,7 @@ def filter_binding(name: str) -> Binding:
 class Main(Screen[None]):
     """The main application screen."""
 
-    TITLE = "TinBoard"
+    TITLE = "Tinboard"
     SUB_TITLE = "A pinboard.in client"
     COMMANDS = {BookmarkModificationCommands, CoreFilteringCommands, TagCommands}
 

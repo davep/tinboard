@@ -20,7 +20,7 @@ from .data import load_configuration, save_configuration, token_file
 
 
 ##############################################################################
-class TinBoard(App[None]):
+class Tinboard(App[None]):
     """The application."""
 
     BINDINGS = [
