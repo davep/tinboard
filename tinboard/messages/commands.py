@@ -1,3 +1,5 @@
+"""Provides system-command level message classes."""
+
 ##############################################################################
 # Textual imports.
 from textual.message import Message
