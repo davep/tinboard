@@ -294,8 +294,7 @@ class Main(Screen[None]):
     @on(EditBookmark)
     def edit(self) -> None:
         """Edit the current bookmark, if there is one."""
-        bookmark = self.query_one(Bookmarks).highlighted
-        if bookmark is None:
+        if (bookmark := self.query_one(Bookmarks).highlighted) is None:
             self.app.bell()
         else:
             data = self.query_one(Bookmarks).get_option_at_index(bookmark)
