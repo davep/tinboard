@@ -21,6 +21,7 @@ from aiopinboard.bookmark import Bookmark as BookmarkData
 ##############################################################################
 # Local imports.
 from .bookmark_input import BookmarkInput
+from .help import Help
 from ..commands import BookmarkModificationCommands, CoreFilteringCommands, TagCommands
 from ..messages import EditBookmark, ShowAlsoTaggedWith, ShowTaggedWith
 from ..widgets import Bookmarks, Bookmark, Details, Filters, Tags
@@ -111,6 +112,7 @@ class Main(Screen[None]):
         filter_binding("Read"),
         filter_binding("Tagged"),
         filter_binding("Untagged"),
+        Binding("f1", "help", "Help"),
         Binding("f2", "goto_pinboard", "pinboard.in"),
         Binding("ctrl+r", "redownload", "Re-download"),
         Binding("ctrl+q", "quit", "Quit"),
@@ -196,6 +198,10 @@ class Main(Screen[None]):
         """
         assert isinstance(event.option, Bookmark)
         self.query_one(Details).bookmark = event.option
+
+    def action_help(self) -> None:
+        """Show the help screen."""
+        self.app.push_screen(Help())
 
     def action_goto_pinboard(self) -> None:
         """Open Pinbaord in the user's web browser."""
