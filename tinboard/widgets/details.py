@@ -97,7 +97,7 @@ class Details(VerticalScroll):
 
     BINDINGS = [
         Binding("e", "edit", "Edit Bookmark"),
-        Binding("r", "read", "(Un)Read"),
+        Binding("ctrl+r", "read", "(Un)Read"),
         Binding("enter", "visit_bookmark", "Visit Bookmark"),
     ]
 

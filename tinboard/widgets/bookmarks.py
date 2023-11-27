@@ -179,7 +179,7 @@ class Bookmarks(OptionList):
 
     BINDINGS = [
         Binding("e", "edit", "Edit"),
-        Binding("r", "read", "(Un)Read"),
+        Binding("ctrl+r", "read", "(Un)Read"),
         Binding("enter", "visit", "Visit"),
     ]
 

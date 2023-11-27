@@ -119,7 +119,7 @@ class Main(Screen[None]):
         filter_binding("Untagged"),
         Binding("f1", "help", "Help"),
         Binding("f2", "goto_pinboard", "pinboard.in"),
-        Binding("ctrl+r", "redownload", "Re-download"),
+        Binding("ctrl+l", "redownload", "Reload"),
         Binding("ctrl+q", "quit", "Quit"),
         Binding("escape", "escape"),
     ]
