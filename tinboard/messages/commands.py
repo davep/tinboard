@@ -15,4 +15,9 @@ class EditBookmark(Command):
     """Edit the current bookmark."""
 
 
+##############################################################################
+class ToggleBookmarkRead(Command):
+    """Toggle the read status of the current bookmark."""
+
+
 ### commands.py ends here

@@ -4,7 +4,7 @@
 # Python imports.
 from datetime import datetime
 from json import loads, dumps
-from typing import Any
+from typing import Any, cast
 from webbrowser import open as open_url
 from typing_extensions import Final, Self
 
@@ -38,7 +38,7 @@ from aiopinboard.bookmark import Bookmark as BookmarkData
 
 ##############################################################################
 # Local imports.
-from ..messages import EditBookmark
+from ..messages import EditBookmark, ToggleBookmarkRead
 from ..data import bookmarks_file
 
 
@@ -179,6 +179,7 @@ class Bookmarks(OptionList):
 
     BINDINGS = [
         Binding("e", "edit", "Edit"),
+        Binding("r", "read", "(Un)Read"),
         Binding("enter", "visit", "Visit"),
     ]
 
@@ -202,6 +203,10 @@ class Bookmarks(OptionList):
     def action_edit(self) -> None:
         """Post the edit command."""
         self.post_message(EditBookmark())
+
+    def action_read(self) -> None:
+        """Post the read status toggle command."""
+        self.post_message(ToggleBookmarkRead())
 
     @property
     def tags(self) -> list[str]:
@@ -383,6 +388,13 @@ class Bookmarks(OptionList):
                 # bookmark to refresh.
                 self.post_message(self.OptionHighlighted(self, self.highlighted))
         return self
+
+    @property
+    def current_bookmark(self) -> Bookmark | None:
+        """The currently-highlighted bookmark, if there is one."""
+        if (bookmark := self.highlighted) is None:
+            return None
+        return cast(Bookmark, self.get_option_at_index(bookmark))
 
 
 ### bookmarks.py ends here

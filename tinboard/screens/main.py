@@ -23,7 +23,12 @@ from aiopinboard.bookmark import Bookmark as BookmarkData
 from .bookmark_input import BookmarkInput
 from .help import Help
 from ..commands import BookmarkModificationCommands, CoreFilteringCommands, TagCommands
-from ..messages import EditBookmark, ShowAlsoTaggedWith, ShowTaggedWith
+from ..messages import (
+    EditBookmark,
+    ShowAlsoTaggedWith,
+    ShowTaggedWith,
+    ToggleBookmarkRead,
+)
 from ..widgets import Bookmarks, Bookmark, Details, Filters, Tags
 
 
@@ -300,14 +305,21 @@ class Main(Screen[None]):
     @on(EditBookmark)
     def edit(self) -> None:
         """Edit the current bookmark, if there is one."""
-        if (bookmark := self.query_one(Bookmarks).highlighted) is None:
+        if (bookmark := self.query_one(Bookmarks).current_bookmark) is None:
             self.app.bell()
         else:
-            data = self.query_one(Bookmarks).get_option_at_index(bookmark)
-            assert isinstance(data, Bookmark)
             self.app.push_screen(
-                BookmarkInput(data.as_bookmark), callback=self.edit_result
+                BookmarkInput(bookmark.as_bookmark), callback=self.edit_result
             )
+
+    @on(ToggleBookmarkRead)
+    async def toggle_read(self) -> None:
+        """Toggle the read/unread status of the current bookmark."""
+        if (bookmark := self.query_one(Bookmarks).current_bookmark) is None:
+            self.app.bell()
+        else:
+            bookmark.unread = not bookmark.unread
+            await self.edit_result(bookmark.as_bookmark)
 
 
 ### main.py ends here

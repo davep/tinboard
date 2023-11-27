@@ -22,7 +22,7 @@ Things to do:
 - [ ] Add the ability to add a bookmark.
 - [X] Add the ability to edit a bookmark.
 - [ ] Add the ability to delete a bookmark.
-- [ ] Add the ability to quickly toggle the unread/read status of a
+- [X] Add the ability to quickly toggle the unread/read status of a
       bookmark.
 - [ ] Add the ability to quickly toggle the public/private status of a
       bookmark.
