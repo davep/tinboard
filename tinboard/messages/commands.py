@@ -20,4 +20,9 @@ class ToggleBookmarkRead(Command):
     """Toggle the read status of the current bookmark."""
 
 
+##############################################################################
+class ToggleBookmarkPublic(Command):
+    """Toggle the public status of the current bookmark."""
+
+
 ### commands.py ends here

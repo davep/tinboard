@@ -20,7 +20,7 @@ from textual.widgets import Label
 
 ##############################################################################
 # Local imports.
-from ..messages import EditBookmark, ToggleBookmarkRead
+from ..messages import EditBookmark, ToggleBookmarkPublic, ToggleBookmarkRead
 from .bookmarks import Bookmark
 from .tags import Tags
 
@@ -98,6 +98,7 @@ class Details(VerticalScroll):
     BINDINGS = [
         Binding("e", "edit", "Edit Bookmark"),
         Binding("ctrl+r", "read", "(Un)Read"),
+        Binding("ctrl+v", "public", "Public/Private"),
         Binding("enter", "visit_bookmark", "Visit Bookmark"),
     ]
 
@@ -152,6 +153,10 @@ class Details(VerticalScroll):
     def action_read(self) -> None:
         """Post the read status toggle command."""
         self.post_message(ToggleBookmarkRead())
+
+    def action_public(self) -> None:
+        """Post the public/private toggle command."""
+        self.post_message(ToggleBookmarkPublic())
 
     @on(Link.Visit)
     def action_visit_bookmark(self) -> None:

@@ -24,7 +24,7 @@ Things to do:
 - [ ] Add the ability to delete a bookmark.
 - [X] Add the ability to quickly toggle the unread/read status of a
       bookmark.
-- [ ] Add the ability to quickly toggle the public/private status of a
+- [X] Add the ability to quickly toggle the public/private status of a
       bookmark.
 - [ ] Add the ability to "logout" (IOW forget the API token).
 - [ ] Add a bookmark export facility.

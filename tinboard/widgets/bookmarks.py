@@ -38,7 +38,7 @@ from aiopinboard.bookmark import Bookmark as BookmarkData
 
 ##############################################################################
 # Local imports.
-from ..messages import EditBookmark, ToggleBookmarkRead
+from ..messages import EditBookmark, ToggleBookmarkPublic, ToggleBookmarkRead
 from ..data import bookmarks_file
 
 
@@ -180,6 +180,7 @@ class Bookmarks(OptionList):
     BINDINGS = [
         Binding("e", "edit", "Edit"),
         Binding("ctrl+r", "read", "(Un)Read"),
+        Binding("ctrl+v", "public", "Public/Private"),
         Binding("enter", "visit", "Visit"),
     ]
 
@@ -207,6 +208,10 @@ class Bookmarks(OptionList):
     def action_read(self) -> None:
         """Post the read status toggle command."""
         self.post_message(ToggleBookmarkRead())
+
+    def action_public(self) -> None:
+        """Post the public/private toggle command."""
+        self.post_message(ToggleBookmarkPublic())
 
     @property
     def tags(self) -> list[str]:

@@ -27,6 +27,7 @@ from ..messages import (
     EditBookmark,
     ShowAlsoTaggedWith,
     ShowTaggedWith,
+    ToggleBookmarkPublic,
     ToggleBookmarkRead,
 )
 from ..widgets import Bookmarks, Bookmark, Details, Filters, Tags
@@ -319,6 +320,15 @@ class Main(Screen[None]):
             self.app.bell()
         else:
             bookmark.unread = not bookmark.unread
+            await self.edit_result(bookmark.as_bookmark)
+
+    @on(ToggleBookmarkPublic)
+    async def toggle_public(self) -> None:
+        """Toggle the public/private status of the current bookmark."""
+        if (bookmark := self.query_one(Bookmarks).current_bookmark) is None:
+            self.app.bell()
+        else:
+            bookmark.shared = not bookmark.shared
             await self.edit_result(bookmark.as_bookmark)
 
 
