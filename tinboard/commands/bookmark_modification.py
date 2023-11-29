@@ -10,7 +10,7 @@ from textual.command import Hit, Hits, Provider
 
 ##############################################################################
 # Local imports.
-from ..messages import EditBookmark
+from ..messages import EditBookmark, ToggleBookmarkPublic, ToggleBookmarkRead
 
 
 ##############################################################################
@@ -29,6 +29,16 @@ class BookmarkModificationCommands(Provider):
         matcher = self.matcher(query)
         for command, message, help_text in (
             ("Edit bookmark", EditBookmark, "Edit the current bookmark"),
+            (
+                "Toggle public/private",
+                ToggleBookmarkPublic,
+                "Toggle the current bookmark's public/private status",
+            ),
+            (
+                "Toggle read/unread",
+                ToggleBookmarkRead,
+                "Toggle the current bookmark's read/unread status",
+            ),
         ):
             if match := matcher.match(command):
                 yield Hit(
