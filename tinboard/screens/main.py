@@ -22,7 +22,12 @@ from aiopinboard.bookmark import Bookmark as BookmarkData
 # Local imports.
 from .bookmark_input import BookmarkInput
 from .help import Help
-from ..commands import BookmarkModificationCommands, CoreFilteringCommands, TagCommands
+from ..commands import (
+    BookmarkModificationCommands,
+    CoreCommands,
+    CoreFilteringCommands,
+    TagCommands,
+)
 from ..messages import (
     EditBookmark,
     ShowAlsoTaggedWith,
@@ -52,7 +57,12 @@ class Main(Screen[None]):
 
     TITLE = "Tinboard"
     SUB_TITLE = "A pinboard.in client"
-    COMMANDS = {BookmarkModificationCommands, CoreFilteringCommands, TagCommands}
+    COMMANDS = {
+        BookmarkModificationCommands,
+        CoreCommands,
+        CoreFilteringCommands,
+        TagCommands,
+    }
 
     CSS = """
     Main {
