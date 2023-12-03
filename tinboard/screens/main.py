@@ -29,6 +29,7 @@ from ..commands import (
     TagCommands,
 )
 from ..messages import (
+    AddBookmark,
     EditBookmark,
     ShowAlsoTaggedWith,
     ShowTaggedWith,
@@ -294,7 +295,7 @@ class Main(Screen[None]):
         """
         self.query_one(Bookmarks).show_also_tagged_with(event.tag)
 
-    async def edit_result(self, result: BookmarkData | None) -> None:
+    async def post_result(self, result: BookmarkData | None) -> None:
         """Handle the result of an edit of a bookmark.
 
         Args:
@@ -313,6 +314,11 @@ class Main(Screen[None]):
             self.query_one(Bookmarks).update_bookmark(result).save()
             self.notify("Updated.")
 
+    @on(AddBookmark)
+    def add(self) -> None:
+        """Add a new bookmark."""
+        self.app.push_screen(BookmarkInput(), callback=self.post_result)
+
     @on(EditBookmark)
     def edit(self) -> None:
         """Edit the current bookmark, if there is one."""
@@ -320,7 +326,7 @@ class Main(Screen[None]):
             self.app.bell()
         else:
             self.app.push_screen(
-                BookmarkInput(bookmark.as_bookmark), callback=self.edit_result
+                BookmarkInput(bookmark.as_bookmark), callback=self.post_result
             )
 
     @on(ToggleBookmarkRead)
@@ -330,7 +336,7 @@ class Main(Screen[None]):
             self.app.bell()
         else:
             bookmark.unread = not bookmark.unread
-            await self.edit_result(bookmark.as_bookmark)
+            await self.post_result(bookmark.as_bookmark)
 
     @on(ToggleBookmarkPublic)
     async def toggle_public(self) -> None:
@@ -339,7 +345,7 @@ class Main(Screen[None]):
             self.app.bell()
         else:
             bookmark.shared = not bookmark.shared
-            await self.edit_result(bookmark.as_bookmark)
+            await self.post_result(bookmark.as_bookmark)
 
 
 ### main.py ends here

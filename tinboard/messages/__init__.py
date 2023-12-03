@@ -2,12 +2,18 @@
 
 ##############################################################################
 # Local imports.
-from .commands import EditBookmark, ToggleBookmarkRead, ToggleBookmarkPublic
+from .commands import (
+    AddBookmark,
+    EditBookmark,
+    ToggleBookmarkRead,
+    ToggleBookmarkPublic,
+)
 from .tags import ShowAlsoTaggedWith, ShowTaggedWith
 
 ##############################################################################
 # Exports.
 __all__ = [
+    "AddBookmark",
     "EditBookmark",
     "ShowAlsoTaggedWith",
     "ShowTaggedWith",

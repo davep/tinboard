@@ -3,6 +3,7 @@
 ##############################################################################
 # Python imports.
 from datetime import datetime
+from hashlib import md5
 from json import loads, dumps
 from typing import Any, cast
 from webbrowser import open as open_url
@@ -34,6 +35,8 @@ from rich.table import Table
 # Pinboard API imports.
 from aiopinboard import API
 from aiopinboard.bookmark import Bookmark as BookmarkData
+
+from tinboard.messages.commands import AddBookmark
 
 ##############################################################################
 # Local imports.
@@ -178,13 +181,14 @@ class Bookmarks(OptionListEx):
     """
 
     BINDINGS = [
+        Binding("n", "new", "New"),
         Binding("e", "edit", "Edit"),
         Binding("ctrl+r", "read", "(Un)Read"),
         Binding("ctrl+v", "public", "Public/Private"),
         Binding("enter", "visit", "Visit"),
     ]
 
-    bookmarks: var[list[Bookmark]] = var([])
+    bookmarks: var[list[Bookmark]] = var([], always_update=True)
     """The list of all known bookmarks."""
 
     last_downloaded: var[datetime | None] = var(None)
@@ -200,6 +204,10 @@ class Bookmarks(OptionListEx):
             assert isinstance(bookmark, Bookmark)
             if bookmark.href:
                 open_url(bookmark.href)
+
+    def action_new(self) -> None:
+        """Add a new bookmark."""
+        self.post_message(AddBookmark())
 
     def action_edit(self) -> None:
         """Post the edit command."""
@@ -370,6 +378,45 @@ class Bookmarks(OptionListEx):
         self.last_downloaded = datetime.now(UTC)
         return self
 
+    def _ensure_complete(self, data: BookmarkData) -> BookmarkData:
+        """Ensure the bookmark data is complete.
+
+        Args:
+            data: The bookmark data to check.
+
+        Returns:
+            The bookmark data.
+
+        When we add a new bookmark to Pinboard, we don't easily get back
+        useful data like its hash. To that they it's necessary (and sort of
+        costly) to query the bookmark back. Instead we fake it here. This is
+        fine as we don't use this faked data to interact with Pinboard, we
+        just use it internally to the app. Any subsequent refresh will
+        overwrite anyway and then it'll all be fully in sync again.
+        """
+        if not data.hash:
+            data.hash = md5(data.href.encode()).hexdigest()
+        return data
+
+    def _add_bookmark(self, bookmark: BookmarkData) -> Self:
+        """Add a bookmark we don't know about locally.
+
+        Args:
+            bookmark: The bookmark to add.
+
+        Returns:
+            Self.
+        """
+        self.bookmarks.insert(0, Bookmark(bookmark))
+        self.bookmarks = self.bookmarks  # Force a watch.
+        self.highlighted = 0
+        # Assume this addition is the "last download" time. While it is true
+        # that the user may have been editing in another client, or on the
+        # web, meanwhile, in almost every case this will be the correct
+        # approach to take *and* they can do a refresh if they want anyway.
+        self.last_downloaded = datetime.now(UTC)
+        return self
+
     def update_bookmark(self, new_data: BookmarkData) -> Self:
         """Update the details of the given bookmark.
 
@@ -379,19 +426,29 @@ class Bookmarks(OptionListEx):
         Returns:
             Self.
         """
-        if isinstance(bookmark := self.get_option(new_data.hash), Bookmark):
-            bookmark.from_bookmark(new_data)
-            self.replace_option_prompt(new_data.hash, bookmark.prompt)
-            # Assume this edit is the "last download" time. While it is true
-            # that the user may have been editing in another client, or on
-            # the web, meanwhile, in almost every case this will be the
-            # correct approach to take *and* they can do a refresh if they
-            # want anyway.
-            self.last_downloaded = datetime.now(UTC)
-            if self.highlighted is not None:
-                # Fake a highlight, to get anything related to the current
-                # bookmark to refresh.
-                self.post_message(self.OptionHighlighted(self, self.highlighted))
+
+        try:
+            bookmark = self.get_option(self._ensure_complete(new_data).hash)
+        except OptionDoesNotExist:
+            # We didn't find that bookmark; it must be new.
+            return self._add_bookmark(new_data)
+
+        # It's an existing bookmark so let's update it.
+        assert isinstance(bookmark, Bookmark)
+        bookmark.from_bookmark(new_data)
+        self.replace_option_prompt(new_data.hash, bookmark.prompt)
+
+        # Assume this edit is the "last download" time. While it is true
+        # that the user may have been editing in another client, or on the
+        # web, meanwhile, in almost every case this will be the correct
+        # approach to take *and* they can do a refresh if they want anyway.
+        self.last_downloaded = datetime.now(UTC)
+
+        if self.highlighted is not None:
+            # Fake a highlight, to get anything related to the current
+            # bookmark to refresh.
+            self.post_message(self.OptionHighlighted(self, self.highlighted))
+
         return self
 
     @property

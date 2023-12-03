@@ -11,6 +11,11 @@ class Command(Message):
 
 
 ##############################################################################
+class AddBookmark(Command):
+    """Add a new bookmark."""
+
+
+##############################################################################
 class EditBookmark(Command):
     """Edit the current bookmark."""
 
