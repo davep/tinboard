@@ -21,7 +21,6 @@ from humanize import naturaltime
 from textual.binding import Binding
 from textual.message import Message
 from textual.reactive import var
-from textual.widgets import OptionList
 from textual.widgets.option_list import Option, OptionDoesNotExist
 
 ##############################################################################
@@ -40,6 +39,7 @@ from aiopinboard.bookmark import Bookmark as BookmarkData
 # Local imports.
 from ..messages import EditBookmark, ToggleBookmarkPublic, ToggleBookmarkRead
 from ..data import bookmarks_file
+from .extended_option_list import OptionListEx
 
 
 ##############################################################################
@@ -164,7 +164,7 @@ class Bookmark(Option):  # pylint:disable=too-many-instance-attributes
 
 
 ##############################################################################
-class Bookmarks(OptionList):
+class Bookmarks(OptionListEx):
     """The list of bookmarks."""
 
     DEFAULT_CSS = """

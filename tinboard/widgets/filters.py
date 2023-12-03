@@ -13,16 +13,19 @@ from typing_extensions import Final
 # Textual imports.
 from textual import on
 from textual.message import Message
-from textual.widgets import OptionList
 from textual.widgets.option_list import Option
 
 ##############################################################################
 # Rich imports.
 from rich.table import Table
 
+##############################################################################
+# Local imports.
+from .extended_option_list import OptionListEx
+
 
 ##############################################################################
-class Filters(OptionList):
+class Filters(OptionListEx):
     """The main menu for the application."""
 
     DEFAULT_CSS = """
@@ -156,8 +159,8 @@ class Filters(OptionList):
             "untagged": cls.ShowUntagged,
         }[name.lower()]()
 
-    @on(OptionList.OptionSelected)
-    def handle_selection(self, event: OptionList.OptionSelected) -> None:
+    @on(OptionListEx.OptionSelected)
+    def handle_selection(self, event: OptionListEx.OptionSelected) -> None:
         """Handle a menu option selection.
 
         Args:

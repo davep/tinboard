@@ -13,16 +13,16 @@ from typing_extensions import Self
 from textual import on
 from textual.binding import Binding
 from textual.events import Focus
-from textual.widgets import OptionList
 from textual.widgets.option_list import Option, OptionDoesNotExist
 
 ##############################################################################
 # Local imports.
 from ..messages import ShowAlsoTaggedWith, ShowTaggedWith
+from .extended_option_list import OptionListEx
 
 
 ##############################################################################
-class Tags(OptionList):
+class Tags(OptionListEx):
     """A menu of tags."""
 
     DEFAULT_CSS = """
@@ -71,8 +71,8 @@ class Tags(OptionList):
         if self.option_count and self.highlighted is None:
             self.highlighted = 0
 
-    @on(OptionList.OptionSelected)
-    def show_tagged(self, event: OptionList.OptionSelected) -> None:
+    @on(OptionListEx.OptionSelected)
+    def show_tagged(self, event: OptionListEx.OptionSelected) -> None:
         """Request that bookmarks of a given tag are shown.
 
         Args:
