@@ -41,6 +41,7 @@ from aiopinboard.bookmark import Bookmark as BookmarkData
 from ..messages import (
     AddBookmark,
     EditBookmark,
+    DeleteBookmark,
     ToggleBookmarkPublic,
     ToggleBookmarkRead,
 )
@@ -188,6 +189,7 @@ class Bookmarks(OptionListEx):
     BINDINGS = [
         Binding("n", "new", "New"),
         Binding("e", "edit", "Edit"),
+        Binding("d", "delete", "Delete"),
         Binding("ctrl+r", "read", "(Un)Read"),
         Binding("ctrl+v", "public", "Public/Private"),
         Binding("enter", "visit", "Visit"),
@@ -217,6 +219,10 @@ class Bookmarks(OptionListEx):
     def action_edit(self) -> None:
         """Post the edit command."""
         self.post_message(EditBookmark())
+
+    def action_delete(self) -> None:
+        """Post the delete command."""
+        self.post_message(DeleteBookmark())
 
     def action_read(self) -> None:
         """Post the read status toggle command."""
@@ -458,6 +464,24 @@ class Bookmarks(OptionListEx):
             # bookmark to refresh.
             self.post_message(self.OptionHighlighted(self, self.highlighted))
 
+        return self
+
+    def remove_bookmark(self, bookmark: Bookmark) -> Self:
+        """Remove the given bookmark.
+
+        Args:
+            bookmark: The bookmark to remove.
+
+        Returns:
+            Self.
+        """
+        del self.bookmarks[self.bookmarks.index(bookmark)]
+        self.bookmarks = self.bookmarks  # Force a watch.
+        # Assume this deletion is the "last download" time. While it is true
+        # that the user may have been editing in another client, or on the
+        # web, meanwhile, in almost every case this will be the correct
+        # approach to take *and* they can do a refresh if they want anyway.
+        self.last_downloaded = datetime.now(UTC)
         return self
 
     @property

@@ -21,6 +21,11 @@ class EditBookmark(Command):
 
 
 ##############################################################################
+class DeleteBookmark(Command):
+    """Delete the current bookmark."""
+
+
+##############################################################################
 class ToggleBookmarkRead(Command):
     """Toggle the read status of the current bookmark."""
 

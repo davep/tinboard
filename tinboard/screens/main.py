@@ -2,6 +2,7 @@
 
 ##############################################################################
 # Python imports.
+from functools import partial
 from webbrowser import open as open_url
 
 ##############################################################################
@@ -21,6 +22,7 @@ from aiopinboard.bookmark import Bookmark as BookmarkData
 ##############################################################################
 # Local imports.
 from .bookmark_input import BookmarkInput
+from .confirm import Confirm
 from .help import Help
 from ..commands import (
     BookmarkModificationCommands,
@@ -31,6 +33,7 @@ from ..commands import (
 from ..messages import (
     AddBookmark,
     EditBookmark,
+    DeleteBookmark,
     ShowAlsoTaggedWith,
     ShowTaggedWith,
     ToggleBookmarkPublic,
@@ -329,6 +332,32 @@ class Main(Screen[None]):
         else:
             self.app.push_screen(
                 BookmarkInput(bookmark.as_bookmark), callback=self.post_result
+            )
+
+    async def _delete(self, bookmark: Bookmark, confirmed: bool) -> None:
+        """Respond to the user's confirmation about a bookmark deletion.
+
+        Args:
+            bookmark: The bookmark to delete.
+            confirmed: The decision the user made about deletion.
+        """
+        if confirmed:
+            await self._api.bookmark.async_delete_bookmark(bookmark.href)
+            self.query_one(Bookmarks).remove_bookmark(bookmark).save()
+            self.notify(f"Bookmark deleted.", severity="warning")
+
+    @on(DeleteBookmark)
+    def delete(self) -> None:
+        """Delete the current bookmark, if there is one."""
+        if (bookmark := self.query_one(Bookmarks).current_bookmark) is None:
+            self.app.bell()
+        else:
+            self.app.push_screen(
+                Confirm(
+                    "Delete?",
+                    f"Are you sure you wish to delete this bookmark?\n\n[dim i]{bookmark.title}[/]",
+                ),
+                callback=partial(self._delete, bookmark),
             )
 
     @on(ToggleBookmarkRead)

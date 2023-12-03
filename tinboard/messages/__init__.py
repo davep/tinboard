@@ -5,6 +5,7 @@
 from .commands import (
     AddBookmark,
     EditBookmark,
+    DeleteBookmark,
     ToggleBookmarkRead,
     ToggleBookmarkPublic,
 )
@@ -15,6 +16,7 @@ from .tags import ShowAlsoTaggedWith, ShowTaggedWith
 __all__ = [
     "AddBookmark",
     "EditBookmark",
+    "DeleteBookmark",
     "ShowAlsoTaggedWith",
     "ShowTaggedWith",
     "ToggleBookmarkPublic",

@@ -24,7 +24,7 @@ Things to do:
   - [ ] Make available suggested tags once the bookmark is known.
 - [X] Add the ability to edit a bookmark.
   - [ ] Validation of data sent to the server
-- [ ] Add the ability to delete a bookmark.
+- [X] Add the ability to delete a bookmark.
 - [X] Add the ability to quickly toggle the unread/read status of a
       bookmark.
 - [X] Add the ability to quickly toggle the public/private status of a
