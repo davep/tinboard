@@ -36,11 +36,14 @@ from rich.table import Table
 from aiopinboard import API
 from aiopinboard.bookmark import Bookmark as BookmarkData
 
-from tinboard.messages.commands import AddBookmark
-
 ##############################################################################
 # Local imports.
-from ..messages import EditBookmark, ToggleBookmarkPublic, ToggleBookmarkRead
+from ..messages import (
+    AddBookmark,
+    EditBookmark,
+    ToggleBookmarkPublic,
+    ToggleBookmarkRead,
+)
 from ..data import bookmarks_file
 from .extended_option_list import OptionListEx
 
