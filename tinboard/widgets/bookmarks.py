@@ -390,11 +390,15 @@ class Bookmarks(OptionListEx):
             The bookmark data.
 
         When we add a new bookmark to Pinboard, we don't easily get back
-        useful data like its hash. To that they it's necessary (and sort of
+        useful data like its hash. To get that it's necessary (and sort of
         costly) to query the bookmark back. Instead we fake it here. This is
         fine as we don't use this faked data to interact with Pinboard, we
         just use it internally to the app. Any subsequent refresh will
         overwrite anyway and then it'll all be fully in sync again.
+
+        Moreover; this method uses the same hash-creation method that
+        Pinboard appears to use (an md5 hex digest of the URL), so the
+        'fake' hash should match the server anyway.
         """
         if not data.hash:
             data.hash = md5(data.href.encode()).hexdigest()
