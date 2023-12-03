@@ -18,6 +18,7 @@ from textual.widgets import Footer, Header, Rule
 # Pinboard API library.
 from aiopinboard import API
 from aiopinboard.bookmark import Bookmark as BookmarkData
+from aiopinboard.errors import RequestError
 
 ##############################################################################
 # Local imports.
@@ -307,17 +308,27 @@ class Main(Screen[None]):
             result: The result data, or `None` if the edit was cancelled.
         """
         if result:
-            await self._api.bookmark.async_add_bookmark(
-                url=result.href,
-                title=result.title,
-                description=result.description,
-                tags=result.tags,
-                shared=result.shared,
-                toread=result.unread,
-                replace=True,
-            )
-            self.query_one(Bookmarks).update_bookmark(result).save()
-            self.notify("Bookmark saved.")
+            try:
+                await self._api.bookmark.async_add_bookmark(
+                    url=result.href,
+                    title=result.title,
+                    description=result.description,
+                    tags=result.tags,
+                    shared=result.shared,
+                    toread=result.unread,
+                    replace=True,
+                )
+                self.query_one(Bookmarks).update_bookmark(result).save()
+                self.notify("Bookmark saved.")
+            except RequestError as error:
+                self.app.bell()
+                self.notify(
+                    str(error),
+                    title="Error saving bookmark data",
+                    severity="error",
+                    timeout=10,
+                )
+                self.app.push_screen(BookmarkInput(result), callback=self.post_result)
 
     @on(AddBookmark)
     def add(self) -> None:

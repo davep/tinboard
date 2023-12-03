@@ -20,10 +20,10 @@ Things to do:
 - [ ] Allow tags to be combined with core filters.
 - [ ] Allow both the above to be combined.
 - [X] Add the ability to add a bookmark.
-  - [ ] Validation of data sent to the server
+  - [X] Validation of data sent to the server
   - [ ] Make available suggested tags once the bookmark is known.
 - [X] Add the ability to edit a bookmark.
-  - [ ] Validation of data sent to the server
+  - [X] Validation of data sent to the server
 - [X] Add the ability to delete a bookmark.
 - [X] Add the ability to quickly toggle the unread/read status of a
       bookmark.
