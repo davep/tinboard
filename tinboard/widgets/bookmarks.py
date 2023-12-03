@@ -170,6 +170,8 @@ class Bookmark(Option):  # pylint:disable=too-many-instance-attributes
 class Bookmarks(OptionListEx):
     """The list of bookmarks."""
 
+    # pylint:disable=too-many-public-methods
+
     DEFAULT_CSS = """
     Bookmarks {
         scrollbar-gutter: stable;

@@ -56,6 +56,8 @@ def filter_binding(name: str) -> Binding:
 class Main(Screen[None]):
     """The main application screen."""
 
+    # pylint:disable=too-many-public-methods
+
     TITLE = "Tinboard"
     SUB_TITLE = "A pinboard.in client"
     COMMANDS = {
