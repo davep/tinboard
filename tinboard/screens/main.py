@@ -312,7 +312,7 @@ class Main(Screen[None]):
                 replace=True,
             )
             self.query_one(Bookmarks).update_bookmark(result).save()
-            self.notify("Updated.")
+            self.notify("Bookmark saved.")
 
     @on(AddBookmark)
     def add(self) -> None:
