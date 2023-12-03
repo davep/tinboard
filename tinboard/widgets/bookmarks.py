@@ -208,7 +208,7 @@ class Bookmarks(OptionListEx):
                 open_url(bookmark.href)
 
     def action_new(self) -> None:
-        """Add a new bookmark."""
+        """Post the new bookmark command."""
         self.post_message(AddBookmark())
 
     def action_edit(self) -> None:
