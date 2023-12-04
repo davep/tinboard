@@ -15,25 +15,16 @@ from textual.suggester import Suggester
 class SuggestTags(Suggester):
     """A Textual `Input` suggester that suggests tags."""
 
-    def __init__(
-        self,
-        tags: Iterable[str],
-        *,
-        case_sensitive: bool = False,
-    ) -> None:
+    def __init__(self, tags: Iterable[str]) -> None:
         """Initialise the suggester.
 
         Args:
             tags: The collection of tags to suggest from.
             case_sensitive: Should the check be case sensitive?
         """
-        super().__init__(use_cache=True, case_sensitive=case_sensitive)
+        super().__init__(use_cache=True, case_sensitive=False)
         self._tags = list(tags)
-        self._candidates = (
-            self._tags
-            if self.case_sensitive
-            else [candidate.casefold() for candidate in self._tags]
-        )
+        self._candidates = [candidate.casefold() for candidate in self._tags]
 
     _LAST_WORD: Final[Pattern[str]] = re.compile(r"\S+$")
     """Regular expression to find the last word in a string."""
