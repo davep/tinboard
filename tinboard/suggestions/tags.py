@@ -27,7 +27,7 @@ class SuggestTags(Suggester):
             tags: The collection of tags to suggest from.
             case_sensitive: Should the check be case sensitive?
         """
-        super().__init__(use_cache=False, case_sensitive=case_sensitive)
+        super().__init__(use_cache=True, case_sensitive=case_sensitive)
         self._tags = list(tags)
         self._candidates = (
             self._tags
