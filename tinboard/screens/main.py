@@ -328,12 +328,18 @@ class Main(Screen[None]):
                     severity="error",
                     timeout=10,
                 )
-                self.app.push_screen(BookmarkInput(result), callback=self.post_result)
+                self.app.push_screen(
+                    BookmarkInput(result, known_tags=self.query_one(Bookmarks).tags),
+                    callback=self.post_result,
+                )
 
     @on(AddBookmark)
     def add(self) -> None:
         """Add a new bookmark."""
-        self.app.push_screen(BookmarkInput(), callback=self.post_result)
+        self.app.push_screen(
+            BookmarkInput(known_tags=self.query_one(Bookmarks).tags),
+            callback=self.post_result,
+        )
 
     @on(EditBookmark)
     def edit(self) -> None:
@@ -342,7 +348,10 @@ class Main(Screen[None]):
             self.app.bell()
         else:
             self.app.push_screen(
-                BookmarkInput(bookmark.as_bookmark), callback=self.post_result
+                BookmarkInput(
+                    bookmark.as_bookmark, known_tags=self.query_one(Bookmarks).tags
+                ),
+                callback=self.post_result,
             )
 
     async def _delete(self, bookmark: Bookmark, confirmed: bool) -> None:
