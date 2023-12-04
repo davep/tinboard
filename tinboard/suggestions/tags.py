@@ -49,9 +49,9 @@ class SuggestTags(Suggester):
         """
         # TODO: Don't suggest a tag that's already in the value.
         if last_word := self._LAST_WORD.search(value):
-            for candidate in self._candidates:
+            for candidate_index, candidate in enumerate(self._candidates):
                 if candidate.startswith(last_word[0]):
-                    return value[: -len(last_word[0])] + candidate
+                    return value[: -len(last_word[0])] + self._tags[candidate_index]
         return None
 
 
