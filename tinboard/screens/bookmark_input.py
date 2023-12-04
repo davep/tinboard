@@ -22,6 +22,7 @@ from aiopinboard.bookmark import Bookmark as BookmarkData
 
 ##############################################################################
 # Local imports.
+from ..suggestions import SuggestTags
 from ..widgets import TextArea
 
 
@@ -70,14 +71,21 @@ class BookmarkInput(ModalScreen[BookmarkData | None]):
 
     BINDINGS = [("escape", "cancel"), ("f2", "save")]
 
-    def __init__(self, bookmark: BookmarkData | None = None) -> None:
+    def __init__(
+        self,
+        bookmark: BookmarkData | None = None,
+        *,
+        known_tags: list[str] | None = None,
+    ) -> None:
         """Initialise the bookmark input dialog.
 
         Args:
             bookmark: The bookmark to edit, or `None` for a new one.
+            known_tags: The tags we currently know about.
         """
         super().__init__()
         self._bookmark = bookmark
+        self._tags = known_tags or []
 
     def compose(self) -> ComposeResult:
         """Compose the layout of the dialog."""
@@ -90,7 +98,11 @@ class BookmarkInput(ModalScreen[BookmarkData | None]):
             yield Label("Description:")
             yield TextArea(id="description")
             yield Label("Tags:")
-            yield Input(placeholder="Bookmark tags (space separated)", id="tags")
+            yield Input(
+                placeholder="Bookmark tags (space separated)",
+                id="tags",
+                suggester=SuggestTags(self._tags),
+            )
             with Horizontal(id="flags"):
                 yield Checkbox("Private", id="private")
                 yield Checkbox("Read Later", id="read-later")
