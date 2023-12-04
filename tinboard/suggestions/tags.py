@@ -40,15 +40,14 @@ class SuggestTags(Suggester):
         Returns:
             A suggested completion, or `None` if none could be made.
         """
-        if tags := [tag for tag in self._TAGS.split(value) if tag]:
-            try:
-                *other_tags, last_tag = tags
-            except ValueError:
-                return None
-            used_tags = set(other_tags)
-            for candidate_index, candidate in enumerate(self._candidates):
-                if candidate.startswith(last_tag) and candidate not in used_tags:
-                    return value[: -len(last_tag)] + self._tags[candidate_index]
+        try:
+            *other_tags, last_tag = [tag for tag in self._TAGS.split(value) if tag]
+        except ValueError:
+            return None
+        used_tags = set(other_tags)
+        for candidate_index, candidate in enumerate(self._candidates):
+            if candidate.startswith(last_tag) and candidate not in used_tags:
+                return value[: -len(last_tag)] + self._tags[candidate_index]
         return None
 
 
