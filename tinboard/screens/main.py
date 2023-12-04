@@ -364,7 +364,7 @@ class Main(Screen[None]):
         if confirmed:
             await self._api.bookmark.async_delete_bookmark(bookmark.href)
             self.query_one(Bookmarks).remove_bookmark(bookmark).save()
-            self.notify(f"Bookmark deleted.", severity="warning")
+            self.notify("Bookmark deleted.", severity="warning")
 
     @on(DeleteBookmark)
     def delete(self) -> None:
