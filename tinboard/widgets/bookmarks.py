@@ -239,8 +239,8 @@ class Bookmarks(OptionListEx):
         for n in range(self.option_count):
             bookmark = self.get_option_at_index(n)
             assert isinstance(bookmark, Bookmark)
-            tags |= set(tag.lower() for tag in bookmark.tags)
-        return sorted(list(tags))
+            tags |= set(tag for tag in bookmark.tags)
+        return sorted(list(tags), key=str.casefold)
 
     @property
     def latest_modification(self) -> datetime | None:
