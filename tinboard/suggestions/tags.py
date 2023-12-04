@@ -15,6 +15,8 @@ from textual.suggester import Suggester
 class SuggestTags(Suggester):
     """A Textual `Input` suggester that suggests tags."""
 
+    # pylint:disable=too-few-public-methods
+
     def __init__(self, tags: Iterable[str]) -> None:
         """Initialise the suggester.
 
@@ -26,8 +28,8 @@ class SuggestTags(Suggester):
         self._tags = list(tags)
         self._candidates = [candidate.casefold() for candidate in self._tags]
 
-    _LAST_WORD: Final[Pattern[str]] = re.compile(r"\S+$")
-    """Regular expression to find the last word in a string."""
+    _TAGS: Final[Pattern[str]] = re.compile(r"\s+")
+    """Regular expression for splitting a string into individual tags."""
 
     async def get_suggestion(self, value: str) -> str | None:
         """Get suggestions for the given value.
@@ -38,11 +40,15 @@ class SuggestTags(Suggester):
         Returns:
             A suggested completion, or `None` if none could be made.
         """
-        # TODO: Don't suggest a tag that's already in the value.
-        if last_word := self._LAST_WORD.search(value):
+        if tags := [tag for tag in self._TAGS.split(value) if tag]:
+            try:
+                *other_tags, last_tag = tags
+            except ValueError:
+                return None
+            used_tags = set(other_tags)
             for candidate_index, candidate in enumerate(self._candidates):
-                if candidate.startswith(last_word[0]):
-                    return value[: -len(last_word[0])] + self._tags[candidate_index]
+                if candidate.startswith(last_tag) and candidate not in used_tags:
+                    return value[: -len(last_tag)] + self._tags[candidate_index]
         return None
 
 
