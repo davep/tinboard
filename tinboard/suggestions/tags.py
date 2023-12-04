@@ -19,17 +19,15 @@ class SuggestTags(Suggester):
         self,
         tags: Iterable[str],
         *,
-        use_cache: bool = True,
         case_sensitive: bool = False,
     ) -> None:
         """Initialise the suggester.
 
         Args:
             tags: The collection of tags to suggest from.
-            use_cache: Should a cache be used?
             case_sensitive: Should the check be case sensitive?
         """
-        super().__init__(use_cache=use_cache, case_sensitive=case_sensitive)
+        super().__init__(use_cache=False, case_sensitive=case_sensitive)
         self._tags = list(tags)
         self._candidates = (
             self._tags
