@@ -22,9 +22,12 @@ class SuggestTags(Suggester):
 
         Args:
             tags: The collection of tags to suggest from.
-            case_sensitive: Should the check be case sensitive?
         """
-        super().__init__(use_cache=True, case_sensitive=False)
+        # Note that we're going to be doing a case-insensitive match, but
+        # the suggester API doesn't provided the raw value if you're not
+        # being case-sensitive; so here we say we *are* going to be case
+        # sensitive and then in get_suggestion we'll handle it ourselves.
+        super().__init__(use_cache=True, case_sensitive=True)
         self._tags = list(tags)
         self._candidates = [candidate.casefold() for candidate in self._tags]
 
@@ -44,7 +47,8 @@ class SuggestTags(Suggester):
             *other_tags, last_tag = [tag for tag in self._TAGS.split(value) if tag]
         except ValueError:
             return None
-        used_tags = set(other_tags)
+        last_tag = last_tag.casefold()
+        used_tags = set(tag.casefold() for tag in other_tags)
         for candidate_index, candidate in enumerate(self._candidates):
             if candidate.startswith(last_tag) and candidate not in used_tags:
                 return value[: -len(last_tag)] + self._tags[candidate_index]
