@@ -14,6 +14,7 @@ from textual import on
 from textual.app import ComposeResult
 from textual.containers import Horizontal, Vertical
 from textual.screen import ModalScreen
+from textual.validation import Length
 from textual.widgets import Button, Checkbox, Input, Label
 
 ##############################################################################
@@ -92,7 +93,9 @@ class BookmarkInput(ModalScreen[BookmarkData | None]):
         with Vertical() as dialog:
             dialog.border_title = "Bookmark"
             yield Label("URL:")
-            yield Input(placeholder="Bookmark URL", id="url")
+            yield Input(
+                placeholder="Bookmark URL", id="url", validators=[Length(minimum=1)]
+            )
             yield Label("Title:")
             yield Input(placeholder="Bookmark title", id="title")
             yield Label("Description:")
@@ -123,6 +126,14 @@ class BookmarkInput(ModalScreen[BookmarkData | None]):
     @on(Button.Pressed, "#save")
     def action_save(self) -> None:
         """Save the bookmark data."""
+        if not self.query_one("#url", Input).value.strip():
+            self.app.bell()
+            self.notify(
+                "The URL is required for the bookmark.",
+                severity="error",
+                title="Missing URL",
+            )
+            return
         self.dismiss(
             BookmarkData(
                 href=self.query_one("#url", Input).value,
