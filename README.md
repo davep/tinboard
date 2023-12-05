@@ -2,10 +2,7 @@
 
 ![Tinboard](https://raw.githubusercontent.com/davep/tinboard/main/tinboard.png)
 
-A very early work in progress. This will be turning into a full
-terminal-based Pinboard client. At the moment this is a read-only client;
-something to let me riff on the interface and decide what I like. Once that
-has settled down I'll be adding full write capability too.
+A very early work in progress. See below for the list of things still to do.
 
 All application data lives in `~/.local/share/tinboard`; if you want to wipe
 it out just nuke that directory. Likewise, application configuration data
