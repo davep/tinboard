@@ -6,7 +6,7 @@ from __future__ import annotations
 
 ##############################################################################
 # Python imports.
-from typing_extensions import Self
+from typing_extensions import Final, Self
 
 ##############################################################################
 # Textual imports.
@@ -16,9 +16,18 @@ from textual.events import Focus
 from textual.widgets.option_list import Option, OptionDoesNotExist
 
 ##############################################################################
+# Rich imports.
+from rich.emoji import Emoji
+
+##############################################################################
 # Local imports.
 from ..messages import ShowAlsoTaggedWith, ShowTaggedWith
 from .extended_option_list import OptionListEx
+
+
+##############################################################################
+ICON: Final[str] = Emoji.replace(":bookmark: ")
+"""The icon to show before tags."""
 
 
 ##############################################################################
@@ -40,7 +49,7 @@ class Tags(OptionListEx):
         Binding("+", "also_tagged", "Show also tagged"),
     ]
 
-    def show(self, tags: list[str]) -> Self:
+    def show(self, tags: list[str], with_icon: bool = False) -> Self:
         """Show the given list of tags.
 
         Args:
@@ -57,7 +66,7 @@ class Tags(OptionListEx):
         )
         try:
             return self.clear_options().add_options(
-                [Option(tag, id=tag) for tag in tags]
+                [Option(f"{ICON if with_icon else ''}{tag}", id=tag) for tag in tags]
             )
         finally:
             if tags:

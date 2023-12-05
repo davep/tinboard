@@ -93,6 +93,10 @@ class Details(VerticalScroll):
     Details Tags, Details Tags:focus {
         margin: 0 2 1 2;
     }
+
+    Details Tags > .option-list--option {
+        padding: 0;
+    }
     """
 
     BINDINGS = [
@@ -140,7 +144,7 @@ class Details(VerticalScroll):
                 f"The bookmark is {'[bold]public[/]' if self.bookmark.shared else '[dim]private[/]'}"
             )
             self.query_one(Tags).show(
-                sorted(self.bookmark.tags, key=str.casefold)
+                sorted(self.bookmark.tags, key=str.casefold), with_icon=True
             ).set_class(not bool(self.bookmark.tags), "empty")
 
         finally:
