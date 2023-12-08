@@ -63,6 +63,21 @@ class Main(Screen[None]):
 
     # pylint:disable=too-many-public-methods
 
+    CONTEXT_HELP = """
+    ## Application keys and commands
+
+    The following keys and commands are available throughout the application:
+
+    | Key | Command | Description |
+    | - | - | - |
+    | <kbd>F1</kbd> | `Help` | This help screen. |
+    | <kbd>F2</kbd> | `Visit Pinboard` | Visit the main Pinboard website. |
+    | <kbd>F12</kbd> | `Logout` | Forgot your API token and remove the local bookmark cache. |
+    | <kbd>Ctrl</kbd>+<kbd>l</kbd> | `Redownload/refresh bookmarks` | Reload the local bookmarks from Pinboard. |
+    | <kbd>Ctrl</kbd>+<kbd>q</kbd> | `Quit the application` | Shockingly... quit the application! |
+    | <kbd>Ctrl</kbd>+<kbd>p</kbd> | | Show the command palette. |
+    """
+
     TITLE = "Tinboard"
     SUB_TITLE = "A pinboard.in client"
     COMMANDS = {
@@ -138,10 +153,10 @@ class Main(Screen[None]):
         filter_binding("Untagged"),
         Binding("f1", "help", "Help"),
         Binding("f2", "goto_pinboard", "pinboard.in"),
-        Binding("f12", "logout", "Logout"),
+        Binding("f12", "logout", "Logout", show=False),
         Binding("ctrl+l", "redownload", "Reload"),
-        Binding("ctrl+q", "quit", "Quit"),
         Binding("escape", "escape"),
+        Binding("ctrl+q", "quit", "Quit"),
     ]
 
     def __init__(self, api_token: str) -> None:
@@ -226,7 +241,7 @@ class Main(Screen[None]):
 
     def action_help(self) -> None:
         """Show the help screen."""
-        self.app.push_screen(Help())
+        self.app.push_screen(Help(self))
 
     def action_goto_pinboard(self) -> None:
         """Open Pinbaord in the user's web browser."""

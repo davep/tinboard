@@ -25,7 +25,7 @@ class Tinboard(App[ExitStates]):
 
     BINDINGS = [
         Binding("ctrl+backslash", "gndn"),
-        Binding("ctrl+p", "command_palette", "Commands", priority=True),
+        Binding("ctrl+p", "command_palette", "Commands", priority=True, show=False),
     ]
 
     def __init__(self) -> None:

@@ -176,6 +176,20 @@ class Bookmarks(OptionListEx):
 
     # pylint:disable=too-many-public-methods
 
+    CONTEXT_HELP = """\
+    ## Bookmarks keys and commands
+
+    The following keys and commands are available in the bookmarks list:
+
+    | Key | Command | Description |
+    | - | - | - |
+    | <kbd>n</kbd> | `Add a new bookmark` | Create a new bookmark. |
+    | <kbd>e</kbd> | `Edit bookmark` | Edit the currently-highlighted bookmark. |
+    | <kbd>d</kbd> | `Delete bookmark` | Delete the currently-highlighted bookmark. |
+    | <kbd>Ctrl</kbd>+<kbd>r</kbd> | `Toggle read/unread` | Toggle the read/unread status of the currently-highlighted bookmark. |
+    | <kbd>Ctrl</kbd>+<kbd>v</kbd> | `Toggle public/private` | Toggle the visibility of the currently-highlighted bookmark. |
+    """
+
     DEFAULT_CSS = """
     Bookmarks {
         scrollbar-gutter: stable;
@@ -187,12 +201,12 @@ class Bookmarks(OptionListEx):
     """
 
     BINDINGS = [
+        Binding("enter", "visit", "Visit"),
         Binding("n", "new", "New"),
         Binding("e", "edit", "Edit"),
         Binding("d", "delete", "Delete"),
-        Binding("ctrl+r", "read", "(Un)Read"),
-        Binding("ctrl+v", "public", "Public/Private"),
-        Binding("enter", "visit", "Visit"),
+        Binding("ctrl+r", "read", "(Un)Read", show=False),
+        Binding("ctrl+v", "public", "Public/Private", show=False),
     ]
 
     bookmarks: var[list[Bookmark]] = var([], always_update=True)

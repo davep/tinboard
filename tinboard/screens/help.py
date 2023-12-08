@@ -2,6 +2,7 @@
 
 ##############################################################################
 # Python imports.
+from inspect import cleandoc
 from webbrowser import open as open_url
 
 ##############################################################################
@@ -9,7 +10,7 @@ from webbrowser import open as open_url
 from textual import on, __version__ as textual_version
 from textual.app import ComposeResult
 from textual.containers import Center, Vertical, VerticalScroll
-from textual.screen import ModalScreen
+from textual.screen import ModalScreen, Screen
 from textual.widgets import Button, Markdown
 
 ##############################################################################
@@ -25,13 +26,11 @@ HELP = f"""\
 
 `Tinboard` is a terminal-based client for [pinboard.in](https://pinboard.in/).
 
-## TODO
-
-More help will appear here. This is just about getting the screen in place.
+{{context_help}}
 
 ## Other
 
-This version if Tinboard is using [Textual](https://textual.textualize.io/) v{textual_version}.
+This version of Tinboard is using [Textual](https://textual.textualize.io/) v{textual_version}.
 """
 
 
@@ -66,12 +65,31 @@ class Help(ModalScreen[None]):
 
     BINDINGS = [("escape", "close")]
 
+    def __init__(self, help_for: Screen) -> None:
+        """Initialise the help screen.
+
+        Args:
+            help_for: The screen to show the help for.
+        """
+        super().__init__()
+        self._context_help = ""
+        if found_help := [
+            cleandoc(getattr(helper, "CONTEXT_HELP"))
+            for helper in reversed(
+                (
+                    help_for.focused if help_for.focused is not None else help_for
+                ).ancestors_with_self
+            )
+            if hasattr(helper, "CONTEXT_HELP")
+        ]:
+            self._context_help = "\n\n".join(found_help)
+
     def compose(self) -> ComposeResult:
         """Compose the layout of the help screen."""
         with Vertical() as help_screen:
             help_screen.border_title = "Help"
             with VerticalScroll():
-                yield Markdown(HELP)
+                yield Markdown(HELP.format(context_help=self._context_help))
             with Center():
                 yield Button("Okay [dim]\\[Esc]")
 
