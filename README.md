@@ -26,7 +26,7 @@ Things to do:
       bookmark.
 - [X] Add the ability to quickly toggle the public/private status of a
       bookmark.
-- [ ] Add the ability to "logout" (IOW forget the API token).
+- [X] Add the ability to "logout" (IOW forget the API token).
 - [ ] Add a bookmark export facility.
 - [ ] Add tag counts to the tag list.
 - [X] Add tag searching to the command palette.

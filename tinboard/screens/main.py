@@ -31,6 +31,7 @@ from ..commands import (
     CoreFilteringCommands,
     TagCommands,
 )
+from ..data import token_file, bookmarks_file
 from ..messages import (
     AddBookmark,
     EditBookmark,
@@ -137,6 +138,7 @@ class Main(Screen[None]):
         filter_binding("Untagged"),
         Binding("f1", "help", "Help"),
         Binding("f2", "goto_pinboard", "pinboard.in"),
+        Binding("f12", "logout", "Logout"),
         Binding("ctrl+l", "redownload", "Reload"),
         Binding("ctrl+q", "quit", "Quit"),
         Binding("escape", "escape"),
@@ -229,6 +231,27 @@ class Main(Screen[None]):
     def action_goto_pinboard(self) -> None:
         """Open Pinbaord in the user's web browser."""
         open_url("https://pinboard.in")
+
+    def _logout(self, confirmed: bool) -> None:
+        """Process the logout confirmation.
+
+        Args:
+            confirmed: Was the logout confirmed by the user?
+        """
+        if confirmed:
+            token_file().unlink(True)
+            bookmarks_file().unlink(True)
+            self.app.exit()
+
+    def action_logout(self) -> None:
+        """Perform the logout action."""
+        self.app.push_screen(
+            Confirm(
+                "Logout",
+                "Remove the local copy of your API token and delete the local copy of all bookmarks?",
+            ),
+            callback=self._logout,
+        )
 
     def action_redownload(self) -> None:
         """Freshly download the bookmarks."""
