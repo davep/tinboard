@@ -31,6 +31,11 @@ class CoreCommands(Provider):
                 "redownload",
                 "Download a full fresh copy of your bookmarks from Pinboard",
             ),
+            (
+                "Logout",
+                "logout",
+                "Forget your Pinboard API token and remove the local copies of all bookmarks.",
+            ),
         ):
             if match := matcher.match(command):
                 yield Hit(
