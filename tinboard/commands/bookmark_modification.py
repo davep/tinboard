@@ -13,6 +13,7 @@ from textual.command import Hit, Hits, Provider
 from ..messages import (
     AddBookmark,
     EditBookmark,
+    DeleteBookmark,
     ToggleBookmarkPublic,
     ToggleBookmarkRead,
 )
@@ -44,6 +45,7 @@ class BookmarkModificationCommands(Provider):
                 ToggleBookmarkPublic,
                 "Toggle the current bookmark's public/private status",
             ),
+            ("Delete bookmark", DeleteBookmark, "Delete the current bookmark"),
             (
                 "Toggle read/unread",
                 ToggleBookmarkRead,
