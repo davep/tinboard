@@ -16,11 +16,11 @@ from textual.binding import Binding
 ##############################################################################
 # Local imports.
 from .screens import Main, TokenInput
-from .data import load_configuration, save_configuration, token_file
+from .data import load_configuration, save_configuration, token_file, ExitStates
 
 
 ##############################################################################
-class Tinboard(App[None]):
+class Tinboard(App[ExitStates]):
     """The application."""
 
     BINDINGS = [
@@ -43,7 +43,16 @@ class Tinboard(App[None]):
             token_file().write_text(token, encoding="utf-8")
             self.push_screen(Main(token))
         else:
-            self.exit()
+            self.exit(ExitStates.TOKEN_NEEDED)
+
+    @staticmethod
+    def environmental_token() -> str | None:
+        """Try and get an API token from the environment.
+
+        Returns:
+           An API token found in the environment, or `None` if one wasn't found.
+        """
+        return os.environ.get("TINBOARD_API_TOKEN")
 
     @property
     def api_token(self) -> str | None:
@@ -54,7 +63,7 @@ class Tinboard(App[None]):
         value will be `None`.
         """
         try:
-            return os.environ.get("TINBOARD_API_TOKEN") or token_file().read_text(
+            return self.environmental_token() or token_file().read_text(
                 encoding="utf-8"
             )
         except IOError:

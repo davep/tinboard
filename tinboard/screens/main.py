@@ -31,7 +31,7 @@ from ..commands import (
     CoreFilteringCommands,
     TagCommands,
 )
-from ..data import token_file, bookmarks_file
+from ..data import token_file, bookmarks_file, ExitStates
 from ..messages import (
     AddBookmark,
     EditBookmark,
@@ -241,7 +241,7 @@ class Main(Screen[None]):
         if confirmed:
             token_file().unlink(True)
             bookmarks_file().unlink(True)
-            self.app.exit()
+            self.app.exit(ExitStates.TOKEN_FORGOTTEN)
 
     def action_logout(self) -> None:
         """Perform the logout action."""
