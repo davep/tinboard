@@ -22,14 +22,15 @@ class Confirm(ModalScreen[bool]):
         padding: 1 2;
         height: auto;
         width: auto;
-        max-width: 80%;
+        max-width: 80vw;
         background: $surface;
         border: panel $error;
         border-title-color: $text;
     }
 
     Confirm Label {
-        width: 1fr;
+        width: auto;
+        max-width: 70vw;
         padding-left: 1;
         padding-right: 1;
         margin-bottom: 1;
