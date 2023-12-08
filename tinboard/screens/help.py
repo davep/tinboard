@@ -6,7 +6,7 @@ from webbrowser import open as open_url
 
 ##############################################################################
 # Textual imports.
-from textual import on
+from textual import on, __version__ as textual_version
 from textual.app import ComposeResult
 from textual.containers import Center, Vertical, VerticalScroll
 from textual.screen import ModalScreen
@@ -28,6 +28,10 @@ HELP = f"""\
 ## TODO
 
 More help will appear here. This is just about getting the screen in place.
+
+## Other
+
+This version if Tinboard is using [Textual](https://textual.textualize.io/) v{textual_version}.
 """
 
 
