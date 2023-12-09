@@ -7,10 +7,10 @@ from webbrowser import open as open_url
 
 ##############################################################################
 # Textual imports.
-from textual import (
+from textual import (  # pylint:disable=no-name-in-module
     on,
     __version__ as textual_version,
-)  # pylint:disable=no-name-in-module
+)
 from textual.app import ComposeResult
 from textual.containers import Center, Vertical, VerticalScroll
 from textual.screen import ModalScreen, Screen
