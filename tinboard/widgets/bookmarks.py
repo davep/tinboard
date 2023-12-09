@@ -183,6 +183,7 @@ class Bookmarks(OptionListEx):
 
     | Key | Command | Description |
     | - | - | - |
+    | <kbd>Enter</kbd> | | Visit the current bookmark. |
     | <kbd>n</kbd> | `Add a new bookmark` | Create a new bookmark. |
     | <kbd>e</kbd> | `Edit bookmark` | Edit the currently-highlighted bookmark. |
     | <kbd>d</kbd> | `Delete bookmark` | Delete the currently-highlighted bookmark. |
