@@ -68,8 +68,7 @@ class Help(ModalScreen[None]):
             help_for: The screen to show the help for.
         """
         super().__init__()
-        self._context_help = ""
-        if found_help := [
+        self._context_help = "\n\n".join(
             cleandoc(getattr(helper, "CONTEXT_HELP"))
             for helper in reversed(
                 (
@@ -77,8 +76,7 @@ class Help(ModalScreen[None]):
                 ).ancestors_with_self
             )
             if hasattr(helper, "CONTEXT_HELP")
-        ]:
-            self._context_help = "\n\n".join(found_help)
+        ).strip()
 
     def compose(self) -> ComposeResult:
         """Compose the layout of the help screen."""
