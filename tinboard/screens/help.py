@@ -30,6 +30,12 @@ HELP = f"""\
 
 ## Other
 
+Tinboard was created by and is maintained by [Dave Pearson](https://www.davep.org/).
+
+
+Tinboard is Free Software and can be [found on GitHub](https://github.com/davep/tinboard).
+
+
 This version of Tinboard is using [Textual](https://textual.textualize.io/) v{textual_version}.
 """
 
