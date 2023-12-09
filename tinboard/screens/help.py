@@ -3,6 +3,7 @@
 ##############################################################################
 # Python imports.
 from inspect import cleandoc
+from typing import Any
 from webbrowser import open as open_url
 
 ##############################################################################
@@ -70,7 +71,7 @@ class Help(ModalScreen[None]):
 
     BINDINGS = [("escape", "close")]
 
-    def __init__(self, help_for: Screen) -> None:
+    def __init__(self, help_for: Screen[Any]) -> None:
         """Initialise the help screen.
 
         Args:
