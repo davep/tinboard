@@ -34,6 +34,17 @@ ICON: Final[str] = Emoji.replace(":bookmark: ")
 class Tags(OptionListEx):
     """A menu of tags."""
 
+    CONTEXT_HELP = """\
+    ## Tag list keys
+
+    The following keys are available in the list of tags:
+
+    | Key | Description |
+    | - | - |
+    | <kbd>Enter</kbd> | Show bookmarks with this tag in the bookmark list. |
+    | <kbd>+</kbd> | Add this tag to any tag filter active in the bookmark list. |
+    """
+
     DEFAULT_CSS = """
     Tags, Tags:focus {
         border: blank;
