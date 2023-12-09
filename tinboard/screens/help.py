@@ -51,10 +51,6 @@ class Help(ModalScreen[None]):
         border-title-color: $accent;
     }
 
-    Help Markdown {
-        height: 1fr;
-    }
-
     Help Center {
         height: auto;
         width: 100%;
