@@ -18,7 +18,7 @@ Things to do:
 - [ ] Allow both the above to be combined.
 - [X] Add the ability to add a bookmark.
   - [X] Validation of data sent to the server
-  - [ ] Make available suggested tags once the bookmark is known.
+  - [X] Make available suggested tags once the bookmark is known.
 - [X] Add the ability to edit a bookmark.
   - [X] Validation of data sent to the server
 - [X] Add the ability to delete a bookmark.

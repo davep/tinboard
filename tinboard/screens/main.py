@@ -374,7 +374,9 @@ class Main(Screen[None]):
                     timeout=10,
                 )
                 self.app.push_screen(
-                    BookmarkInput(result, known_tags=self.query_one(Bookmarks).tags),
+                    BookmarkInput(
+                        self._api, result, known_tags=self.query_one(Bookmarks).tags
+                    ),
                     callback=self.post_result,
                 )
 
@@ -382,7 +384,7 @@ class Main(Screen[None]):
     def add(self) -> None:
         """Add a new bookmark."""
         self.app.push_screen(
-            BookmarkInput(known_tags=self.query_one(Bookmarks).tags),
+            BookmarkInput(self._api, known_tags=self.query_one(Bookmarks).tags),
             callback=self.post_result,
         )
 
@@ -394,7 +396,9 @@ class Main(Screen[None]):
         else:
             self.app.push_screen(
                 BookmarkInput(
-                    bookmark.as_bookmark, known_tags=self.query_one(Bookmarks).tags
+                    self._api,
+                    bookmark.as_bookmark,
+                    known_tags=self.query_one(Bookmarks).tags,
                 ),
                 callback=self.post_result,
             )
