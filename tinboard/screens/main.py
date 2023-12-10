@@ -202,16 +202,36 @@ class Main(Screen[None]):
             As a side-effect of calling this method, the local copy of all
             the bookmarks will be overwritten.
         """
-        (await self.query_one(Bookmarks).download_all(self._api)).save()
+        try:
+            (await self.query_one(Bookmarks).download_all(self._api)).save()
+        except RequestError:
+            self.app.bell()
+            self.notify(
+                "Error downloading bookmarks from the server.",
+                title="Download Error",
+                severity="error",
+                timeout=8,
+            )
+            self._bookmarks_changed()
 
     @work
     async def maybe_redownload(self) -> None:
         """Redownload the bookmarks if they look newer on the server."""
         if last_download := self.query_one(Bookmarks).last_downloaded:
-            if (
-                await self._api.bookmark.async_get_last_change_datetime()
-                > last_download
-            ):
+            try:
+                latest_on_server = (
+                    await self._api.bookmark.async_get_last_change_datetime()
+                )
+            except RequestError:
+                self.app.bell()
+                self.notify(
+                    f"Unable to get the last change date from Pinboard. Is your token valid?",
+                    title="Server Error",
+                    severity="error",
+                    timeout=8,
+                )
+                return
+            if latest_on_server > last_download:
                 self.notify(
                     "Bookmarks on the server appear newer; downloading a fresh copy."
                 )
@@ -411,7 +431,17 @@ class Main(Screen[None]):
             confirmed: The decision the user made about deletion.
         """
         if confirmed:
-            await self._api.bookmark.async_delete_bookmark(bookmark.href)
+            try:
+                await self._api.bookmark.async_delete_bookmark(bookmark.href)
+            except RequestError:
+                self.app.bell()
+                self.notify(
+                    "Error trying to delete the bookmark.",
+                    title="Server Error",
+                    severity="error",
+                    timeout=8,
+                )
+                return
             self.query_one(Bookmarks).remove_bookmark(bookmark).save()
             self.notify("Bookmark deleted.", severity="warning")
 

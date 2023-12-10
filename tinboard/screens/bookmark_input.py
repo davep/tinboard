@@ -22,6 +22,7 @@ from textual.widgets import Button, Checkbox, Input, Label
 # Pinboard API imports.
 from aiopinboard import API
 from aiopinboard.bookmark import Bookmark as BookmarkData
+from aiopinboard.errors import RequestError
 
 ##############################################################################
 # Local imports.
@@ -132,9 +133,19 @@ class BookmarkInput(ModalScreen[BookmarkData | None]):
     @work(exclusive=True)
     async def _get_tag_suggestions(self) -> None:
         """Load up fresh tag suggestions based on the URL."""
-        tags = await self._api.bookmark.async_get_suggested_tags(
-            self.query_one("#url", Input).value
-        )
+        try:
+            tags = await self._api.bookmark.async_get_suggested_tags(
+                self.query_one("#url", Input).value
+            )
+        except RequestError:
+            self.app.bell()
+            self.notify(
+                "Error getting suggested tags from the server.",
+                title="Server Error",
+                severity="error",
+                timeout=8,
+            )
+            return
         suggested_tags = ""
         if tags["recommended"]:
             suggested_tags += f"[b]Recommended:[/b] {' '.join(tags['recommended'])}\n"

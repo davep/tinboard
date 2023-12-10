@@ -38,7 +38,7 @@ Things to do:
   - [ ] The main filter?
   - [ ] The selected tag(s)?
 - [ ] All sorts of error handling
-  - [ ] Bad token given to Pinboard.
+  - [X] Bad token given to Pinboard.
   - [ ] IO errors around the local cache of bookmarks.
 
 [//]: # (README.md ends here)
