@@ -8,7 +8,6 @@ from json import loads, dumps
 from typing import Any, Callable, cast
 from webbrowser import open as open_url
 from typing_extensions import Final, Self
-from aiopinboard import bookmark
 
 ##############################################################################
 # pytz imports.
