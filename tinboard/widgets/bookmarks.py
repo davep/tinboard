@@ -334,7 +334,7 @@ class Bookmarks(OptionListEx):
                 lambda bookmark: bool(bookmark.tags) is self.has_tags_filter
             )
         if self.tag_filter:
-            filter_names.append(f"Tagged {', '.join(self.tag_filter)}")
+            filter_names.append(f"Tagged {', '.join(sorted(self.tag_filter))}")
             filter_checks.append(lambda bookmark: bookmark.is_tagged(*self.tag_filter))
         if self.text_filter:
             filter_names.append(f"Contains '{self.text_filter}'")
