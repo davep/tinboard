@@ -221,8 +221,8 @@ class Bookmarks(OptionListEx):
     )
     """The core filter in play."""
 
-    _tags: var[set[str]] = var(set())
-    """Keeps track of the additive list of tags."""
+    _tag_filter: var[set[str]] = var(set())
+    """The tags to filter on."""
 
     def action_visit(self) -> None:
         """Visit the highlighted bookmark."""
@@ -290,11 +290,13 @@ class Bookmarks(OptionListEx):
 
         # If there are tags to test for, further filter on them...
         bookmarks = [
-            bookmark for bookmark in bookmarks if bookmark.is_tagged(*self._tags)
+            bookmark for bookmark in bookmarks if bookmark.is_tagged(*self._tag_filter)
         ]
 
         # Generate any tagged information for the title.
-        tagged_title = f"; Tagged {', '.join(self._tags)}" if self._tags else ""
+        tagged_title = (
+            f"; Tagged {', '.join(self._tag_filter)}" if self._tag_filter else ""
+        )
 
         # Sort out the title of the screen.
         self.screen.sub_title = f"{filter_title}{tagged_title} ({len(bookmarks)})"
@@ -318,7 +320,7 @@ class Bookmarks(OptionListEx):
     def show_all(self) -> None:
         """Show all bookmarks."""
         self._core_filter = "All", lambda _: True
-        self._tags = set()
+        self._tag_filter = set()
         self._refresh_bookmarks()
 
     def show_public(self) -> None:
@@ -353,7 +355,7 @@ class Bookmarks(OptionListEx):
 
     def show_tagged_with(self, tag: str) -> None:
         """Show bookmarks tagged with a given tag."""
-        self._tags = set([tag])
+        self._tag_filter = set([tag])
         self._refresh_bookmarks()
 
     def show_also_tagged_with(self, tag: str) -> None:
@@ -362,7 +364,7 @@ class Bookmarks(OptionListEx):
         Args:
             tag: The tag to filter on, or add to an existing tag filter.
         """
-        self._tags |= {tag}
+        self._tag_filter |= {tag}
         self._refresh_bookmarks()
 
     def _watch_bookmarks(self) -> None:
