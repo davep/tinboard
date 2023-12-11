@@ -14,7 +14,7 @@ come. :-)
 Things to do:
 
 - [ ] Full text search.
-- [ ] Allow tags to be combined with core filters.
+- [X] Allow tags to be combined with core filters.
 - [ ] Allow both the above to be combined.
 - [X] Add the ability to add a bookmark.
   - [X] Validation of data sent to the server

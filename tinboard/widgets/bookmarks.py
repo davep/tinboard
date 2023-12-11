@@ -5,7 +5,7 @@
 from datetime import datetime
 from hashlib import md5
 from json import loads, dumps
-from typing import Any, cast
+from typing import Any, Callable, cast
 from webbrowser import open as open_url
 from typing_extensions import Final, Self
 
@@ -176,7 +176,7 @@ class Bookmarks(OptionListEx):
 
     # pylint:disable = too-many-public-methods
 
-    CONTEXT_HELP = """\
+    CONTEXT_HELP = """
     ## Bookmarks keys and commands
 
     The following keys and commands are available in the bookmarks list:
@@ -215,6 +215,11 @@ class Bookmarks(OptionListEx):
 
     last_downloaded: var[datetime | None] = var(None)
     """When the bookmarks were last downloaded."""
+
+    _core_filter: var[tuple[str, Callable[[Bookmark], bool]]] = var(
+        ("All", lambda _: True)
+    )
+    """The core filter in play."""
 
     _tags: var[set[str]] = var(set())
     """Keeps track of the additive list of tags."""
@@ -272,13 +277,27 @@ class Bookmarks(OptionListEx):
     class Changed(Message):
         """Message to say the visible collection of bookmarks has changed."""
 
-    def show_bookmarks(
-        self, bookmarks: list[Bookmark], description: str = "All"
-    ) -> Self:
-        """Show the given list of bookmarks."""
-        # pylint:disable=attribute-defined-outside-init
-        self._tags = set()
-        self.screen.sub_title = f"{description} ({len(bookmarks)})"
+    def _refresh_bookmarks(self) -> Self:
+        """Refresh the display of bookmarks.
+
+        Takes core filters and tags into account.."""
+
+        # Get the details of the core filter.
+        filter_title, filter_check = self._core_filter
+
+        # Filter the list of bookmarks with the core filter.
+        bookmarks = [bookmark for bookmark in self.bookmarks if filter_check(bookmark)]
+
+        # If there are tags to test for, further filter on them...
+        bookmarks = [
+            bookmark for bookmark in bookmarks if bookmark.is_tagged(*self._tags)
+        ]
+
+        # Generate any tagged information for the title.
+        tagged_title = f"; Tagged {', '.join(self._tags)}" if self._tags else ""
+
+        # Sort out the title of the screen.
+        self.screen.sub_title = f"{filter_title}{tagged_title} ({len(bookmarks)})"
         highlighted_bookmark = (
             self.get_option_at_index(self.highlighted).id
             if self.highlighted is not None
@@ -298,48 +317,44 @@ class Bookmarks(OptionListEx):
 
     def show_all(self) -> None:
         """Show all bookmarks."""
-        self.show_bookmarks(self.bookmarks)
+        self._core_filter = "All", lambda _: True
+        self._tags = set()
+        self._refresh_bookmarks()
 
     def show_public(self) -> None:
         """Show public bookmarks."""
-        self.show_bookmarks(
-            [bookmark for bookmark in self.bookmarks if bookmark.shared], "Public"
-        )
+        self._core_filter = "Public", lambda bookmark: bookmark.shared
+        self._refresh_bookmarks()
 
     def show_private(self) -> None:
         """Show private bookmarks."""
-        self.show_bookmarks(
-            [bookmark for bookmark in self.bookmarks if not bookmark.shared], "Private"
-        )
+        self._core_filter = "Private", lambda bookmark: not bookmark.shared
+        self._refresh_bookmarks()
 
     def show_unread(self) -> None:
         """Show unread bookmarks."""
-        self.show_bookmarks(
-            [bookmark for bookmark in self.bookmarks if bookmark.unread], "Unread"
-        )
+        self._core_filter = "Unread", lambda bookmark: bookmark.unread
+        self._refresh_bookmarks()
 
     def show_read(self) -> None:
         """Show read bookmarks."""
-        self.show_bookmarks(
-            [bookmark for bookmark in self.bookmarks if not bookmark.unread], "Read"
-        )
+        self._core_filter = "Read", lambda bookmark: not bookmark.unread
+        self._refresh_bookmarks()
 
     def show_untagged(self) -> None:
         """Show untagged bookmarks."""
-        self.show_bookmarks(
-            [bookmark for bookmark in self.bookmarks if not bookmark.tags], "Untagged"
-        )
+        self._core_filter = "Untagged", lambda bookmark: not bookmark.tags
+        self._refresh_bookmarks()
 
     def show_tagged(self) -> None:
         """Show tagged bookmarks."""
-        self.show_bookmarks(
-            [bookmark for bookmark in self.bookmarks if bookmark.tags], "Tagged"
-        )
+        self._core_filter = "Tagged", lambda bookmark: bookmark.tags
+        self._refresh_bookmarks()
 
     def show_tagged_with(self, tag: str) -> None:
         """Show bookmarks tagged with a given tag."""
-        self._tags = set()
-        self.show_also_tagged_with(tag)
+        self._tags = set([tag])
+        self._refresh_bookmarks()
 
     def show_also_tagged_with(self, tag: str) -> None:
         """Start/extend a tag filter.
@@ -347,16 +362,12 @@ class Bookmarks(OptionListEx):
         Args:
             tag: The tag to filter on, or add to an existing tag filter.
         """
-        tags = self._tags | {tag}
-        self.show_bookmarks(
-            [bookmark for bookmark in self.bookmarks if bookmark.is_tagged(*tags)],
-            f"Tagged with {', '.join(tags)}",
-        )
-        self._tags = tags
+        self._tags |= {tag}
+        self._refresh_bookmarks()
 
     def _watch_bookmarks(self) -> None:
         """Refresh the display when all bookmarks are updated."""
-        self.show_bookmarks(self.bookmarks)
+        self._refresh_bookmarks()
 
     @property
     def as_json(self) -> dict[str, Any]:
