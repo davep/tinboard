@@ -326,36 +326,36 @@ class Main(Screen[None]):
     @on(Filters.ShowPublic)
     def action_show_public(self) -> None:
         """Show all public bookmarks."""
-        self.query_one(Bookmarks).show_public()
+        self.query_one(Bookmarks).public_filter = True
 
     @on(Filters.ShowPrivate)
     def action_show_private(self) -> None:
         """Show all private bookmarks."""
-        self.query_one(Bookmarks).show_private()
+        self.query_one(Bookmarks).public_filter = False
 
     @on(Filters.ShowUnread)
     def action_show_unread(self) -> None:
         """Show all unread bookmarks."""
-        self.query_one(Bookmarks).show_unread()
+        self.query_one(Bookmarks).read_filter = False
 
     @on(Filters.ShowRead)
     def action_show_read(self) -> None:
         """Show all read bookmarks."""
-        self.query_one(Bookmarks).show_read()
+        self.query_one(Bookmarks).read_filter = True
 
     @on(Filters.ShowUntagged)
     def action_show_untagged(self) -> None:
         """Show all untagged bookmarks."""
-        self.query_one(Bookmarks).show_untagged()
+        self.query_one(Bookmarks).has_tags_filter = False
 
     @on(Filters.ShowTagged)
     def action_show_tagged(self) -> None:
         """Show all tagged bookmarks."""
-        self.query_one(Bookmarks).show_tagged()
+        self.query_one(Bookmarks).has_tags_filter = True
 
     def _search(self, search_text: str) -> None:
         """Handle a request to search for text in the bookmarks."""
-        self.query_one(Bookmarks).show_containing(search_text)
+        self.query_one(Bookmarks).text_filter = search_text
 
     def action_search(self) -> None:
         """Do some free-text searching."""
@@ -368,7 +368,7 @@ class Main(Screen[None]):
         Args:
             event: The event that contains the tag to show.
         """
-        self.query_one(Bookmarks).show_tagged_with(event.tag)
+        self.query_one(Bookmarks).tag_filter = {event.tag}
 
     @on(ShowAlsoTaggedWith)
     def show_also_tagged_with(self, event: ShowAlsoTaggedWith) -> None:
@@ -377,7 +377,7 @@ class Main(Screen[None]):
         Args:
             event: The event that contains the tag to add.
         """
-        self.query_one(Bookmarks).show_also_tagged_with(event.tag)
+        self.query_one(Bookmarks).tag_filter |= {event.tag}
 
     async def post_result(self, result: BookmarkData | None) -> None:
         """Handle the result of an edit of a bookmark.

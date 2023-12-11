@@ -105,6 +105,17 @@ class Bookmark(Option):  # pylint:disable = too-many-instance-attributes
         # Combine them and add a rule afterwards.
         return Group(title, details, Rule(style="dim"))
 
+    def is_all(self, *checks: Callable[["Bookmark"], bool]) -> bool:
+        """Does this bookmark pass all the given tests?
+
+        Args:
+            checks: The checks to run against the bookmark.
+
+        Returns:
+            `True` if all tests pass, `False` if not.
+        """
+        return all(check(self) for check in checks)
+
     def is_tagged(self, *tags: str) -> bool:
         """Is this bookmark tagged with the given tags?
 
@@ -223,16 +234,30 @@ class Bookmarks(OptionListEx):
     last_downloaded: var[datetime | None] = var(None)
     """When the bookmarks were last downloaded."""
 
-    _core_filter: var[tuple[str, Callable[[Bookmark], bool]]] = var(
-        ("All", lambda _: True)
-    )
-    """The core filter in play."""
+    read_filter: var[bool | None] = var(None)
+    """The filter for the read status.
 
-    _tag_filter: var[set[str]] = var(set())
+    `True` for read, `False` for unread, `None` for no filter.
+    """
+
+    public_filter: var[bool | None] = var(None)
+    """The filter for the public status.
+
+    `True` for public, `False` for private, `None` for no filter.
+    """
+
+    has_tags_filter: var[bool | None] = var(None)
+    """The filter for if a bookmark has tags or not.
+
+    `True` for has tags, `False` for doesn't have tags, `None` for no
+    filter.
+    """
+
+    tag_filter: var[frozenset[str] | set[str]] = var(frozenset())
     """The tags to filter on."""
 
-    _text_filter: var[str] = var("")
-    """The text to filter on."""
+    text_filter: var[str] = var("")
+    """The text to filter on. Empty string for no filter."""
 
     def action_visit(self) -> None:
         """Visit the highlighted bookmark."""
@@ -290,44 +315,39 @@ class Bookmarks(OptionListEx):
     def _refresh_bookmarks(self) -> Self:
         """Refresh the display of bookmarks.
 
-        Takes core filters and tags into account.."""
+        Takes core filters and tags into account."""
 
-        # Get the details of the core filter.
-        filter_title, filter_check = self._core_filter
+        # Build up the main filtering checks.
+        filter_names: list[str] = []
+        filter_checks: list[Callable[[Bookmark], bool]] = []
+        if self.public_filter is not None:
+            filter_names.append("Public" if self.public_filter else "Private")
+            filter_checks.append(lambda bookmark: bookmark.shared is self.public_filter)
+        if self.read_filter is not None:
+            filter_names.append("Read" if self.read_filter else "Unread")
+            filter_checks.append(
+                lambda bookmark: bookmark.unread is not self.read_filter
+            )
+        if self.has_tags_filter is not None:
+            filter_names.append("Tagged" if self.has_tags_filter else "Untagged")
+            filter_checks.append(
+                lambda bookmark: bool(bookmark.tags) is self.has_tags_filter
+            )
+        if self.tag_filter:
+            filter_names.append(f"Tagged {', '.join(self.tag_filter)}")
+            filter_checks.append(lambda bookmark: bookmark.is_tagged(*self.tag_filter))
+        if self.text_filter:
+            filter_names.append(f"Contains '{self.text_filter}'")
+            filter_checks.append(lambda bookmark: bookmark.has_text(self.text_filter))
 
-        # Filter the list of bookmarks with the core filter.
-        bookmarks = [bookmark for bookmark in self.bookmarks if filter_check(bookmark)]
+        # Filter the list of bookmarks with the core filters.
+        bookmarks = [
+            bookmark for bookmark in self.bookmarks if bookmark.is_all(*filter_checks)
+        ]
 
-        # If there are tags to test for, further filter on them...
-        if self._tag_filter:
-            bookmarks = [
-                bookmark
-                for bookmark in bookmarks
-                if bookmark.is_tagged(*self._tag_filter)
-            ]
+        # Set the title of the screen.
+        self.screen.sub_title = f"{'; '.join(filter_names) or 'All'} ({len(bookmarks)})"
 
-        # Generate any tagged information for the title.
-        tagged_title = (
-            f"; Tagged {', '.join(self._tag_filter)}" if self._tag_filter else ""
-        )
-
-        # If there's text to search for, filter down to that too.
-        if self._text_filter:
-            bookmarks = [
-                bookmark
-                for bookmark in bookmarks
-                if bookmark.has_text(self._text_filter)
-            ]
-
-        # Generate any text searching information for the title.
-        contains_title = (
-            f"; Contains '{self._text_filter}'" if self._text_filter else ""
-        )
-
-        # Sort out the title of the screen.
-        self.screen.sub_title = (
-            f"{filter_title}{tagged_title}{contains_title} ({len(bookmarks)})"
-        )
         highlighted_bookmark = (
             self.get_option_at_index(self.highlighted).id
             if self.highlighted is not None
@@ -347,62 +367,40 @@ class Bookmarks(OptionListEx):
 
     def show_all(self) -> None:
         """Show all bookmarks."""
-        self._core_filter = "All", lambda _: True
-        self._tag_filter = set()
-        self._text_filter = ""
+        # TODO: This is sub-optimal; each of the following, except for the
+        # tag filter have watch methods, which cause a refresh. So when we
+        # show all we're doing a refresh 4 times in a row. This is one of
+        # those very few times where I could do with a "update a reactive
+        # and inhibit a watch" facility that isn't an internal hack.
+        self.public_filter = None
+        self.read_filter = None
+        self.text_filter = ""
+        self.tag_filter = frozenset()
+
+    def _watch_read_filter(self) -> None:
+        """React to the read/unread filer being changed."""
         self._refresh_bookmarks()
 
-    def show_public(self) -> None:
-        """Show public bookmarks."""
-        self._core_filter = "Public", lambda bookmark: bookmark.shared
+    def _watch_public_filter(self) -> None:
+        """React to the public bookmark filter being changed."""
         self._refresh_bookmarks()
 
-    def show_private(self) -> None:
-        """Show private bookmarks."""
-        self._core_filter = "Private", lambda bookmark: not bookmark.shared
+    def _watch_has_tags_filter(self) -> None:
+        """React to the has tags filter being changed."""
         self._refresh_bookmarks()
 
-    def show_unread(self) -> None:
-        """Show unread bookmarks."""
-        self._core_filter = "Unread", lambda bookmark: bookmark.unread
+    def _watch_text_filter(self) -> None:
+        """React to the search text being changed."""
         self._refresh_bookmarks()
 
-    def show_read(self) -> None:
-        """Show read bookmarks."""
-        self._core_filter = "Read", lambda bookmark: not bookmark.unread
-        self._refresh_bookmarks()
+    def _validate_tag_filter(
+        self, new_value: frozenset[str] | set[str]
+    ) -> frozenset[str]:
+        """Ensure the tags filter always ends up being a frozen set."""
+        return new_value if isinstance(new_value, frozenset) else frozenset(new_value)
 
-    def show_untagged(self) -> None:
-        """Show untagged bookmarks."""
-        self._core_filter = "Untagged", lambda bookmark: not bookmark.tags
-        self._refresh_bookmarks()
-
-    def show_tagged(self) -> None:
-        """Show tagged bookmarks."""
-        self._core_filter = "Tagged", lambda bookmark: bookmark.tags
-        self._refresh_bookmarks()
-
-    def show_tagged_with(self, tag: str) -> None:
-        """Show bookmarks tagged with a given tag."""
-        self._tag_filter = set([tag])
-        self._refresh_bookmarks()
-
-    def show_also_tagged_with(self, tag: str) -> None:
-        """Start/extend a tag filter.
-
-        Args:
-            tag: The tag to filter on, or add to an existing tag filter.
-        """
-        self._tag_filter |= {tag}
-        self._refresh_bookmarks()
-
-    def show_containing(self, search_text: str) -> None:
-        """Show tags that contain the given text.
-
-        Args:
-            search_text: The text to search for.
-        """
-        self._text_filter = search_text
+    def _watch_tag_filter(self) -> None:
+        """React to the tags being changed."""
         self._refresh_bookmarks()
 
     def _watch_bookmarks(self) -> None:
