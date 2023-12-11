@@ -213,8 +213,8 @@ class Bookmarks(OptionListEx):
         Binding("n", "new", "New"),
         Binding("e", "edit", "Edit"),
         Binding("d", "delete", "Delete"),
-        Binding("ctrl+r", "read", "(Un)Read", show=False),
-        Binding("ctrl+v", "public", "Public/Private", show=False),
+        Binding("ctrl+r", "read"),
+        Binding("ctrl+v", "public"),
     ]
 
     bookmarks: var[list[Bookmark]] = var([], always_update=True)
