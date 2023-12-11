@@ -76,6 +76,7 @@ class Main(Screen[None]):
     | <kbd>Ctrl</kbd>+<kbd>l</kbd> | `Redownload/refresh bookmarks` | Reload the local bookmarks from Pinboard. |
     | <kbd>Ctrl</kbd>+<kbd>q</kbd> | `Quit the application` | Shockingly... quit the application! |
     | <kbd>Ctrl</kbd>+<kbd>p</kbd> | | Show the command palette. |
+    | <kbd>#</kbd> | | Focus the menu of tags. |
     | <kbd>a</kbd> | `Show All` | Show all bookmarks. |
     | <kbd>R</kbd> | `Show Unread` | Show all unread bookmarks. |
     | <kbd>r</kbd> | `Show Read` | Show all read bookmarks. |
