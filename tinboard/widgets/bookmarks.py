@@ -50,7 +50,7 @@ from .extended_option_list import OptionListEx
 
 
 ##############################################################################
-class Bookmark(Option):  # pylint:disable=too-many-instance-attributes
+class Bookmark(Option):  # pylint:disable = too-many-instance-attributes
     """An individual bookmark."""
 
     PRIVATE_ICON: Final[str] = Emoji.replace(":lock:")
@@ -100,7 +100,7 @@ class Bookmark(Option):  # pylint:disable=too-many-instance-attributes
         details.add_column()
         details.add_row(
             f"[dim][i]{naturaltime(self.last_modified)}[/][/]",
-            f"[dim]{', '.join(sorted(self.tags, key=str.casefold))}[/]",
+            f"[dim]{', '.join(sorted(self.tags, key = str.casefold))}[/]",
         )
         # Combine them and add a rule afterwards.
         return Group(title, details, Rule(style="dim"))
@@ -174,7 +174,7 @@ class Bookmark(Option):  # pylint:disable=too-many-instance-attributes
 class Bookmarks(OptionListEx):
     """The list of bookmarks."""
 
-    # pylint:disable=too-many-public-methods
+    # pylint:disable = too-many-public-methods
 
     CONTEXT_HELP = """\
     ## Bookmarks keys and commands
