@@ -326,32 +326,44 @@ class Main(Screen[None]):
     @on(Filters.ShowPublic)
     def action_show_public(self) -> None:
         """Show all public bookmarks."""
-        self.query_one(Bookmarks).public_filter = True
+        self.query_one(Bookmarks).public_filter = (
+            None if self.query_one(Bookmarks).public_filter is True else True
+        )
 
     @on(Filters.ShowPrivate)
     def action_show_private(self) -> None:
         """Show all private bookmarks."""
-        self.query_one(Bookmarks).public_filter = False
+        self.query_one(Bookmarks).public_filter = (
+            None if self.query_one(Bookmarks).public_filter is False else False
+        )
 
     @on(Filters.ShowUnread)
     def action_show_unread(self) -> None:
         """Show all unread bookmarks."""
-        self.query_one(Bookmarks).read_filter = False
+        self.query_one(Bookmarks).read_filter = (
+            None if self.query_one(Bookmarks).read_filter is False else False
+        )
 
     @on(Filters.ShowRead)
     def action_show_read(self) -> None:
         """Show all read bookmarks."""
-        self.query_one(Bookmarks).read_filter = True
+        self.query_one(Bookmarks).read_filter = (
+            None if self.query_one(Bookmarks).read_filter is True else True
+        )
 
     @on(Filters.ShowUntagged)
     def action_show_untagged(self) -> None:
         """Show all untagged bookmarks."""
-        self.query_one(Bookmarks).has_tags_filter = False
+        self.query_one(Bookmarks).has_tags_filter = (
+            None if self.query_one(Bookmarks).has_tags_filter is False else False
+        )
 
     @on(Filters.ShowTagged)
     def action_show_tagged(self) -> None:
         """Show all tagged bookmarks."""
-        self.query_one(Bookmarks).has_tags_filter = True
+        self.query_one(Bookmarks).has_tags_filter = (
+            None if self.query_one(Bookmarks).has_tags_filter is True else True
+        )
 
     def _search(self, search_text: str) -> None:
         """Handle a request to search for text in the bookmarks."""
