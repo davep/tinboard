@@ -13,9 +13,9 @@ come. :-)
 
 Things to do:
 
-- [ ] Full text search.
+- [X] Full text search.
 - [X] Allow tags to be combined with core filters.
-- [ ] Allow both the above to be combined.
+- [X] Allow both the above to be combined.
 - [X] Add the ability to add a bookmark.
   - [X] Validation of data sent to the server
   - [X] Make available suggested tags once the bookmark is known.

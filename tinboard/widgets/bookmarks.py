@@ -8,6 +8,7 @@ from json import loads, dumps
 from typing import Any, Callable, cast
 from webbrowser import open as open_url
 from typing_extensions import Final, Self
+from aiopinboard import bookmark
 
 ##############################################################################
 # pytz imports.
@@ -118,6 +119,13 @@ class Bookmark(Option):  # pylint:disable = too-many-instance-attributes
             {tag.casefold() for tag in self.tags}
         )
 
+    def has_text(self, search_text: str) -> bool:
+        """Does the bookmark contain the given text?
+
+        Note that this is a case-insensitive test.
+        """
+        return search_text.casefold() in (self.title + self.description).casefold()
+
     @property
     def as_json(self) -> dict[str, Any]:
         """The bookmark as a JSON-friendly dictionary."""
@@ -224,6 +232,9 @@ class Bookmarks(OptionListEx):
     _tag_filter: var[set[str]] = var(set())
     """The tags to filter on."""
 
+    _text_filter: var[str] = var("")
+    """The text to filter on."""
+
     def action_visit(self) -> None:
         """Visit the highlighted bookmark."""
         if self.highlighted is not None:
@@ -301,8 +312,23 @@ class Bookmarks(OptionListEx):
             f"; Tagged {', '.join(self._tag_filter)}" if self._tag_filter else ""
         )
 
+        # If there's text to search for, filter down to that too.
+        if self._text_filter:
+            bookmarks = [
+                bookmark
+                for bookmark in bookmarks
+                if bookmark.has_text(self._text_filter)
+            ]
+
+        # Generate any text searching information for the title.
+        contains_title = (
+            f"; Contains '{self._text_filter}'" if self._text_filter else ""
+        )
+
         # Sort out the title of the screen.
-        self.screen.sub_title = f"{filter_title}{tagged_title} ({len(bookmarks)})"
+        self.screen.sub_title = (
+            f"{filter_title}{tagged_title}{contains_title} ({len(bookmarks)})"
+        )
         highlighted_bookmark = (
             self.get_option_at_index(self.highlighted).id
             if self.highlighted is not None
@@ -324,6 +350,7 @@ class Bookmarks(OptionListEx):
         """Show all bookmarks."""
         self._core_filter = "All", lambda _: True
         self._tag_filter = set()
+        self._text_filter = ""
         self._refresh_bookmarks()
 
     def show_public(self) -> None:
@@ -368,6 +395,15 @@ class Bookmarks(OptionListEx):
             tag: The tag to filter on, or add to an existing tag filter.
         """
         self._tag_filter |= {tag}
+        self._refresh_bookmarks()
+
+    def show_containing(self, search_text: str) -> None:
+        """Show tags that contain the given text.
+
+        Args:
+            search_text: The text to search for.
+        """
+        self._text_filter = search_text
         self._refresh_bookmarks()
 
     def _watch_bookmarks(self) -> None:

@@ -25,6 +25,7 @@ from aiopinboard.errors import RequestError
 from .bookmark_input import BookmarkInput
 from .confirm import Confirm
 from .help import Help
+from .search_input import SearchInput
 from ..commands import (
     BookmarkModificationCommands,
     CoreCommands,
@@ -76,6 +77,7 @@ class Main(Screen[None]):
     | <kbd>Ctrl</kbd>+<kbd>l</kbd> | `Redownload/refresh bookmarks` | Reload the local bookmarks from Pinboard. |
     | <kbd>Ctrl</kbd>+<kbd>q</kbd> | `Quit the application` | Shockingly... quit the application! |
     | <kbd>Ctrl</kbd>+<kbd>p</kbd> | | Show the command palette. |
+    | <kbd>/</kbd> | | Text search. |
     | <kbd>#</kbd> | | Focus the menu of tags. |
     | <kbd>a</kbd> | `Show All` | Show all bookmarks. |
     | <kbd>R</kbd> | `Show Unread` | Show all unread bookmarks. |
@@ -166,6 +168,7 @@ class Main(Screen[None]):
         Binding("escape", "escape"),
         Binding("ctrl+q", "quit", "Quit"),
         Binding("#", "focus('tag-menu')"),
+        Binding("/", "search"),
     ]
 
     def __init__(self, api_token: str) -> None:
@@ -349,6 +352,14 @@ class Main(Screen[None]):
     def action_show_tagged(self) -> None:
         """Show all tagged bookmarks."""
         self.query_one(Bookmarks).show_tagged()
+
+    def _search(self, search_text: str) -> None:
+        """Handle a request to search for text in the bookmarks."""
+        self.query_one(Bookmarks).show_containing(search_text)
+
+    def action_search(self) -> None:
+        """Do some free-text searching."""
+        self.app.push_screen(SearchInput(), callback=self._search)
 
     @on(ShowTaggedWith)
     def show_tagged_with(self, event: ShowTaggedWith) -> None:
