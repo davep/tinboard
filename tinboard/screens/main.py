@@ -163,7 +163,7 @@ class Main(Screen[None]):
         filter_binding("Untagged"),
         Binding("f1", "help", "Help"),
         Binding("f2", "goto_pinboard", "pinboard.in"),
-        Binding("f12", "logout", "Logout", show=False),
+        Binding("f12", "logout"),
         Binding("ctrl+l", "redownload", "Reload"),
         Binding("escape", "escape"),
         Binding("ctrl+q", "quit", "Quit"),
