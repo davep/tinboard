@@ -31,6 +31,7 @@ class CoreCommands(Provider):
                 "redownload",
                 "Download a full fresh copy of your bookmarks from Pinboard",
             ),
+            ("Search", "search", "Search for text in the currently-shown bookmarks"),
             (
                 "Logout",
                 "logout",
