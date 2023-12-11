@@ -61,6 +61,10 @@ class Help(ModalScreen[None]):
         border-title-color: $accent;
     }
 
+    Help VerticalScroll {
+        scrollbar-gutter: stable;
+    }
+
     Help Center {
         height: auto;
         width: 100%;
