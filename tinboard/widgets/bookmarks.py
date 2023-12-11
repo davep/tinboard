@@ -289,9 +289,12 @@ class Bookmarks(OptionListEx):
         bookmarks = [bookmark for bookmark in self.bookmarks if filter_check(bookmark)]
 
         # If there are tags to test for, further filter on them...
-        bookmarks = [
-            bookmark for bookmark in bookmarks if bookmark.is_tagged(*self._tag_filter)
-        ]
+        if self._tag_filter:
+            bookmarks = [
+                bookmark
+                for bookmark in bookmarks
+                if bookmark.is_tagged(*self._tag_filter)
+            ]
 
         # Generate any tagged information for the title.
         tagged_title = (
