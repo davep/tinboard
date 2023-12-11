@@ -164,6 +164,7 @@ class Main(Screen[None]):
         Binding("ctrl+l", "redownload", "Reload"),
         Binding("escape", "escape"),
         Binding("ctrl+q", "quit", "Quit"),
+        Binding("#", "focus('tag-menu')"),
     ]
 
     def __init__(self, api_token: str) -> None:
@@ -181,7 +182,7 @@ class Main(Screen[None]):
         with Vertical(id="menu", classes="focus"):
             yield Filters()
             yield Rule()
-            yield Tags()
+            yield Tags(id="tag-menu")
         yield Bookmarks(classes="focus")
         yield Details(classes="focus")
         yield Footer()
