@@ -11,7 +11,7 @@ from textual.command import Hit, Hits, Provider
 
 ##############################################################################
 class CoreCommands(Provider):
-    """A source of commands for invoking the main application commands.."""
+    """A source of commands for invoking the main application commands."""
 
     async def search(self, query: str) -> Hits:
         """Handle a request to search for commands that match the query.
