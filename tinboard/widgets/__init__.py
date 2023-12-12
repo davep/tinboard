@@ -5,7 +5,7 @@
 from .bookmarks import Bookmark, Bookmarks
 from .details import Details
 from .filters import Filters
-from .tags import InlineTags, Tags
+from .tags import InlineTags, TagsMenu
 from .text_area import TextArea
 
 ##############################################################################
@@ -16,7 +16,7 @@ __all__ = [
     "Details",
     "Filters",
     "InlineTags",
-    "Tags",
+    "TagsMenu",
     "TextArea",
 ]
 

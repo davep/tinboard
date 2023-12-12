@@ -10,7 +10,7 @@ from textual.command import Hit, Hits, Provider
 
 ##############################################################################
 # Local imports.
-from ..messages import ShowAlsoTaggedWith, ShowTaggedWith
+from ..messages import ClearTags, ShowAlsoTaggedWith, ShowTaggedWith
 
 
 ##############################################################################
@@ -29,6 +29,8 @@ class TagCommands(Provider):
         Yields:
             Command hits for the command palette.
         """
+
+        # Create commands for all the tags.
         matcher = self.matcher(query)
         for tag in self.current_tags:
             for prefix, message in (
@@ -43,6 +45,15 @@ class TagCommands(Provider):
                         partial(self.screen.post_message, message(tag)),
                         help=f"Show all bookmarks that are {full_command.lower()}",
                     )
+
+        # Also add a command for clearing tags.
+        if match := matcher.match("Clear tag filter"):
+            yield Hit(
+                match,
+                matcher.highlight("Clear tag filter"),
+                partial(self.screen.post_message, ClearTags()),
+                help="Clear any current tag-based filtering",
+            )
 
 
 ### tags.py ends here

@@ -35,14 +35,15 @@ from ..commands import (
 from ..data import token_file, bookmarks_file, ExitStates
 from ..messages import (
     AddBookmark,
-    EditBookmark,
+    ClearTags,
     DeleteBookmark,
+    EditBookmark,
     ShowAlsoTaggedWith,
     ShowTaggedWith,
     ToggleBookmarkPublic,
     ToggleBookmarkRead,
 )
-from ..widgets import Bookmarks, Bookmark, Details, Filters, Tags
+from ..widgets import Bookmarks, Bookmark, Details, Filters, TagsMenu
 
 
 ##############################################################################
@@ -126,7 +127,7 @@ class Main(Screen[None]):
         padding-left: 1;
     }
 
-    #menu Tags {
+    #menu TagsMenu {
         height: 1fr;
     }
 
@@ -187,7 +188,7 @@ class Main(Screen[None]):
         with Vertical(id="menu", classes="focus"):
             yield Filters()
             yield Rule()
-            yield Tags(id="tag-menu")
+            yield TagsMenu("tags-menu")
         yield Bookmarks(classes="focus")
         yield Details(classes="focus")
         yield Footer()
@@ -258,7 +259,7 @@ class Main(Screen[None]):
         # and call_after_refresh on the focus all fail. A short set_timer
         # works but that feels icky. So... let's force the issue.
         bookmarks.disabled = False
-        self.query_one("#menu Tags", Tags).show(bookmarks.tag_counts)
+        self.query_one(TagsMenu).show(bookmarks.tag_counts)
         TagCommands.current_tags = list(bookmarks.tags)
         bookmarks.focus()
 
@@ -304,7 +305,7 @@ class Main(Screen[None]):
     def action_redownload(self) -> None:
         """Freshly download the bookmarks."""
         self.sub_title = "Loading..."
-        self.query_one("#menu Tags", Tags).show([])
+        self.query_one(TagsMenu).show([])
         self.query_one(Bookmarks).loading = True
         self.download_bookmarks()
 
@@ -316,7 +317,7 @@ class Main(Screen[None]):
             self.screen.focused.parent, Details
         ):
             self.query_one(Bookmarks).focus()
-        elif isinstance(self.screen.focused, (Bookmarks, Tags)):
+        elif isinstance(self.screen.focused, (Bookmarks, TagsMenu)):
             self.query_one(Filters).focus()
 
     @on(Filters.ShowAll)
@@ -391,6 +392,11 @@ class Main(Screen[None]):
             event: The event that contains the tag to add.
         """
         self.query_one(Bookmarks).tag_filter |= {event.tag}
+
+    @on(ClearTags)
+    def clear_tags(self) -> None:
+        """Clear any tags that are in use."""
+        self.query_one(Bookmarks).tag_filter = set()
 
     async def post_result(self, result: BookmarkData | None) -> None:
         """Handle the result of an edit of a bookmark.

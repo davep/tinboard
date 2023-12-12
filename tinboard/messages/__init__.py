@@ -9,12 +9,13 @@ from .commands import (
     ToggleBookmarkRead,
     ToggleBookmarkPublic,
 )
-from .tags import ShowAlsoTaggedWith, ShowTaggedWith
+from .tags import ClearTags, ShowAlsoTaggedWith, ShowTaggedWith
 
 ##############################################################################
 # Exports.
 __all__ = [
     "AddBookmark",
+    "ClearTags",
     "EditBookmark",
     "DeleteBookmark",
     "ShowAlsoTaggedWith",

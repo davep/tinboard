@@ -6,6 +6,7 @@ from __future__ import annotations
 
 ##############################################################################
 # Python imports.
+from inspect import cleandoc
 from typing_extensions import Final, Self
 
 ##############################################################################
@@ -23,7 +24,7 @@ from rich.table import Table
 
 ##############################################################################
 # Local imports.
-from ..messages import ShowAlsoTaggedWith, ShowTaggedWith
+from ..messages import ClearTags, ShowAlsoTaggedWith, ShowTaggedWith
 from .extended_option_list import OptionListEx
 
 
@@ -119,6 +120,19 @@ class Tags(OptionListEx):
         if self.highlighted is not None:
             if (tag := self.get_option_at_index(self.highlighted).id) is not None:
                 self.post_message(ShowAlsoTaggedWith(tag))
+
+
+##############################################################################
+class TagsMenu(Tags):
+    """A version of `Tags` to use as part of the main menu."""
+
+    CONTEXT_HELP = f"{Tags.CONTEXT_HELP}| <kbd>c</kbd> | Clear any active tag filter. |"
+
+    BINDINGS = [Binding("c", "clear", "Clear Tags")]
+
+    def action_clear(self) -> None:
+        """Clear any active tags."""
+        self.post_message(ClearTags())
 
 
 ##############################################################################

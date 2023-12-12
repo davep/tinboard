@@ -28,4 +28,9 @@ class ShowAlsoTaggedWith(TagMessage):
     """Message to say bookmarks also of this tag should be shown."""
 
 
+##############################################################################
+class ClearTags(Message):
+    """Clear any tags being used to filter."""
+
+
 ### tags.py ends here
