@@ -232,7 +232,7 @@ class Main(Screen[None]):
             except RequestError:
                 self.app.bell()
                 self.notify(
-                    f"Unable to get the last change date from Pinboard. Is your token valid?",
+                    "Unable to get the last change date from Pinboard. Is your token valid?",
                     title="Server Error",
                     severity="error",
                     timeout=8,
