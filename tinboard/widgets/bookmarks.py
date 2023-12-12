@@ -558,12 +558,7 @@ class Bookmarks(OptionListEx):  # pylint:disable = too-many-instance-attributes
         # approach to take *and* they can do a refresh if they want anyway.
         self.last_downloaded = datetime.now(UTC)
 
-        if self.highlighted is not None:
-            # Fake a highlight, to get anything related to the current
-            # bookmark to refresh.
-            self.post_message(self.OptionHighlighted(self, self.highlighted))
-
-        return self
+        return self._refresh_bookmarks()
 
     def remove_bookmark(self, bookmark: Bookmark) -> Self:
         """Remove the given bookmark.

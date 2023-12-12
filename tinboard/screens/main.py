@@ -280,6 +280,7 @@ class Main(Screen[None]):
         bookmarks.disabled = False
         self.query_one(TagsMenu).show(bookmarks.tag_counts)
         TagCommands.current_tags = list(bookmarks.tags)
+        self.query_one(Details).bookmark = bookmarks.current_bookmark
         bookmarks.focus()
 
     @on(Bookmarks.OptionHighlighted, "Bookmarks")
