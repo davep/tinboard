@@ -169,7 +169,7 @@ class Main(Screen[None]):
         Binding("ctrl+l", "redownload", "Reload"),
         Binding("escape", "escape"),
         Binding("ctrl+q", "quit", "Quit"),
-        Binding("#", "focus('tag-menu')"),
+        Binding("#", "focus('tags-menu')"),
         Binding("/", "search"),
     ]
 
@@ -188,7 +188,7 @@ class Main(Screen[None]):
         with Vertical(id="menu", classes="focus"):
             yield Filters()
             yield Rule()
-            yield TagsMenu("tags-menu")
+            yield TagsMenu(id="tags-menu")
         yield Bookmarks(classes="focus")
         yield Details(classes="focus")
         yield Footer()
