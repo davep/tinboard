@@ -140,7 +140,7 @@ class Details(VerticalScroll):
                 f"The bookmark is {'[bold]public[/]' if self.bookmark.shared else '[dim]private[/]'}"
             )
             self.query_one(InlineTags).show(
-                sorted(self.bookmark.tags, key=str.casefold), with_icon=True
+                sorted(self.bookmark.tags, key=str.casefold)
             ).set_class(not bool(self.bookmark.tags), "empty")
 
         finally:

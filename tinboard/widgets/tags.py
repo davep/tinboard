@@ -67,7 +67,7 @@ class Tags(OptionListEx):
         """
         return tag
 
-    def show(self, tags: list[str], with_icon: bool = False) -> Self:
+    def show(self, tags: list[str]) -> Self:
         """Show the given list of tags.
 
         Args:
