@@ -260,6 +260,9 @@ class Bookmarks(OptionListEx):  # pylint:disable = too-many-instance-attributes
     text_filter: var[str] = var("")
     """The text to filter on. Empty string for no filter."""
 
+    _suspend_refresh: var[bool] = var(False)
+    """Flag to say if a refresh should be suspended."""
+
     def action_visit(self) -> None:
         """Visit the highlighted bookmark."""
         if self.highlighted is not None:
@@ -348,6 +351,10 @@ class Bookmarks(OptionListEx):  # pylint:disable = too-many-instance-attributes
 
         Takes core filters and tags into account."""
 
+        # GTFO if we're not supposed to refresh right now.
+        if self._suspend_refresh:
+            return self
+
         # Build up the filters.
         filter_names: list[str] = []
         filter_checks: list[Callable[[Bookmark], bool]] = []
@@ -402,16 +409,21 @@ class Bookmarks(OptionListEx):  # pylint:disable = too-many-instance-attributes
 
     def show_all(self) -> None:
         """Show all bookmarks."""
-        # TODO: This is sub-optimal; each of the following, except for the
-        # tag filter have watch methods, which cause a refresh. So when we
-        # show all we're doing a refresh 4 times in a row. This is one of
-        # those very few times where I could do with a "update a reactive
-        # and inhibit a watch" facility that isn't an internal hack.
-        self.public_filter = None
-        self.read_filter = None
-        self.has_tags_filter = None
-        self.text_filter = ""
-        self.tag_filter = frozenset()
+        # There's currently no way to prevent watch methods from being
+        # triggered while updating reactives; and in this one situation I
+        # really could do with not having them fire as I want to set default
+        # values for a lot of reactives but only refresh the bookmarks the
+        # once. So here I implement my own flag to make that happen.
+        self._suspend_refresh = True
+        try:
+            self.public_filter = None
+            self.read_filter = None
+            self.has_tags_filter = None
+            self.text_filter = ""
+            self.tag_filter = frozenset()
+        finally:
+            self._suspend_refresh = False
+            self._refresh_bookmarks()
 
     def _watch_read_filter(self) -> None:
         """React to the read/unread filer being changed."""
