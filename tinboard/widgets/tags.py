@@ -73,6 +73,12 @@ class Tags(OptionListEx):
         prompt.add_row(tag, f"[dim i]{count}[/]")
         return prompt
 
+    def clear_options(self) -> Self:
+        """Workaround for https://github.com/Textualize/textual/issues/3714"""
+        super().clear_options()
+        self._clear_content_tracking()
+        return self
+
     def show(self, tags: list[tuple[str, int]]) -> Self:
         """Show the given list of tags.
 
