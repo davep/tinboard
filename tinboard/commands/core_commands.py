@@ -37,6 +37,11 @@ class CoreCommands(Provider):
                 "logout",
                 "Forget your Pinboard API token and remove the local copies of all bookmarks.",
             ),
+            (
+                "Toggle details",
+                "toggle_details",
+                "Toggle the display of the details of the highlighted bookmark.",
+            ),
         ):
             if match := matcher.match(command):
                 yield Hit(
