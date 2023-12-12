@@ -340,7 +340,7 @@ class Bookmarks(OptionListEx):
 
         Takes core filters and tags into account."""
 
-        # Build up the main filtering checks.
+        # Build up the filters.
         filter_names: list[str] = []
         filter_checks: list[Callable[[Bookmark], bool]] = []
         if self.public_filter is not None:
@@ -363,7 +363,7 @@ class Bookmarks(OptionListEx):
             filter_names.append(f"Contains '{self.text_filter}'")
             filter_checks.append(lambda bookmark: bookmark.has_text(self.text_filter))
 
-        # Filter the list of bookmarks with the core filters.
+        # Apply the filters.
         bookmarks = [
             bookmark for bookmark in self.bookmarks if bookmark.is_all(*filter_checks)
         ]
@@ -371,6 +371,9 @@ class Bookmarks(OptionListEx):
         # Set the title of the screen.
         self.screen.sub_title = f"{'; '.join(filter_names) or 'All'} ({len(bookmarks)})"
 
+        # Update the display of bookmarks, trying out best to keep the
+        # currently-highlighted bookmark as the highlighted bookmark (if it
+        # makes sense to, of course).
         highlighted_bookmark = (
             self.get_option_at_index(self.highlighted).id
             if self.highlighted is not None
