@@ -31,7 +31,7 @@ from .extended_option_list import OptionListEx
 class Tags(OptionListEx):
     """A menu of tags."""
 
-    CONTEXT_HELP = """\
+    CONTEXT_HELP = """
     ## Tag list keys
 
     The following keys are available in the list of tags:
