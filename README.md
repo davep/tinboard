@@ -30,7 +30,7 @@ Things to do:
 - [ ] Add a bookmark export facility.
 - [X] Add tag counts to the tag list.
 - [X] Add tag searching to the command palette.
-- [ ] Add a show/hide toggle for the details pane.
+- [X] Add a show/hide toggle for the details pane.
 - [ ] Add support for notes.
 - [ ] Add saving of various states to resume when next ran.
   - [X] Dark/light mode.

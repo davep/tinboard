@@ -74,6 +74,7 @@ class Main(Screen[None]):
     | - | - | - |
     | <kbd>F1</kbd> | `Help` | This help screen. |
     | <kbd>F2</kbd> | `Visit Pinboard` | Visit the main Pinboard website. |
+    | <kbd>F3</kbd> | | Toggle the bookmark details pane. |
     | <kbd>F12</kbd> | `Logout` | Forgot your API token and remove the local bookmark cache. |
     | <kbd>Ctrl</kbd>+<kbd>l</kbd> | `Redownload/refresh bookmarks` | Reload the local bookmarks from Pinboard. |
     | <kbd>Ctrl</kbd>+<kbd>q</kbd> | `Quit the application` | Shockingly... quit the application! |
@@ -153,6 +154,16 @@ class Main(Screen[None]):
         width: 3fr;
         min-width: 30;
     }
+
+    /* Tweaks to the above when the details are hidden. */
+
+    Main.details-hidden Details {
+        display: none;
+    }
+
+    Main.details-hidden Bookmarks {
+        width: 8fr;
+    }
     """
 
     BINDINGS = [
@@ -165,6 +176,7 @@ class Main(Screen[None]):
         filter_binding("Untagged"),
         Binding("f1", "help", "Help"),
         Binding("f2", "goto_pinboard", "pinboard.in"),
+        Binding("f3", "toggle_details"),
         Binding("f12", "logout"),
         Binding("ctrl+l", "redownload", "Reload"),
         Binding("escape", "escape"),
@@ -280,6 +292,10 @@ class Main(Screen[None]):
     def action_goto_pinboard(self) -> None:
         """Open Pinbaord in the user's web browser."""
         open_url("https://pinboard.in")
+
+    def action_toggle_details(self) -> None:
+        """Toggle the display of the details pane."""
+        self.toggle_class("details-hidden")
 
     def _logout(self, confirmed: bool) -> None:
         """Process the logout confirmation.
