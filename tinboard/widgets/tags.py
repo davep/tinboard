@@ -92,7 +92,7 @@ class Tags(OptionListEx):
             self.highlighted = 0
 
     @on(OptionListEx.OptionSelected)
-    def show_tagged(self, event: OptionListEx.OptionSelected) -> None:
+    def _show_tagged(self, event: OptionListEx.OptionSelected) -> None:
         """Request that bookmarks of a given tag are shown.
 
         Args:
