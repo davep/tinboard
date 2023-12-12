@@ -409,6 +409,7 @@ class Bookmarks(OptionListEx):  # pylint:disable = too-many-instance-attributes
         # and inhibit a watch" facility that isn't an internal hack.
         self.public_filter = None
         self.read_filter = None
+        self.has_tags_filter = None
         self.text_filter = ""
         self.tag_filter = frozenset()
 
