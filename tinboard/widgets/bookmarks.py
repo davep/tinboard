@@ -290,7 +290,7 @@ class Bookmarks(OptionListEx):
     @property
     def tags(self) -> list[str]:
         """All known tags in the current displayed set of bookmarks"""
-        tags = set()
+        tags: set[str] = set()
         for n in range(self.option_count):
             bookmark = self.get_option_at_index(n)
             assert isinstance(bookmark, Bookmark)
