@@ -190,7 +190,7 @@ class Bookmark(Option):  # pylint:disable = too-many-instance-attributes
 
 
 ##############################################################################
-class Bookmarks(OptionListEx):
+class Bookmarks(OptionListEx):  # pylint:disable = too-many-instance-attributes
     """The list of bookmarks."""
 
     # pylint:disable = too-many-public-methods
