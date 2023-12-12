@@ -41,4 +41,13 @@ Things to do:
   - [X] Bad token given to Pinboard.
   - [ ] IO errors around the local cache of bookmarks.
 
+Known issues:
+
+- The description editor doesn't word-wrap. (currently waiting on Textual
+  [to add wrapping support for
+  `TextAre`](https://github.com/Textualize/textual/pull/3711)).
+- The bookmark list looks a bit wonky when downloading from Pinboard.
+  (currently waiting on [the loading indicator fix to be release by
+  Textual](https://github.com/Textualize/textual/pull/3816))
+
 [//]: # (README.md ends here)
