@@ -46,8 +46,7 @@ Known issues:
 - The description editor doesn't word-wrap. (currently waiting on Textual
   [to add wrapping support for
   `TextArea`](https://github.com/Textualize/textual/pull/3711)).
-- The bookmark list looks a bit wonky when downloading from Pinboard.
-  (currently waiting on [the loading indicator fix to be release by
-  Textual](https://github.com/Textualize/textual/pull/3816))
+- The details pane doesn't correctly stay hidden [due to a CSS regression in
+  Textual 0.45](https://github.com/Textualize/textual/issues/3858).
 
 [//]: # (README.md ends here)
