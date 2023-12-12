@@ -32,7 +32,13 @@ from ..commands import (
     CoreFilteringCommands,
     TagCommands,
 )
-from ..data import token_file, bookmarks_file, ExitStates
+from ..data import (
+    load_configuration,
+    save_configuration,
+    token_file,
+    bookmarks_file,
+    ExitStates,
+)
 from ..messages import (
     AddBookmark,
     ClearTags,
@@ -207,6 +213,7 @@ class Main(Screen[None]):
 
     def on_mount(self) -> None:
         """Start the process of loading the bookmarks."""
+        self.set_class(not load_configuration().details_visible, "details-hidden")
         self.sub_title = "Loading..."
         bookmarks = self.query_one(Bookmarks)
         bookmarks.loading = True
@@ -296,6 +303,9 @@ class Main(Screen[None]):
     def action_toggle_details(self) -> None:
         """Toggle the display of the details pane."""
         self.toggle_class("details-hidden")
+        config = load_configuration()
+        config.details_visible = not self.has_class("details-hidden")
+        save_configuration(config)
 
     def _logout(self, confirmed: bool) -> None:
         """Process the logout confirmation.

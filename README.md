@@ -34,7 +34,7 @@ Things to do:
 - [ ] Add support for notes.
 - [ ] Add saving of various states to resume when next ran.
   - [X] Dark/light mode.
-  - [ ] The show/hide state of the details pane.
+  - [X] The show/hide state of the details pane.
   - [ ] The main filter?
   - [ ] The selected tag(s)?
 - [ ] All sorts of error handling

@@ -20,6 +20,9 @@ class Configuration:
     dark_mode: bool = True
     """Should we run in dark mode?"""
 
+    details_visible: bool = True
+    """Show the details pane be visible?"""
+
 
 ##############################################################################
 def configuration_file() -> Path:
