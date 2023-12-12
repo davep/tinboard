@@ -19,6 +19,7 @@ from textual.widgets.option_list import Option, OptionDoesNotExist
 # Rich imports.
 from rich.console import RenderableType
 from rich.emoji import Emoji
+from rich.table import Table
 
 ##############################################################################
 # Local imports.
@@ -56,18 +57,23 @@ class Tags(OptionListEx):
         Binding("+", "also_tagged", "Show also tagged"),
     ]
 
-    def _prompt(self, tag: str) -> RenderableType:
+    def _prompt(self, tag: str, count: int) -> RenderableType:
         """A prompt for the given tag.
 
         Args:
-            The tag to build a prompt for.
+            tag: The tag to build a prompt for.
+            count: The count for that tag.
 
         Returns:
             The prompt for the tag.
         """
-        return tag
+        prompt = Table.grid(expand=True)
+        prompt.add_column(ratio=1)
+        prompt.add_column(justify="right")
+        prompt.add_row(tag, f"[dim i]{count}[/]")
+        return prompt
 
-    def show(self, tags: list[str]) -> Self:
+    def show(self, tags: list[tuple[str, int]]) -> Self:
         """Show the given list of tags.
 
         Args:
@@ -84,7 +90,7 @@ class Tags(OptionListEx):
         )
         try:
             return self.clear_options().add_options(
-                [Option(self._prompt(tag), id=tag) for tag in tags]
+                [Option(self._prompt(tag, count), id=tag) for tag, count in tags]
             )
         finally:
             if tags:
@@ -128,7 +134,7 @@ class InlineTags(Tags):
     _ICON: Final[str] = Emoji.replace(":bookmark: ")
     """The icon to show before tags."""
 
-    def _prompt(self, tag: str) -> RenderableType:
+    def _prompt(self, tag: str, count: int) -> RenderableType:
         """A prompt for the given tag.
 
         Args:
@@ -137,6 +143,7 @@ class InlineTags(Tags):
         Returns:
             The prompt for the tag.
         """
+        del count
         return f"{self._ICON} {tag}"
 
 

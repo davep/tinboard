@@ -117,8 +117,9 @@ class Main(Screen[None]):
     #menu {
         padding: 0;
         margin: 0;
+        width: 2fr;
         height: 1fr;
-        min-width: 25;
+        min-width: 28;
     }
 
     #menu Filters {
@@ -143,7 +144,7 @@ class Main(Screen[None]):
 
     Bookmarks {
         height: 1fr;
-        width: 6fr;
+        width: 5fr;
     }
 
     Details {
@@ -257,7 +258,7 @@ class Main(Screen[None]):
         # and call_after_refresh on the focus all fail. A short set_timer
         # works but that feels icky. So... let's force the issue.
         bookmarks.disabled = False
-        self.query_one("#menu Tags", Tags).show(bookmarks.tags)
+        self.query_one("#menu Tags", Tags).show(bookmarks.tag_counts)
         TagCommands.current_tags = list(bookmarks.tags)
         bookmarks.focus()
 

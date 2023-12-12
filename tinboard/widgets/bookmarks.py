@@ -2,6 +2,7 @@
 
 ##############################################################################
 # Python imports.
+from collections import Counter
 from datetime import datetime
 from hashlib import md5
 from json import loads, dumps
@@ -296,6 +297,28 @@ class Bookmarks(OptionListEx):
             assert isinstance(bookmark, Bookmark)
             tags |= set(tag for tag in bookmark.tags)
         return sorted(list(tags), key=str.casefold)
+
+    @staticmethod
+    def _tag_key(tag: tuple[str, int]) -> str:
+        """Get the key for a tag/count pair.
+
+        Args:
+            tag: The tag information.
+
+        Returns:
+            The key to use when sorting the key.
+        """
+        return tag[0].casefold()
+
+    @property
+    def tag_counts(self) -> list[tuple[str, int]]:
+        """All known tags in the current displayed set of bookmarks, with counts."""
+        tags: list[str] = []
+        for n in range(self.option_count):
+            bookmark = self.get_option_at_index(n)
+            assert isinstance(bookmark, Bookmark)
+            tags.extend(bookmark.tags)
+        return sorted(list(Counter(tags).items()), key=self._tag_key)
 
     @property
     def latest_modification(self) -> datetime | None:

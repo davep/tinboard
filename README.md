@@ -28,7 +28,7 @@ Things to do:
       bookmark.
 - [X] Add the ability to "logout" (IOW forget the API token).
 - [ ] Add a bookmark export facility.
-- [ ] Add tag counts to the tag list.
+- [X] Add tag counts to the tag list.
 - [X] Add tag searching to the command palette.
 - [ ] Add a show/hide toggle for the details pane.
 - [ ] Add support for notes.
