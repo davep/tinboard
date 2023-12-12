@@ -22,7 +22,7 @@ from textual.widgets import Label
 # Local imports.
 from ..messages import EditBookmark, ToggleBookmarkPublic, ToggleBookmarkRead
 from .bookmarks import Bookmark
-from .tags import Tags
+from .tags import InlineTags
 
 
 ##############################################################################
@@ -90,12 +90,8 @@ class Details(VerticalScroll):
         text-style: italic;
     }
 
-    Details Tags, Details Tags:focus {
+    Details InlineTags, Details InlineTags:focus {
         margin: 0 2 1 2;
-    }
-
-    Details Tags > .option-list--option {
-        padding: 0;
     }
     """
 
@@ -118,7 +114,7 @@ class Details(VerticalScroll):
         yield Label(id="added-exact", classes="detail")
         yield Label(id="is-read", classes="detail")
         yield Label(id="is-public", classes="detail")
-        yield Tags(classes="empty")
+        yield InlineTags(classes="empty")
 
     def _watch_bookmark(self) -> None:
         """React to the bookmark being changed."""
@@ -143,7 +139,7 @@ class Details(VerticalScroll):
             self.query_one("#is-public", Label).update(
                 f"The bookmark is {'[bold]public[/]' if self.bookmark.shared else '[dim]private[/]'}"
             )
-            self.query_one(Tags).show(
+            self.query_one(InlineTags).show(
                 sorted(self.bookmark.tags, key=str.casefold), with_icon=True
             ).set_class(not bool(self.bookmark.tags), "empty")
 

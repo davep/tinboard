@@ -17,17 +17,13 @@ from textual.widgets.option_list import Option, OptionDoesNotExist
 
 ##############################################################################
 # Rich imports.
+from rich.console import RenderableType
 from rich.emoji import Emoji
 
 ##############################################################################
 # Local imports.
 from ..messages import ShowAlsoTaggedWith, ShowTaggedWith
 from .extended_option_list import OptionListEx
-
-
-##############################################################################
-ICON: Final[str] = Emoji.replace(":bookmark: ")
-"""The icon to show before tags."""
 
 
 ##############################################################################
@@ -60,6 +56,17 @@ class Tags(OptionListEx):
         Binding("+", "also_tagged", "Show also tagged"),
     ]
 
+    def _prompt(self, tag: str) -> RenderableType:
+        """A prompt for the given tag.
+
+        Args:
+            The tag to build a prompt for.
+
+        Returns:
+            The prompt for the tag.
+        """
+        return tag
+
     def show(self, tags: list[str], with_icon: bool = False) -> Self:
         """Show the given list of tags.
 
@@ -77,7 +84,7 @@ class Tags(OptionListEx):
         )
         try:
             return self.clear_options().add_options(
-                [Option(f"{ICON if with_icon else ''}{tag}", id=tag) for tag in tags]
+                [Option(self._prompt(tag), id=tag) for tag in tags]
             )
         finally:
             if tags:
@@ -106,6 +113,31 @@ class Tags(OptionListEx):
         if self.highlighted is not None:
             if (tag := self.get_option_at_index(self.highlighted).id) is not None:
                 self.post_message(ShowAlsoTaggedWith(tag))
+
+
+##############################################################################
+class InlineTags(Tags):
+    """A version of the `Tags` widget intended to embed in another."""
+
+    DEFAULT_CSS = """
+    InlineTags > .option-list--option {
+        padding: 0;
+    }
+    """
+
+    _ICON: Final[str] = Emoji.replace(":bookmark: ")
+    """The icon to show before tags."""
+
+    def _prompt(self, tag: str) -> RenderableType:
+        """A prompt for the given tag.
+
+        Args:
+            The tag to build a prompt for.
+
+        Returns:
+            The prompt for the tag.
+        """
+        return f"{self._ICON} {tag}"
 
 
 ### tags.py ends here
