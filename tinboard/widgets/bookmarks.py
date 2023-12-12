@@ -298,6 +298,14 @@ class Bookmarks(OptionListEx):  # pylint:disable = too-many-instance-attributes
             tags |= set(tag for tag in bookmark.tags)
         return sorted(list(tags), key=str.casefold)
 
+    @property
+    def all_tags(self) -> list[str]:
+        """All known tags for every saved bookmark."""
+        tags: set[str] = set()
+        for bookmark in self.bookmarks:
+            tags |= set(tag for tag in bookmark.tags)
+        return sorted(list(tags), key=str.casefold)
+
     @staticmethod
     def _tag_key(tag: tuple[str, int]) -> str:
         """Get the key for a tag/count pair.
