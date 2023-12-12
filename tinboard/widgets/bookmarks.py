@@ -369,6 +369,7 @@ class Bookmarks(OptionListEx):  # pylint:disable = too-many-instance-attributes
         ]
 
         # Set the title of the screen.
+        # pylint:disable=attribute-defined-outside-init
         self.screen.sub_title = f"{'; '.join(filter_names) or 'All'} ({len(bookmarks)})"
 
         # Update the display of bookmarks, trying out best to keep the
