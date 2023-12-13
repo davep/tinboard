@@ -517,7 +517,17 @@ class Main(Screen[None]):
                     timeout=8,
                 )
                 return
-            self.query_one(Bookmarks).remove_bookmark(bookmark).save()
+            try:
+                self.query_one(Bookmarks).remove_bookmark(bookmark).save()
+            except OSError as error:
+                self.app.bell()
+                self.notify(
+                    f"Error saving the bookmarks.\n\n{error}",
+                    title="Save Error",
+                    severity="error",
+                    timeout=8,
+                )
+                return
             self.notify("Bookmark deleted.", severity="warning")
 
     @on(DeleteBookmark)
