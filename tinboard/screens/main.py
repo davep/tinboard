@@ -466,6 +466,14 @@ class Main(Screen[None]):
                     ),
                     callback=self.post_result,
                 )
+            except OSError as error:
+                self.app.bell()
+                self.notify(
+                    f"Error saving the bookmarks.\n\n{error}",
+                    title="Save Error",
+                    severity="error",
+                    timeout=8,
+                )
 
     @on(AddBookmark)
     def add(self) -> None:
