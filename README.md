@@ -44,8 +44,8 @@ Things to do:
 Known issues:
 
 - Only the final tag in the tags for a bookmark is saving on the server.
-  Need to check if that's on me, a problem with the library I'm using, or
-  something weird with Pinboard itself.
+  This is [a bug in
+  `aiobinboard`](https://github.com/bachya/aiopinboard/issues/298).
 - The description editor doesn't word-wrap. (currently waiting on Textual
   [to add wrapping support for
   `TextArea`](https://github.com/Textualize/textual/pull/3711)).
