@@ -37,9 +37,9 @@ Things to do:
   - [X] The show/hide state of the details pane.
   - [ ] The main filter?
   - [ ] The selected tag(s)?
-- [ ] All sorts of error handling
+- [X] All sorts of error handling
   - [X] Bad token given to Pinboard.
-  - [ ] IO errors around the local cache of bookmarks.
+  - [X] IO errors around the local cache of bookmarks.
 
 Known issues:
 
