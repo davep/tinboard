@@ -22,6 +22,7 @@ from aiopinboard.errors import RequestError
 
 ##############################################################################
 # Local imports.
+from .. import __version__
 from .bookmark_input import BookmarkInput
 from .confirm import Confirm
 from .help import Help
@@ -96,7 +97,7 @@ class Main(Screen[None]):
     | <kbd>t</kbd> | `Show Tagged` | Show all tagged bookmarks. |
     """
 
-    TITLE = "Tinboard"
+    TITLE = f"Tinboard v{__version__}"
     SUB_TITLE = "A pinboard.in client"
     COMMANDS = {
         BookmarkModificationCommands,
