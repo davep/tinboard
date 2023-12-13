@@ -239,6 +239,14 @@ class Main(Screen[None]):
                 timeout=8,
             )
             self._bookmarks_changed()
+        except OSError as error:
+            self.app.bell()
+            self.notify(
+                f"Error saving the bookmarks.\n\n{error}",
+                title="Save Error",
+                severity="error",
+                timeout=8,
+            )
 
     @work
     async def maybe_redownload(self) -> None:
