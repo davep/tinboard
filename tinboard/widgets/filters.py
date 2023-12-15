@@ -6,7 +6,6 @@ from __future__ import annotations
 
 ##############################################################################
 # Python imports.
-from dataclasses import dataclass
 from typing_extensions import Final
 
 ##############################################################################
@@ -131,13 +130,6 @@ class Filters(OptionListEx):
 
     class ShowUntagged(CoreFilter):
         """Show the bookmarks that have no tags."""
-
-    @dataclass
-    class ShowTaggedWith(Message):
-        """Filter with the given tag."""
-
-        tag: str
-        """The tag to filter on."""
 
     @classmethod
     def core_filter_message(cls, name: str) -> CoreFilter:
