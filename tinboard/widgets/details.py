@@ -121,23 +121,21 @@ class Details(VerticalScroll):
         try:
             if self.bookmark is None:
                 return
-            self.query_one("#title", Label).update(self.bookmark.title)
-            self.query_one("#description", Label).update(self.bookmark.description)
+            self.query_one("#title", Label).update(self.bookmark.data.description)
+            self.query_one("#description", Label).update(self.bookmark.data.extended)
             self.query_one("#description", Label).set_class(
-                not bool(self.bookmark.description), "empty"
+                not bool(self.bookmark.data.extended), "empty"
             )
-            self.query_one(Link).update(f"[@click=visit]{self.bookmark.href}[/]")
+            self.query_one(Link).update(f"[@click=visit]{self.bookmark.data.href}[/]")
             self.query_one("#added-ish", Label).update(
-                f"Added {naturaltime(self.bookmark.last_modified)}"
+                f"Added {naturaltime(self.bookmark.data.time)}"
             )
-            self.query_one("#added-exact", Label).update(
-                str(self.bookmark.last_modified)
-            )
+            self.query_one("#added-exact", Label).update(str(self.bookmark.data.time))
             self.query_one("#is-read", Label).update(
-                f"The bookmark has {'[i]not[/] ' if self.bookmark.unread else ''}been read"
+                f"The bookmark has {'[i]not[/] ' if self.bookmark.data.to_read else ''}been read"
             )
             self.query_one("#is-public", Label).update(
-                f"The bookmark is {'[bold]public[/]' if self.bookmark.shared else '[dim]private[/]'}"
+                f"The bookmark is {'[bold]public[/]' if self.bookmark.data.shared else '[dim]private[/]'}"
             )
             self.query_one(InlineTags).show(
                 [(tag, 1) for tag in sorted(self.bookmark.tags, key=str.casefold)]
@@ -162,7 +160,7 @@ class Details(VerticalScroll):
     def action_visit_bookmark(self) -> None:
         """Visit the current bookmark, if there is one."""
         if self.bookmark is not None:
-            open_url(self.bookmark.href)
+            open_url(self.bookmark.data.href)
 
 
 ### details.py ends here

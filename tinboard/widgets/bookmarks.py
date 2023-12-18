@@ -5,7 +5,7 @@
 from collections import Counter
 from datetime import datetime
 from hashlib import md5
-from json import loads, dumps
+from json import loads, dumps, JSONEncoder
 from typing import Any, Callable, cast
 from webbrowser import open as open_url
 from typing_extensions import Final, Self
@@ -33,11 +33,6 @@ from rich.rule import Rule
 from rich.table import Table
 
 ##############################################################################
-# Pinboard API imports.
-from aiopinboard import API
-from aiopinboard.bookmark import Bookmark as BookmarkData
-
-##############################################################################
 # Local imports.
 from ..messages import (
     AddBookmark,
@@ -47,11 +42,12 @@ from ..messages import (
     ToggleBookmarkRead,
 )
 from ..data import bookmarks_file
+from ..pinboard import API, BookmarkData
 from .extended_option_list import OptionListEx
 
 
 ##############################################################################
-class Bookmark(Option):  # pylint:disable = too-many-instance-attributes
+class Bookmark(Option):
     """An individual bookmark."""
 
     PRIVATE_ICON: Final[str] = Emoji.replace(":lock:")
@@ -60,29 +56,19 @@ class Bookmark(Option):  # pylint:disable = too-many-instance-attributes
     UNREAD_ICON: Final[str] = Emoji.replace(":see-no-evil_monkey:")
     """The icon to use for an unread bookmark."""
 
-    def __init__(self, bookmark: BookmarkData) -> None:
+    def __init__(self, data: BookmarkData) -> None:
         """Initialise the bookmark.
 
         Args:
-            bookmark: The bookmark data gathered from the server.
+            data: The bookmark data gathered from the server.
         """
-        self.hash = bookmark.hash
-        """The hash of the bookmark"""
-        self.href = bookmark.href
-        """The HREF of the bookmark"""
-        self.title = bookmark.title
-        """The title of the bookmark."""
-        self.description = bookmark.description
-        """The description of the bookmark."""
-        self.last_modified = bookmark.last_modified
-        """The time the bookmark was last modified."""
-        self.tags = bookmark.tags
-        """The tags for the bookmark."""
-        self.unread = bookmark.unread
-        """The unread status of the bookmark."""
-        self.shared = bookmark.shared
-        """The flag to say if the bookmark is public or private."""
-        super().__init__(self.prompt, id=bookmark.hash)
+        self._data = data
+        super().__init__(self.prompt, id=data.hash)
+
+    @property
+    def tags(self) -> list[str]:
+        """The tags of the bookmark, as a list."""
+        return self._data.tags.split()
 
     @property
     def prompt(self) -> Group:
@@ -92,15 +78,15 @@ class Bookmark(Option):  # pylint:disable = too-many-instance-attributes
         title.add_column(ratio=1)
         title.add_column(justify="right")
         title.add_row(
-            self.title,
-            f"  {'' if self.shared else self.PRIVATE_ICON}{self.UNREAD_ICON if self.unread else ''}",
+            self._data.description,
+            f"  {'' if self._data.shared else self.PRIVATE_ICON}{self.UNREAD_ICON if self._data.to_read else ''}",
         )
         # Create the details line.
         details = Table.grid(expand=True)
         details.add_column(ratio=1)
         details.add_column()
         details.add_row(
-            f"[dim][i]{naturaltime(self.last_modified)}[/][/]",
+            f"[dim][i]{naturaltime(self._data.time)}[/][/]",
             f"[dim]{', '.join(sorted(self.tags, key = str.casefold))}[/]",
         )
         # Combine them and add a rule afterwards.
@@ -135,21 +121,10 @@ class Bookmark(Option):  # pylint:disable = too-many-instance-attributes
 
         Note that this is a case-insensitive test.
         """
-        return search_text.casefold() in (self.title + self.description).casefold()
-
-    @property
-    def as_json(self) -> dict[str, Any]:
-        """The bookmark as a JSON-friendly dictionary."""
-        return {
-            "hash": self.hash,
-            "href": self.href,
-            "title": self.title,
-            "description": self.description,
-            "last_modified": self.last_modified.isoformat(),
-            "tags": self.tags,
-            "unread": self.unread,
-            "shared": self.shared,
-        }
+        return (
+            search_text.casefold()
+            in (self._data.description + self._data.extended).casefold()
+        )
 
     @classmethod
     def from_json(cls, data: dict[str, Any]) -> "Bookmark":
@@ -161,31 +136,18 @@ class Bookmark(Option):  # pylint:disable = too-many-instance-attributes
         Returns:
             The `Bookmark` instance.
         """
-        (data := data.copy())["last_modified"] = datetime.fromisoformat(
-            data["last_modified"]
-        )
+        if "time" in data:
+            data["time"] = datetime.fromisoformat(data["time"])
         return cls(BookmarkData(**data))
 
     @property
-    def as_bookmark(self) -> BookmarkData:
+    def data(self) -> BookmarkData:
         """The bookmark as the underlying bookmark data."""
-        data = self.as_json
-        data["last_modified"] = datetime.fromisoformat(data["last_modified"])
-        return BookmarkData(**data)
+        return self._data
 
-    def from_bookmark(self, bookmark: BookmarkData) -> None:
-        """Update the bookmark from some bookmark data.
-
-        Args:
-            bookmark: The bookmark data to update from.
-        """
-        self.href = bookmark.href
-        self.title = bookmark.title
-        self.description = bookmark.description
-        self.last_modified = bookmark.last_modified
-        self.tags = bookmark.tags
-        self.unread = bookmark.unread
-        self.shared = bookmark.shared
+    @data.setter
+    def data(self, data: BookmarkData) -> None:
+        self._data = data
         self.set_prompt(self.prompt)
 
 
@@ -268,8 +230,8 @@ class Bookmarks(OptionListEx):  # pylint:disable = too-many-instance-attributes
         if self.highlighted is not None:
             bookmark = self.get_option_at_index(self.highlighted)
             assert isinstance(bookmark, Bookmark)
-            if bookmark.href:
-                open_url(bookmark.href)
+            if bookmark.data.href:
+                open_url(bookmark.data.href)
 
     def action_new(self) -> None:
         """Post the new bookmark command."""
@@ -338,7 +300,7 @@ class Bookmarks(OptionListEx):  # pylint:disable = too-many-instance-attributes
         If there are no bookmarks this will be `None`.
         """
         return (
-            sorted([bookmark.last_modified for bookmark in self.bookmarks])[-1]
+            sorted([bookmark.data.time for bookmark in self.bookmarks])[-1]
             if self.bookmarks
             else None
         )
@@ -360,11 +322,13 @@ class Bookmarks(OptionListEx):  # pylint:disable = too-many-instance-attributes
         filter_checks: list[Callable[[Bookmark], bool]] = []
         if self.public_filter is not None:
             filter_names.append("Public" if self.public_filter else "Private")
-            filter_checks.append(lambda bookmark: bookmark.shared is self.public_filter)
+            filter_checks.append(
+                lambda bookmark: bookmark.data.shared is self.public_filter
+            )
         if self.read_filter is not None:
             filter_names.append("Read" if self.read_filter else "Unread")
             filter_checks.append(
-                lambda bookmark: bookmark.unread is not self.read_filter
+                lambda bookmark: bookmark.data.to_read is not self.read_filter
             )
         if self.has_tags_filter is not None:
             filter_names.append("Tagged" if self.has_tags_filter else "Untagged")
@@ -462,7 +426,7 @@ class Bookmarks(OptionListEx):  # pylint:disable = too-many-instance-attributes
             "last_downloaded": None
             if self.last_downloaded is None
             else self.last_downloaded.isoformat(),
-            "bookmarks": [bookmark.as_json for bookmark in self.bookmarks],
+            "bookmarks": [bookmark.data.as_json for bookmark in self.bookmarks],
         }
 
     def load_json(self, data: dict[str, Any]) -> None:
@@ -483,9 +447,22 @@ class Bookmarks(OptionListEx):  # pylint:disable = too-many-instance-attributes
             return True
         return False
 
+    class _Encoder(JSONEncoder):
+        """Encoder for turning the bookmarks into JSON data."""
+
+        def default(self, o: object) -> Any:
+            """Handle unknown values.
+
+            Args:
+                o: The object to handle.
+            """
+            return datetime.isoformat(o) if isinstance(o, datetime) else o
+
     def save(self) -> Self:
         """Save the bookmarks to the local file."""
-        bookmarks_file().write_text(dumps(self.as_json, indent=4), encoding="utf-8")
+        bookmarks_file().write_text(
+            dumps(self.as_json, indent=4, cls=self._Encoder), encoding="utf-8"
+        )
         return self
 
     async def download_all(self, api: API) -> Self:
@@ -494,10 +471,7 @@ class Bookmarks(OptionListEx):  # pylint:disable = too-many-instance-attributes
         Args:
             api: The API to download via.
         """
-        self.bookmarks = [
-            Bookmark(bookmark)
-            for bookmark in await api.bookmark.async_get_all_bookmarks()
-        ]
+        self.bookmarks = [Bookmark(bookmark) for bookmark in await api.all_bookmarks()]
         self.last_downloaded = datetime.now(UTC)
         return self
 
@@ -562,7 +536,7 @@ class Bookmarks(OptionListEx):  # pylint:disable = too-many-instance-attributes
 
         # It's an existing bookmark so let's update it.
         assert isinstance(bookmark, Bookmark)
-        bookmark.from_bookmark(new_data)
+        bookmark.data = new_data
         self.replace_option_prompt(new_data.hash, bookmark.prompt)
 
         # Assume this edit is the "last download" time. While it is true

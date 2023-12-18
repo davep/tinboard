@@ -5,10 +5,10 @@ name = "pypi"
 
 [packages]
 textual = "*"
-aiopinboard = "*"
 xdg-base-dirs = "*"
 pytz = "*"
 humanize = "*"
+httpx = "*"
 
 [dev-packages]
 pre-commit = "*"

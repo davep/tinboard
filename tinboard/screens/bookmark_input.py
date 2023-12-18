@@ -19,13 +19,8 @@ from textual.validation import Length
 from textual.widgets import Button, Checkbox, Input, Label
 
 ##############################################################################
-# Pinboard API imports.
-from aiopinboard import API
-from aiopinboard.bookmark import Bookmark as BookmarkData
-from aiopinboard.errors import RequestError
-
-##############################################################################
 # Local imports.
+from ..pinboard import API, BookmarkData
 from ..suggestions import SuggestTags
 from ..widgets import TextArea
 
@@ -134,10 +129,8 @@ class BookmarkInput(ModalScreen[BookmarkData | None]):
     async def _get_tag_suggestions(self) -> None:
         """Load up fresh tag suggestions based on the URL."""
         try:
-            tags = await self._api.bookmark.async_get_suggested_tags(
-                self.query_one("#url", Input).value
-            )
-        except RequestError:
+            tags = await self._api.suggested_tags(self.query_one("#url", Input).value)
+        except API.RequestError:
             self.app.bell()
             self.notify(
                 "Error getting suggested tags from the server.",
@@ -147,27 +140,27 @@ class BookmarkInput(ModalScreen[BookmarkData | None]):
             )
             return
         suggested_tags = ""
-        if tags["recommended"]:
-            suggested_tags += f"[b]Recommended:[/b] {' '.join(tags['recommended'])}\n"
-        if tags["popular"]:
-            suggested_tags += f"[b]Popular:[/b] {' '.join(tags['popular'])}"
+        if tags.recommended:
+            suggested_tags += f"[b]Recommended:[/b] {' '.join(tags.recommended)}\n"
+        if tags.popular:
+            suggested_tags += f"[b]Popular:[/b] {' '.join(tags.popular)}"
         self.query_one("#tag-suggestions").set_class(
             bool(suggested_tags.strip()), "got-suggestions"
         )
         self.query_one("#tag-suggestions", Label).update(f"[dim]{suggested_tags}[/]")
         self.query_one("#tags", Input).suggester = SuggestTags(
-            set(self._tags + tags["recommended"] + tags["popular"])
+            set(self._tags + tags.recommended + tags.popular)
         )
 
     def on_mount(self) -> None:
         """Configure the dialog once it's in the DOM."""
         if self._bookmark:
             self.query_one("#url", Input).value = self._bookmark.href
-            self.query_one("#title", Input).value = self._bookmark.title
-            self.query_one("#description", TextArea).text = self._bookmark.description
-            self.query_one("#tags", Input).value = " ".join(self._bookmark.tags)
+            self.query_one("#title", Input).value = self._bookmark.description
+            self.query_one("#description", TextArea).text = self._bookmark.extended
+            self.query_one("#tags", Input).value = self._bookmark.tags
             self.query_one("#private", Checkbox).value = not self._bookmark.shared
-            self.query_one("#read-later", Checkbox).value = self._bookmark.unread
+            self.query_one("#read-later", Checkbox).value = self._bookmark.to_read
             self._get_tag_suggestions()
 
     @on(DescendantFocus, "#url")
@@ -205,15 +198,13 @@ class BookmarkInput(ModalScreen[BookmarkData | None]):
         self.dismiss(
             BookmarkData(
                 href=self.query_one("#url", Input).value,
-                title=self.query_one("#title", Input).value,
-                description=self.query_one("#description", TextArea).text,
-                tags=self.query_one("#tags", Input).value.split(),
+                description=self.query_one("#title", Input).value,
+                extended=self.query_one("#description", TextArea).text,
+                tags=self.query_one("#tags", Input).value,
                 shared=not self.query_one("#private", Checkbox).value,
-                unread=self.query_one("#read-later", Checkbox).value,
+                to_read=self.query_one("#read-later", Checkbox).value,
                 hash="" if self._bookmark is None else self._bookmark.hash,
-                last_modified=datetime.now()
-                if self._bookmark is None
-                else self._bookmark.last_modified,
+                time=datetime.now() if self._bookmark is None else self._bookmark.time,
             )
         )
 

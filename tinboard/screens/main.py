@@ -15,12 +15,6 @@ from textual.screen import Screen
 from textual.widgets import Footer, Header, Rule
 
 ##############################################################################
-# Pinboard API library.
-from aiopinboard import API
-from aiopinboard.bookmark import Bookmark as BookmarkData
-from aiopinboard.errors import RequestError
-
-##############################################################################
 # Local imports.
 from .. import __version__
 from .bookmark_input import BookmarkInput
@@ -50,6 +44,7 @@ from ..messages import (
     ToggleBookmarkPublic,
     ToggleBookmarkRead,
 )
+from ..pinboard import API, BookmarkData
 from ..widgets import Bookmarks, Bookmark, Details, Filters, TagsMenu
 
 
@@ -231,7 +226,7 @@ class Main(Screen[None]):
         """
         try:
             (await self.query_one(Bookmarks).download_all(self._api)).save()
-        except RequestError:
+        except API.RequestError:
             self.app.bell()
             self.notify(
                 "Error downloading bookmarks from the server.",
@@ -254,10 +249,8 @@ class Main(Screen[None]):
         """Redownload the bookmarks if they look newer on the server."""
         if last_download := self.query_one(Bookmarks).last_downloaded:
             try:
-                latest_on_server = (
-                    await self._api.bookmark.async_get_last_change_datetime()
-                )
-            except RequestError:
+                latest_on_server = await self._api.last_update()
+            except API.RequestError:
                 self.app.bell()
                 self.notify(
                     "Unable to get the last change date from Pinboard. Is your token valid?",
@@ -435,18 +428,10 @@ class Main(Screen[None]):
         """
         if result:
             try:
-                await self._api.bookmark.async_add_bookmark(
-                    url=result.href,
-                    title=result.title,
-                    description=result.description,
-                    tags=result.tags,
-                    shared=result.shared,
-                    toread=result.unread,
-                    replace=True,
-                )
+                await self._api.add_bookmark(result)
                 self.query_one(Bookmarks).update_bookmark(result).save()
                 self.notify("Bookmark saved.")
-            except RequestError as error:
+            except API.RequestError as error:
                 self.app.bell()
                 self.notify(
                     str(error),
@@ -486,7 +471,7 @@ class Main(Screen[None]):
             self.app.push_screen(
                 BookmarkInput(
                     self._api,
-                    bookmark.as_bookmark,
+                    bookmark.data,
                     known_tags=self.query_one(Bookmarks).all_tags,
                 ),
                 callback=self.post_result,
@@ -501,8 +486,8 @@ class Main(Screen[None]):
         """
         if confirmed:
             try:
-                await self._api.bookmark.async_delete_bookmark(bookmark.href)
-            except RequestError:
+                await self._api.delete_bookmark(bookmark.data.href)
+            except API.RequestError:
                 self.app.bell()
                 self.notify(
                     "Error trying to delete the bookmark.",
@@ -533,7 +518,7 @@ class Main(Screen[None]):
             self.app.push_screen(
                 Confirm(
                     "Delete?",
-                    f"Are you sure you wish to delete this bookmark?\n\n[dim i]{bookmark.title}[/]",
+                    f"Are you sure you wish to delete this bookmark?\n\n[dim i]{bookmark.data.description}[/]",
                 ),
                 callback=partial(self._delete, bookmark),
             )
@@ -544,8 +529,8 @@ class Main(Screen[None]):
         if (bookmark := self.query_one(Bookmarks).current_bookmark) is None:
             self.app.bell()
         else:
-            bookmark.unread = not bookmark.unread
-            await self.post_result(bookmark.as_bookmark)
+            bookmark.data.to_read = not bookmark.data.to_read
+            await self.post_result(bookmark.data)
 
     @on(ToggleBookmarkPublic)
     async def toggle_public(self) -> None:
@@ -553,8 +538,8 @@ class Main(Screen[None]):
         if (bookmark := self.query_one(Bookmarks).current_bookmark) is None:
             self.app.bell()
         else:
-            bookmark.shared = not bookmark.shared
-            await self.post_result(bookmark.as_bookmark)
+            bookmark.data.shared = not bookmark.data.shared
+            await self.post_result(bookmark.data)
 
 
 ### main.py ends here

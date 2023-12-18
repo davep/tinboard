@@ -43,12 +43,6 @@ Things to do:
 
 Known issues:
 
-- Newlines in the descriptions don't survive being pulled down from
-  Pinboard. This is due to [`aiopinboard` using the XML API and that API
-  endpoint not ensuring that line breaks can be
-  handled](https://github.com/bachya/aiopinboard/issues/300). Solution here
-  will be to either have `aiopinboard` switch to the JSON API endpoint, or
-  to roll my own API client for this application.
 - The description editor doesn't word-wrap. (currently waiting on Textual
   [to add wrapping support for
   `TextArea`](https://github.com/Textualize/textual/pull/3711)).
