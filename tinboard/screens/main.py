@@ -210,11 +210,15 @@ class Main(Screen[None]):
     def on_mount(self) -> None:
         """Start the process of loading the bookmarks."""
         self.set_class(not load_configuration().details_visible, "details-hidden")
-        self.sub_title = "Loading..."
-        bookmarks = self.query_one(Bookmarks)
-        bookmarks.loading = True
-        bookmarks.load()
-        self.maybe_redownload()
+        self.sub_title = "Loading cached bookmarks..."
+        self.query_one(Bookmarks).loading = True
+        self.load_bookmarks()
+
+    @work(thread=True)
+    def load_bookmarks(self) -> None:
+        """Load the local copy of the bookmarks, if they exist."""
+        self.query_one(Bookmarks).load()
+        self.app.call_from_thread(self.maybe_redownload)
 
     @work
     async def download_bookmarks(self) -> None:
