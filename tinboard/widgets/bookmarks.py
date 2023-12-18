@@ -196,29 +196,29 @@ class Bookmarks(OptionListEx):  # pylint:disable = too-many-instance-attributes
     last_downloaded: var[datetime | None] = var(None)
     """When the bookmarks were last downloaded."""
 
-    read_filter: var[bool | None] = var(None)
+    read_filter: var[bool | None] = var(None, init=False)
     """The filter for the read status.
 
     `True` for read, `False` for unread, `None` for no filter.
     """
 
-    public_filter: var[bool | None] = var(None)
+    public_filter: var[bool | None] = var(None, init=False)
     """The filter for the public status.
 
     `True` for public, `False` for private, `None` for no filter.
     """
 
-    has_tags_filter: var[bool | None] = var(None)
+    has_tags_filter: var[bool | None] = var(None, init=False)
     """The filter for if a bookmark has tags or not.
 
     `True` for has tags, `False` for doesn't have tags, `None` for no
     filter.
     """
 
-    tag_filter: var[frozenset[str] | set[str]] = var(frozenset())
+    tag_filter: var[frozenset[str] | set[str]] = var(frozenset(), init=False)
     """The tags to filter on."""
 
-    text_filter: var[str] = var("")
+    text_filter: var[str] = var("", init=False)
     """The text to filter on. Empty string for no filter."""
 
     _suspend_refresh: var[bool] = var(False)
