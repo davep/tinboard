@@ -91,6 +91,15 @@ class BookmarkData:
         return asdict(self)
 
     def ensure_hash(self) -> Self:
+        """Ensure the bookmark has a hash.
+
+        Returns:
+            Self.
+
+        When making a new bookmark locally it's possible that there will be
+        no hash; this method creates one (that is compatible with Pinboard)
+        if there isn't one.
+        """
         if not self.hash:
             self.hash = md5(self.href.encode()).hexdigest()
         return self
