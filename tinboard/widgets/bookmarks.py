@@ -504,7 +504,7 @@ class Bookmarks(OptionListEx):  # pylint:disable = too-many-instance-attributes
         """
 
         try:
-            bookmark = self.get_option(new_data.ensure_hash().hash)
+            bookmark = self.get_option(new_data.hash)
         except OptionDoesNotExist:
             # We didn't find that bookmark; it must be new.
             return self._add_bookmark(new_data)

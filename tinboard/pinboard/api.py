@@ -64,6 +64,14 @@ class BookmarkData:
     tags: str
     """The tags for the bookmark, space-separated."""
 
+    def __post_init__(self) -> None:
+        """Final initialisation of the bookmark data.
+
+        If `hash` is empty, one will be generated.
+        """
+        if not self.hash:
+            self.hash = md5(self.href.encode()).hexdigest()
+
     @classmethod
     def from_json(cls, data: dict[str, str]) -> "BookmarkData":
         """Create an instance of `BookmarkData` from JSON data.
@@ -89,20 +97,6 @@ class BookmarkData:
     def as_json(self) -> dict[str, str]:
         """The bookmark in JSON-friendly form."""
         return asdict(self)
-
-    def ensure_hash(self) -> Self:
-        """Ensure the bookmark has a hash.
-
-        Returns:
-            Self.
-
-        When making a new bookmark locally it's possible that there will be
-        no hash; this method creates one (that is compatible with Pinboard)
-        if there isn't one.
-        """
-        if not self.hash:
-            self.hash = md5(self.href.encode()).hexdigest()
-        return self
 
 
 ##############################################################################
