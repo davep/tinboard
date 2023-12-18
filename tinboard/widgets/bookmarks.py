@@ -4,7 +4,6 @@
 # Python imports.
 from collections import Counter
 from datetime import datetime
-from hashlib import md5
 from json import loads, dumps, JSONEncoder
 from typing import Any, Callable, cast
 from webbrowser import open as open_url
@@ -475,30 +474,6 @@ class Bookmarks(OptionListEx):  # pylint:disable = too-many-instance-attributes
         self.last_downloaded = datetime.now(UTC)
         return self
 
-    def _ensure_complete(self, data: BookmarkData) -> BookmarkData:
-        """Ensure the bookmark data is complete.
-
-        Args:
-            data: The bookmark data to check.
-
-        Returns:
-            The bookmark data.
-
-        When we add a new bookmark to Pinboard, we don't easily get back
-        useful data like its hash. To get that it's necessary (and sort of
-        costly) to query the bookmark back. Instead we fake it here. This is
-        fine as we don't use this faked data to interact with Pinboard, we
-        just use it internally to the app. Any subsequent refresh will
-        overwrite anyway and then it'll all be fully in sync again.
-
-        Moreover; this method uses the same hash-creation method that
-        Pinboard appears to use (an md5 hex digest of the URL), so the
-        'fake' hash should match the server anyway.
-        """
-        if not data.hash:
-            data.hash = md5(data.href.encode()).hexdigest()
-        return data
-
     def _add_bookmark(self, bookmark: BookmarkData) -> Self:
         """Add a bookmark we don't know about locally.
 
@@ -529,7 +504,7 @@ class Bookmarks(OptionListEx):  # pylint:disable = too-many-instance-attributes
         """
 
         try:
-            bookmark = self.get_option(self._ensure_complete(new_data).hash)
+            bookmark = self.get_option(new_data.ensure_hash().hash)
         except OptionDoesNotExist:
             # We didn't find that bookmark; it must be new.
             return self._add_bookmark(new_data)

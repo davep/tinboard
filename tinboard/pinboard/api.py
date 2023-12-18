@@ -1,13 +1,14 @@
-"""Pinboard API class."""
+"""Pinboard API code."""
 
 ##############################################################################
 # Python imports.
 from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta
 from functools import reduce
+from hashlib import md5
 from json import loads
 from operator import or_
-from typing_extensions import Final
+from typing_extensions import Final, Self
 
 ##############################################################################
 # pytz imports.
@@ -75,19 +76,24 @@ class BookmarkData:
         """
         return cls(
             href=data.get("href", ""),
-            description=data["description"],
-            extended=data["extended"],
-            hash=data["hash"],
-            time=parse_time(data["time"]),
-            shared=data["shared"] == "yes",
-            to_read=data["toread"] == "yes",
-            tags=data["tags"],
+            description=data.get("description", ""),
+            extended=data.get("extended", ""),
+            hash=data.get("hash", ""),
+            time=parse_time(data.get("time", "")),
+            shared=data.get("shared", "") == "yes",
+            to_read=data.get("toread") == "yes",
+            tags=data.get("tags", ""),
         )
 
     @property
     def as_json(self) -> dict[str, str]:
         """The bookmark in JSON-friendly form."""
         return asdict(self)
+
+    def ensure_hash(self) -> Self:
+        if not self.hash:
+            self.hash = md5(self.href.encode()).hexdigest()
+        return self
 
 
 ##############################################################################
