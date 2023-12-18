@@ -43,9 +43,6 @@ Things to do:
 
 Known issues:
 
-- Only the final tag in the tags for a bookmark is saving on the server.
-  This is [a bug in
-  `aiobinboard`](https://github.com/bachya/aiopinboard/issues/298).
 - Newlines in the descriptions don't survive being pulled down from
   Pinboard. This is due to [`aiopinboard` using the XML API and that API
   endpoint not ensuring that line breaks can be
