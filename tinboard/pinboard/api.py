@@ -89,7 +89,7 @@ class BookmarkData:
             hash=data.get("hash", ""),
             time=parse_time(data.get("time", "")),
             shared=data.get("shared", "") == "yes",
-            to_read=data.get("toread") == "yes",
+            to_read=data.get("toread", "") == "yes",
             tags=data.get("tags", ""),
         )
 
