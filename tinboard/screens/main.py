@@ -222,7 +222,7 @@ class Main(Screen[None]):
 
     @work
     async def download_bookmarks(self) -> None:
-        """Get all the bookmarks from pinboard.
+        """Get all the bookmarks from Pinboard.
 
         Note:
             As a side-effect of calling this method, the local copy of all
