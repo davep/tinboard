@@ -134,16 +134,16 @@ class API:
         self._last_all: datetime | None = None
         """The time when we last asked for all the bookmarks."""
 
-    def _api_url(self, *params: str) -> str:
+    def _api_url(self, *path: str) -> str:
         """Construct a URL for calling on the API.
 
         Args:
-            *params: The parameters to use.
+            *path: The path to the endpoint.
 
         Returns:
             The URL to use.
         """
-        return f"https://api.pinboard.in/v1/{'/'.join(params)}?auth_token={self._api_token}&format=json"
+        return f"https://api.pinboard.in/v1/{'/'.join(path)}?auth_token={self._api_token}&format=json"
 
     async def _call(self, *path: str, **params: str) -> str:
         """Call on the Pinboard API.
