@@ -255,17 +255,21 @@ class API:
         Args:
             data: The bookmark to add.
         """
-        await self._call(
-            "posts",
-            "add",
-            url=data.href,
-            description=data.description,
-            extended=data.extended,
-            tags=data.tags,
-            dt=data.time.isoformat(),
-            replace="yes",
-            shared="yes" if data.shared else "no",
-            toread="yes" if data.to_read else "no",
+        self._check(
+            loads(
+                await self._call(
+                    "posts",
+                    "add",
+                    url=data.href,
+                    description=data.description,
+                    extended=data.extended,
+                    tags=data.tags,
+                    dt=data.time.isoformat(),
+                    replace="yes",
+                    shared="yes" if data.shared else "no",
+                    toread="yes" if data.to_read else "no",
+                )
+            )
         )
 
     async def delete_bookmark(self, url: str) -> None:

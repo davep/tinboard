@@ -130,7 +130,7 @@ class BookmarkInput(ModalScreen[BookmarkData | None]):
         """Load up fresh tag suggestions based on the URL."""
         try:
             tags = await self._api.suggested_tags(self.query_one("#url", Input).value)
-        except API.RequestError:
+        except API.Error:
             self.app.bell()
             self.notify(
                 "Error getting suggested tags from the server.",

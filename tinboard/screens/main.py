@@ -250,7 +250,7 @@ class Main(Screen[None]):
         if last_download := self.query_one(Bookmarks).last_downloaded:
             try:
                 latest_on_server = await self._api.last_update()
-            except API.RequestError:
+            except API.Error:
                 self.app.bell()
                 self.notify(
                     "Unable to get the last change date from Pinboard. Is your token valid?",
@@ -431,7 +431,7 @@ class Main(Screen[None]):
                 await self._api.add_bookmark(result)
                 self.query_one(Bookmarks).update_bookmark(result).save()
                 self.notify("Bookmark saved.")
-            except API.RequestError as error:
+            except API.Error as error:
                 self.app.bell()
                 self.notify(
                     str(error),
@@ -487,7 +487,7 @@ class Main(Screen[None]):
         if confirmed:
             try:
                 await self._api.delete_bookmark(bookmark.data.href)
-            except API.RequestError:
+            except API.Error:
                 self.app.bell()
                 self.notify(
                     "Error trying to delete the bookmark.",
