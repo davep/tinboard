@@ -190,7 +190,7 @@ class Bookmarks(OptionListEx):  # pylint:disable = too-many-instance-attributes
         Binding("ctrl+v", "public"),
     ]
 
-    bookmarks: var[list[Bookmark]] = var([], always_update=True)
+    bookmarks: var[list[Bookmark]] = var([], always_update=True, init=False)
     """The list of all known bookmarks."""
 
     last_downloaded: var[datetime | None] = var(None)
