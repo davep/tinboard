@@ -2,46 +2,52 @@
 
 ![Tinboard](https://raw.githubusercontent.com/davep/tinboard/main/tinboard.png)
 
-A very early work in progress. See below for the list of things still to do.
+## Introduction
 
-All application data lives in `~/.local/share/tinboard`; if you want to wipe
-it out just nuke that directory. Likewise, application configuration data
-lives in `~/.config/tinboard`.
+Tinboard is a terminal-based client application for the [Pinboard
+bookmarking service](https://pinboard.in/about/). It provides the ability to
+manage and search your bookmarks in the terminal.
 
-As for bugs and feature requests and stuff... not yet thanks; that time will
-come. :-)
+## Installing
 
-Things to do:
+The package can be installed using [`pipx`](https://pypa.github.io/pipx/):
 
-- [X] Full text search.
-- [X] Allow tags to be combined with core filters.
-- [X] Allow both the above to be combined.
-- [X] Add the ability to add a bookmark.
-  - [X] Validation of data sent to the server
-  - [X] Make available suggested tags once the bookmark is known.
-- [X] Add the ability to edit a bookmark.
-  - [X] Validation of data sent to the server
-- [X] Add the ability to delete a bookmark.
-- [X] Add the ability to quickly toggle the unread/read status of a
-      bookmark.
-- [X] Add the ability to quickly toggle the public/private status of a
-      bookmark.
-- [X] Add the ability to "logout" (IOW forget the API token).
-- [ ] Add a bookmark export facility.
-- [X] Add tag counts to the tag list.
-- [X] Add tag searching to the command palette.
-- [X] Add a show/hide toggle for the details pane.
-- [ ] Add support for notes.
-- [ ] Add saving of various states to resume when next ran.
-  - [X] Dark/light mode.
-  - [X] The show/hide state of the details pane.
-  - [ ] The main filter?
-  - [ ] The selected tag(s)?
-- [X] All sorts of error handling
-  - [X] Bad token given to Pinboard.
-  - [X] IO errors around the local cache of bookmarks.
+```sh
+$ pipx install tinboard
+```
 
-Known issues:
+Once installed run the `tinboard` command.
+
+## Getting started
+
+To use Tinboard you will need a Pinboard account (this application isn't
+going to be useful to anyone who isn't a Pinboard user). Assuming you *do*
+have a Pinboard account, you can get going by running up `tinboard` and
+providing your API token when asked:
+
+![The Tinboard token input dialog](https://raw.githubusercontent.com/davep/tinboard/main/images/token-request.png)
+
+If you're not sure where to find your API token, just press <kbd>F1</kbd>,
+or the `Go to token` button, and you'll be taken to the relevant Pinboard
+page in your browser; copy the token, come back to this dialog and paste it
+in.
+
+Once done Tinboard will download your bookmarks and you're good to go!
+
+## Using Tinboard
+
+The best way to get to know Tinboard is to read the help screen, once in the
+main application you can see this by pressing <kbd>F1</kbd>.
+
+![Tinboard Help](https://raw.githubusercontent.com/davep/tinboard/main/images/help.png)
+
+## Getting help
+
+If you need help, or have any ideas, please feel free to [raise an
+issue](https://github.com/davep/tinboard/issues) or [start a
+discussion](https://github.com/davep/tinboard/discussions).
+
+## Known issues
 
 - The description editor doesn't word-wrap. (currently waiting on Textual
   [to add wrapping support for
