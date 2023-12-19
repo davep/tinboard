@@ -53,4 +53,16 @@ discussion](https://github.com/davep/tinboard/discussions).
   [to add wrapping support for
   `TextArea`](https://github.com/Textualize/textual/pull/3711)).
 
+## TODO
+
+Things I'm considering adding or addressing:
+
+- [ ] Double-check the rate limits on the API calls to be sure they're correct.
+- [ ] A bookmark export facility.
+- [ ] A bookmark availability checker.
+  - [ ] Check the current bookmark.
+  - [ ] A mode that slowly checks all bookmarks.
+- [ ] Support for Pinboard Notes.
+- [ ] Optionally sort the tags by count.
+
 [//]: # (README.md ends here)
