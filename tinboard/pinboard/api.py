@@ -8,7 +8,7 @@ from functools import reduce
 from hashlib import md5
 from json import loads
 from operator import or_
-from typing_extensions import Final, Self
+from typing_extensions import Final
 
 ##############################################################################
 # pytz imports.
