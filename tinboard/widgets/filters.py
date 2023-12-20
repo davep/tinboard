@@ -12,6 +12,7 @@ from typing_extensions import Final
 # Textual imports.
 from textual import on
 from textual.message import Message
+from textual.reactive import var
 from textual.widgets.option_list import Option
 
 ##############################################################################
@@ -20,6 +21,7 @@ from rich.table import Table
 
 ##############################################################################
 # Local imports.
+from .bookmarks import Bookmarks
 from .extended_option_list import OptionListEx
 
 
@@ -53,6 +55,9 @@ class Filters(OptionListEx):
     }
     """The core options of the menu."""
 
+    counts: var[Bookmarks.Counts] = var(Bookmarks.Counts(), init=False)
+    """Holds the counts for the bookmarks."""
+
     @classmethod
     def shortcut(cls, option: str) -> str:
         """Get the shortcut for a given filter menu option.
@@ -65,8 +70,7 @@ class Filters(OptionListEx):
         """
         return cls.OPTIONS[option]
 
-    @classmethod
-    def _prompt(cls, name: str) -> Table:
+    def _prompt(self, name: str) -> Table:
         """Create a prompt for a filter.
 
         Args:
@@ -78,7 +82,12 @@ class Filters(OptionListEx):
         prompt = Table.grid(expand=True)
         prompt.add_column(no_wrap=True, ratio=1)
         prompt.add_column(no_wrap=True, justify="left")
-        prompt.add_row(name, f"[dim]\\[{cls.shortcut(name)}][/]")
+        prompt.add_column(no_wrap=True, justify="left")
+        prompt.add_row(
+            name,
+            f"[dim i]{getattr(self.counts, name.lower())}[/]",
+            f"  [dim]\\[{self.shortcut(name)}][/]",
+        )
         return prompt
 
     def __init__(
@@ -161,6 +170,11 @@ class Filters(OptionListEx):
         event.stop()
         assert event.option.id is not None
         self.post_message(self.core_filter_message(event.option.id))
+
+    def _watch_counts(self) -> None:
+        """React to the counts being changed."""
+        for filter_name in self.OPTIONS:
+            self.replace_option_prompt(filter_name.lower(), self._prompt(filter_name))
 
 
 ### menu.py ends here

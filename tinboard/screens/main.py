@@ -280,6 +280,10 @@ class Main(Screen[None]):
         self.query_one(TagsMenu).show(bookmarks.tag_counts)
         TagCommands.current_tags = list(bookmarks.tags)
         self.query_one(Details).bookmark = bookmarks.current_bookmark
+        # TODO: if getting the counts starts to look like it causes a wee
+        # pause, perhaps calculate them from within a threaded worker.
+        # Mostly though, so far, I'm not seeing any impact.
+        self.query_one(Filters).counts = bookmarks.counts
         bookmarks.focus()
 
     @on(Bookmarks.OptionHighlighted, "Bookmarks")
