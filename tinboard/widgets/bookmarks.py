@@ -3,6 +3,7 @@
 ##############################################################################
 # Python imports.
 from collections import Counter
+from dataclasses import dataclass
 from datetime import datetime
 from json import loads, dumps, JSONEncoder
 from typing import Any, Callable, cast
@@ -251,6 +252,45 @@ class Bookmarks(OptionListEx):  # pylint:disable = too-many-instance-attributes
     def action_public(self) -> None:
         """Post the public/private toggle command."""
         self.post_message(ToggleBookmarkPublic())
+
+    @dataclass
+    class Counts:
+        """The various bookmark counts."""
+
+        all: int = 0
+        """The count of all the bookmarks."""
+        unread: int = 0
+        """The count of unread bookmarks."""
+        read: int = 0
+        """The count of read bookmarks."""
+        private: int = 0
+        """The count of private bookmarks."""
+        public: int = 0
+        """The count of public bookmarks."""
+        untagged: int = 0
+        """The count of untagged bookmarks."""
+        tagged: int = 0
+        """The count of tagged bookmarks."""
+
+    @property
+    def counts(self) -> Counts:
+        """The various counts for the bookmarks."""
+        # TODO: cache this.
+        counts = self.Counts(all=len(self.bookmarks))
+        for bookmark in self.bookmarks:
+            if bookmark.data.to_read:
+                counts.unread += 1
+            else:
+                counts.read += 1
+            if bookmark.data.shared:
+                counts.public += 1
+            else:
+                counts.private += 1
+            if bookmark.tags:
+                counts.tagged += 1
+            else:
+                counts.untagged += 1
+        return counts
 
     @property
     def tags(self) -> list[str]:
