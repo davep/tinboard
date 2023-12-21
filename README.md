@@ -34,6 +34,9 @@ in.
 
 Once done Tinboard will download your bookmarks and you're good to go!
 
+*NOTE: if it's your preference, you can set the token in an environment
+variable called `TINBOARD_API_TOKEN`.*
+
 ## Using Tinboard
 
 The best way to get to know Tinboard is to read the help screen, once in the
