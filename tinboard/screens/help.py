@@ -41,6 +41,24 @@ Tinboard is Free Software and can be [found on GitHub](https://github.com/davep/
 
 
 This version of Tinboard is using [Textual](https://textual.textualize.io/) v{textual_version}.
+
+## Licence
+
+Tinboard - A client for the Pinboard bookmarking service.[EOL]
+Copyright (C) 2023 Dave Pearson
+
+This program is free software: you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the Free
+Software Foundation, either version 3 of the License, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+more details.
+
+You should have received a copy of the GNU General Public License along with
+this program. If not, see <https://www.gnu.org/licenses/>.
 """
 
 
@@ -97,7 +115,9 @@ class Help(ModalScreen[None]):
         with Vertical() as help_screen:
             help_screen.border_title = "Help"
             with VerticalScroll():
-                yield Markdown(HELP.format(context_help=self._context_help))
+                yield Markdown(
+                    HELP.replace("[EOL]", "  ").format(context_help=self._context_help)
+                )
             with Center():
                 yield Button("Okay [dim]\\[Esc]")
 
