@@ -1,6 +1,6 @@
 # Tinboard
 
-![Tinboard](https://raw.githubusercontent.com/davep/tinboard/main/tinboard.png)
+![Tinboard](https://raw.githubusercontent.com/davep/tinboard/main/images/tinboard.png)
 
 ## Introduction
 
