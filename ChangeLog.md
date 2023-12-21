@@ -2,7 +2,7 @@
 
 ## v0.2.0
 
-**Released: WiP**
+**Released: 2023-12-21**
 
 - Added bookmark counts to the main filter menu.
 
