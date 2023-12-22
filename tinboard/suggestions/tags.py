@@ -15,8 +15,6 @@ from textual.suggester import Suggester
 class SuggestTags(Suggester):
     """A Textual `Input` suggester that suggests tags."""
 
-    # pylint:disable=too-few-public-methods
-
     def __init__(self, tags: Iterable[str]) -> None:
         """Initialise the suggester.
 

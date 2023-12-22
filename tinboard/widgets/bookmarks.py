@@ -152,10 +152,8 @@ class Bookmark(Option):
 
 
 ##############################################################################
-class Bookmarks(OptionListEx):  # pylint:disable = too-many-instance-attributes
+class Bookmarks(OptionListEx):
     """The list of bookmarks."""
-
-    # pylint:disable = too-many-public-methods
 
     CONTEXT_HELP = """
     ## Bookmarks keys and commands
