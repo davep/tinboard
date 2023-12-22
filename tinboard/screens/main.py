@@ -75,6 +75,7 @@ class Main(Screen[None]):
     | <kbd>F1</kbd> | `Help` | This help screen. |
     | <kbd>F2</kbd> | `Visit Pinboard` | Visit the main Pinboard website. |
     | <kbd>F3</kbd> | | Toggle the bookmark details pane. |
+    | <kbd>F4</kbd> | | Toggle the sort order of the tags menu. |
     | <kbd>F12</kbd> | `Logout` | Forgot your API token and remove the local bookmark cache. |
     | <kbd>Ctrl</kbd>+<kbd>l</kbd> | `Redownload/refresh bookmarks` | Reload the local bookmarks from Pinboard. |
     | <kbd>Ctrl</kbd>+<kbd>q</kbd> | `Quit the application` | Shockingly... quit the application! |
@@ -177,6 +178,7 @@ class Main(Screen[None]):
         Binding("f1", "help", "Help"),
         Binding("f2", "goto_pinboard"),
         Binding("f3", "toggle_details"),
+        Binding("f4", "toggle_tag_order"),
         Binding("f12", "logout"),
         Binding("ctrl+l", "redownload"),
         Binding("escape", "escape"),
@@ -207,9 +209,11 @@ class Main(Screen[None]):
 
     def on_mount(self) -> None:
         """Start the process of loading the bookmarks."""
-        self.set_class(not load_configuration().details_visible, "details-hidden")
+        configuration = load_configuration()
+        self.set_class(not configuration.details_visible, "details-hidden")
         self.sub_title = "Loading cached bookmarks..."
         self.query_one(Bookmarks).loading = True
+        self.query_one(TagsMenu).sort_by_count = configuration.sort_tags_by_count
         self.load_bookmarks()
 
     @work(thread=True)
@@ -307,6 +311,15 @@ class Main(Screen[None]):
         self.toggle_class("details-hidden")
         config = load_configuration()
         config.details_visible = not self.has_class("details-hidden")
+        save_configuration(config)
+
+    def action_toggle_tag_order(self) -> None:
+        """Toggle the ordering of the tags in the tag menu."""
+        tags = self.query_one(TagsMenu)
+        tags.sort_by_count = not tags.sort_by_count
+        tags.show(self.query_one(Bookmarks).tag_counts)
+        config = load_configuration()
+        config.sort_tags_by_count = tags.sort_by_count
         save_configuration(config)
 
     def _logout(self, confirmed: bool) -> None:

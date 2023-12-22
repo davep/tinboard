@@ -13,6 +13,7 @@ from typing_extensions import Final, Self
 from textual import on
 from textual.binding import Binding
 from textual.events import Focus
+from textual.reactive import var
 from textual.widgets.option_list import Option, OptionDoesNotExist
 
 ##############################################################################
@@ -73,6 +74,17 @@ class Tags(OptionListEx):
         prompt.add_row(tag, f"[dim i]{count}[/]")
         return prompt
 
+    def _sorted(self, tags: list[tuple[str, int]]) -> list[tuple[str, int]]:
+        """Sort the tags.
+
+        Args:
+            tags: The tags to sort.
+
+        Returns:
+            The tags in the desired sort order.
+        """
+        return tags
+
     def show(self, tags: list[tuple[str, int]]) -> Self:
         """Show the given list of tags.
 
@@ -90,7 +102,10 @@ class Tags(OptionListEx):
         )
         try:
             return self.clear_options().add_options(
-                [Option(self._prompt(tag, count), id=tag) for tag, count in tags]
+                [
+                    Option(self._prompt(tag, count), id=tag)
+                    for tag, count in self._sorted(tags)
+                ]
             )
         finally:
             if tags:
@@ -128,6 +143,24 @@ class TagsMenu(Tags):
     CONTEXT_HELP = f"{Tags.CONTEXT_HELP}| <kbd>c</kbd> | Clear any active tag filter. |"
 
     BINDINGS = [Binding("c", "clear", "Clear Tags")]
+
+    sort_by_count: var[bool] = var(False)
+    """Should the tags be sorted by count?"""
+
+    def _sorted(self, tags: list[tuple[str, int]]) -> list[tuple[str, int]]:
+        """Sort the tags.
+
+        Args:
+            tags: The tags to sort.
+
+        Returns:
+            The tags in the desired sort order.
+        """
+        return (
+            sorted(tags, key=lambda tag: tag[1], reverse=True)
+            if self.sort_by_count
+            else tags
+        )
 
     def action_clear(self) -> None:
         """Clear any active tags."""

@@ -5,6 +5,7 @@
 **Released: WiP**
 
 - Decluttered the footer in most cases; use of <kbd>F1</kbd> emphasised.
+- Added the ability to sort the tags menu by bookmark count.
 
 ## v0.2.0
 
