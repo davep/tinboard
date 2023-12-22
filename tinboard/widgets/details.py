@@ -96,11 +96,24 @@ class Details(VerticalScroll):
     """
 
     BINDINGS = [
-        Binding("e", "edit", "Edit Bookmark"),
-        Binding("ctrl+r", "read", "(Un)Read"),
-        Binding("ctrl+v", "public", "Public/Private"),
-        Binding("enter", "visit_bookmark", "Visit Bookmark"),
+        Binding("enter", "visit_bookmark", "Visit"),
+        Binding("e", "edit", "Edit"),
+        Binding("ctrl+r", "read"),
+        Binding("ctrl+v", "public"),
     ]
+
+    CONTEXT_HELP = """
+    ## Bookmark details keys
+
+    The following keys are available in the bookmark details:
+
+    | Key | Description |
+    | - | - |
+    | <kbd>Enter</kbd> | Visit the current bookmark. |
+    | <kbd>e</kbd> | Edit the details of the bookmark. |
+    | <kbd>Ctrl</kbd>+<kbd>r</kbd> | Toggle the read/unread status of the bookmark. |
+    | <kbd>Ctrl</kbd>+<kbd>v</kbd> | Toggle the visibility of the bookmark. |
+    """
 
     bookmark: var[Bookmark | None] = var(None, always_update=True)
     """The current bookmark."""
