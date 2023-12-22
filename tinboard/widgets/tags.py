@@ -122,7 +122,7 @@ class Tags(OptionListEx):
 
 
 ##############################################################################
-class TagsMenu(Tags):  # pylint:disable=too-many-ancestors
+class TagsMenu(Tags):
     """A version of `Tags` to use as part of the main menu."""
 
     CONTEXT_HELP = f"{Tags.CONTEXT_HELP}| <kbd>c</kbd> | Clear any active tag filter. |"
@@ -135,7 +135,7 @@ class TagsMenu(Tags):  # pylint:disable=too-many-ancestors
 
 
 ##############################################################################
-class InlineTags(Tags):  # pylint:disable=too-many-ancestors
+class InlineTags(Tags):
     """A version of the `Tags` widget intended to embed in another."""
 
     DEFAULT_CSS = """

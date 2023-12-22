@@ -2,4 +2,4 @@
 max-line-length=120
 
 [MESSAGES CONTROL]
-disable=fixme, too-many-instance-attributes
+disable=fixme, too-many-instance-attributes, too-many-public-methods, too-few-public-methods, too-many-ancestors
