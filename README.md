@@ -66,6 +66,6 @@ Things I'm considering adding or addressing:
   - [ ] Check the current bookmark.
   - [ ] A mode that slowly checks all bookmarks.
 - [ ] Support for Pinboard Notes.
-- [ ] Optionally sort the tags by count.
+- [X] Optionally sort the tags by count.
 
 [//]: # (README.md ends here)
