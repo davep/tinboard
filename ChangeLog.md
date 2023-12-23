@@ -2,7 +2,7 @@
 
 ## v0.3.0
 
-**Released: WiP**
+**Released: 2023-12-23**
 
 - Decluttered the footer in most cases; use of <kbd>F1</kbd> emphasised.
 - Added the ability to sort the tags menu by bookmark count.
