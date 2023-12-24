@@ -10,7 +10,7 @@ from humanize import naturaltime
 
 ##############################################################################
 # Pyperclip imports.
-from pyperclip import copy as to_clipboard
+from pyperclip import copy as to_clipboard, PyperclipException
 
 ##############################################################################
 # Textual imports.
@@ -186,8 +186,15 @@ class Details(VerticalScroll):
         """Copy the URL of the bookmark to the clipboard."""
         if self.bookmark is not None:
             if self.bookmark.data.href:
-                to_clipboard(self.bookmark.data.href)
-                self.notify("URL copied to the clipboard")
+                try:
+                    to_clipboard(self.bookmark.data.href)
+                    self.notify("URL copied to the clipboard")
+                except PyperclipException:
+                    self.app.bell()
+                    self.notify(
+                        "Clipboard support not available in your environment.",
+                        severity="error",
+                    )
 
 
 ### details.py ends here
