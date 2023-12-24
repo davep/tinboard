@@ -9,6 +9,10 @@ from webbrowser import open as open_url
 from humanize import naturaltime
 
 ##############################################################################
+# Pyperclip imports.
+from pyperclip import copy as to_clipboard
+
+##############################################################################
 # Textual imports.
 from textual import on
 from textual.app import ComposeResult
@@ -97,6 +101,7 @@ class Details(VerticalScroll):
 
     BINDINGS = [
         Binding("enter", "visit_bookmark", "Visit"),
+        Binding("c", "copy", "Copy to Clipboard"),
         Binding("e", "edit", "Edit"),
         Binding("ctrl+r", "read"),
         Binding("ctrl+v", "public"),
@@ -110,6 +115,7 @@ class Details(VerticalScroll):
     | Key | Description |
     | - | - |
     | <kbd>Enter</kbd> | Visit the current bookmark. |
+    | <kbd>c</kbd> | Copy the URL of the bookmark to the clipboard. |
     | <kbd>e</kbd> | Edit the details of the bookmark. |
     | <kbd>Ctrl</kbd>+<kbd>r</kbd> | Toggle the read/unread status of the bookmark. |
     | <kbd>Ctrl</kbd>+<kbd>v</kbd> | Toggle the visibility of the bookmark. |
@@ -173,7 +179,15 @@ class Details(VerticalScroll):
     def action_visit_bookmark(self) -> None:
         """Visit the current bookmark, if there is one."""
         if self.bookmark is not None:
-            open_url(self.bookmark.data.href)
+            if self.bookmark.data.href:
+                open_url(self.bookmark.data.href)
+
+    def action_copy(self) -> None:
+        """Copy the URL of the bookmark to the clipboard."""
+        if self.bookmark is not None:
+            if self.bookmark.data.href:
+                to_clipboard(self.bookmark.data.href)
+                self.notify("URL copied to the clipboard")
 
 
 ### details.py ends here
