@@ -12,7 +12,7 @@ from typing_extensions import Final, Self
 
 ##############################################################################
 # Pyperclip imports.
-from pyperclip import copy as to_clipboard
+from pyperclip import copy as to_clipboard, PyperclipException
 
 ##############################################################################
 # pytz imports.
@@ -246,8 +246,15 @@ class Bookmarks(OptionListEx):
         """Copy the URL of the current bookmark to the clipboard."""
         if (bookmark := self.highlighted_bookmark) is not None:
             if bookmark.data.href:
-                to_clipboard(bookmark.data.href)
-                self.notify("URL copied to the clipboard")
+                try:
+                    to_clipboard(bookmark.data.href)
+                    self.notify("URL copied to the clipboard")
+                except PyperclipException:
+                    self.app.bell()
+                    self.notify(
+                        "Clipboard support not available in your environment.",
+                        severity="error",
+                    )
 
     def action_new(self) -> None:
         """Post the new bookmark command."""
