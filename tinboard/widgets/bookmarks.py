@@ -11,6 +11,10 @@ from webbrowser import open as open_url
 from typing_extensions import Final, Self
 
 ##############################################################################
+# Pyperclip imports.
+from pyperclip import copy as to_clipboard
+
+##############################################################################
 # pytz imports.
 from pytz import UTC
 
@@ -163,6 +167,7 @@ class Bookmarks(OptionListEx):
     | Key | Command | Description |
     | - | - | - |
     | <kbd>Enter</kbd> | | Visit the current bookmark. |
+    | <kbd>c</kbd> |  | Copy the URL of the bookmark to the clipboard. |
     | <kbd>n</kbd> | `Add a new bookmark` | Create a new bookmark. |
     | <kbd>e</kbd> | `Edit bookmark` | Edit the currently-highlighted bookmark. |
     | <kbd>d</kbd> | `Delete bookmark` | Delete the currently-highlighted bookmark. |
@@ -182,6 +187,7 @@ class Bookmarks(OptionListEx):
 
     BINDINGS = [
         Binding("enter", "visit", "Visit"),
+        Binding("c", "copy"),
         Binding("n", "new", "New"),
         Binding("e", "edit", "Edit"),
         Binding("d", "delete", "Delete"),
@@ -223,13 +229,25 @@ class Bookmarks(OptionListEx):
     _suspend_refresh: var[bool] = var(False)
     """Flag to say if a refresh should be suspended."""
 
+    @property
+    def highlighted_bookmark(self) -> Bookmark | None:
+        """The currently-highlighted bookmark, if there is one."""
+        if self.highlighted is not None:
+            return cast(Bookmark, self.get_option_at_index(self.highlighted))
+        return None
+
     def action_visit(self) -> None:
         """Visit the highlighted bookmark."""
-        if self.highlighted is not None:
-            bookmark = self.get_option_at_index(self.highlighted)
-            assert isinstance(bookmark, Bookmark)
+        if (bookmark := self.highlighted_bookmark) is not None:
             if bookmark.data.href:
                 open_url(bookmark.data.href)
+
+    def action_copy(self) -> None:
+        """Copy the URL of the current bookmark to the clipboard."""
+        if (bookmark := self.highlighted_bookmark) is not None:
+            if bookmark.data.href:
+                to_clipboard(bookmark.data.href)
+                self.notify("URL copied to the clipboard")
 
     def action_new(self) -> None:
         """Post the new bookmark command."""

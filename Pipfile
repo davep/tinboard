@@ -9,6 +9,7 @@ xdg-base-dirs = "*"
 pytz = "*"
 humanize = "*"
 httpx = "*"
+pyperclip = "*"
 
 [dev-packages]
 pre-commit = "*"

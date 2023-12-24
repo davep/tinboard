@@ -1,5 +1,11 @@
 # Tinboard ChangeLog
 
+## v0.4.0
+
+**Released: WiP**
+
+- Added the ability to copy a bookmark's URL to the clipboard.
+
 ## v0.3.0
 
 **Released: 2023-12-23**
