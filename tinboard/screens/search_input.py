@@ -4,7 +4,6 @@
 # Textual imports.
 from textual import on
 from textual.app import ComposeResult
-from textual.containers import Vertical
 from textual.screen import ModalScreen
 from textual.widgets import Input
 
@@ -18,18 +17,11 @@ class SearchInput(ModalScreen[str]):
         align: center middle;
     }
 
-    SearchInput Vertical {
+    SearchInput Input, SearchInput Input:focus {
         border: round $accent;
         width: 60%;
-        height: auto;
-        background: $surface;
-    }
-
-    SearchInput Input, SearchInput Input:focus {
-        margin: 0;
         padding: 1;
-        border: none;
-        background: $surface;
+        height: auto;
     }
     """
 
@@ -37,10 +29,7 @@ class SearchInput(ModalScreen[str]):
 
     def compose(self) -> ComposeResult:
         """Compose the input dialog."""
-        with Vertical():
-            yield Input(
-                placeholder="Case-insensitive text to look for in the bookmarks"
-            )
+        yield Input(placeholder="Case-insensitive text to look for in the bookmarks")
 
     @on(Input.Submitted)
     def search(self) -> None:
