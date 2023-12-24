@@ -5,6 +5,8 @@
 **Released: WiP**
 
 - Added the ability to copy a bookmark's URL to the clipboard.
+- URL field will populate with any URL in the clipboard when adding a new
+  bookmark.
 
 ## v0.3.0
 

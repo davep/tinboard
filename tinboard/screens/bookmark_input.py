@@ -7,6 +7,11 @@ from __future__ import annotations
 ##############################################################################
 # Python imports.
 from datetime import datetime
+from urllib.parse import urlparse
+
+##############################################################################
+# Pyperclip imports.
+from pyperclip import paste as from_clipboard, PyperclipException
 
 ##############################################################################
 # Textual imports.
@@ -152,6 +157,25 @@ class BookmarkInput(ModalScreen[BookmarkData | None]):
             set(self._tags + tags.recommended + tags.popular)
         )
 
+    @work(thread=True)
+    def _suggest_bookmark(self) -> None:
+        """Get a bookmark suggestion by peeking in the clipboard."""
+        try:
+            clipboard = from_clipboard()
+        except PyperclipException:
+            return
+        if clipboard:
+            candidate = urlparse(clipboard)
+            if candidate.scheme in ("http", "https"):
+
+                def _paste():
+                    url = self.query_one("#url", Input)
+                    if not url.value:
+                        url.value = clipboard
+                        self._get_tag_suggestions()
+
+                self.app.call_from_thread(_paste)
+
     def on_mount(self) -> None:
         """Configure the dialog once it's in the DOM."""
         if self._bookmark:
@@ -162,6 +186,8 @@ class BookmarkInput(ModalScreen[BookmarkData | None]):
             self.query_one("#private", Checkbox).value = not self._bookmark.shared
             self.query_one("#read-later", Checkbox).value = self._bookmark.to_read
             self._get_tag_suggestions()
+        else:
+            self._suggest_bookmark()
 
     @on(DescendantFocus, "#url")
     def _remember_url(self, event: DescendantFocus) -> None:
