@@ -10,7 +10,7 @@ build  := $(python) -m build
 black  := $(run) black
 
 ##############################################################################
-# Run the plotter.
+# Run the app.
 .PHONY: run
 run:
 	$(python) -m $(lib)
