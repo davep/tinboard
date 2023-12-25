@@ -9,10 +9,6 @@ from webbrowser import open as open_url
 from humanize import naturaltime
 
 ##############################################################################
-# Pyperclip imports.
-from pyperclip import copy as to_clipboard, PyperclipException
-
-##############################################################################
 # Textual imports.
 from textual import on
 from textual.app import ComposeResult
@@ -24,7 +20,12 @@ from textual.widgets import Label
 
 ##############################################################################
 # Local imports.
-from ..messages import EditBookmark, ToggleBookmarkPublic, ToggleBookmarkRead
+from ..messages import (
+    CopyBookmarkURL,
+    EditBookmark,
+    ToggleBookmarkPublic,
+    ToggleBookmarkRead,
+)
 from .bookmarks import Bookmark
 from .tags import InlineTags
 
@@ -184,17 +185,7 @@ class Details(VerticalScroll):
 
     def action_copy(self) -> None:
         """Copy the URL of the bookmark to the clipboard."""
-        if self.bookmark is not None:
-            if self.bookmark.data.href:
-                try:
-                    to_clipboard(self.bookmark.data.href)
-                    self.notify("URL copied to the clipboard")
-                except PyperclipException:
-                    self.app.bell()
-                    self.notify(
-                        "Clipboard support not available in your environment.",
-                        severity="error",
-                    )
+        self.post_message(CopyBookmarkURL())
 
 
 ### details.py ends here

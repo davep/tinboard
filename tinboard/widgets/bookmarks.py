@@ -11,10 +11,6 @@ from webbrowser import open as open_url
 from typing_extensions import Final, Self
 
 ##############################################################################
-# Pyperclip imports.
-from pyperclip import copy as to_clipboard, PyperclipException
-
-##############################################################################
 # pytz imports.
 from pytz import UTC
 
@@ -40,6 +36,7 @@ from rich.table import Table
 # Local imports.
 from ..messages import (
     AddBookmark,
+    CopyBookmarkURL,
     EditBookmark,
     DeleteBookmark,
     ToggleBookmarkPublic,
@@ -167,7 +164,7 @@ class Bookmarks(OptionListEx):
     | Key | Command | Description |
     | - | - | - |
     | <kbd>Enter</kbd> | | Visit the current bookmark. |
-    | <kbd>c</kbd> |  | Copy the URL of the bookmark to the clipboard. |
+    | <kbd>c</kbd> | `Copy to clipboard` | Copy the URL of the bookmark to the clipboard. |
     | <kbd>n</kbd> | `Add a new bookmark` | Create a new bookmark. |
     | <kbd>e</kbd> | `Edit bookmark` | Edit the currently-highlighted bookmark. |
     | <kbd>d</kbd> | `Delete bookmark` | Delete the currently-highlighted bookmark. |
@@ -244,17 +241,7 @@ class Bookmarks(OptionListEx):
 
     def action_copy(self) -> None:
         """Copy the URL of the current bookmark to the clipboard."""
-        if (bookmark := self.highlighted_bookmark) is not None:
-            if bookmark.data.href:
-                try:
-                    to_clipboard(bookmark.data.href)
-                    self.notify("URL copied to the clipboard")
-                except PyperclipException:
-                    self.app.bell()
-                    self.notify(
-                        "Clipboard support not available in your environment.",
-                        severity="error",
-                    )
+        self.post_message(CopyBookmarkURL())
 
     def action_new(self) -> None:
         """Post the new bookmark command."""

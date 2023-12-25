@@ -1,4 +1,4 @@
-"""Commands related to modifying bookmarks."""
+"""Commands related to the list of bookmarks."""
 
 ##############################################################################
 # Python imports.
@@ -12,6 +12,7 @@ from textual.command import Hit, Hits, Provider
 # Local imports.
 from ..messages import (
     AddBookmark,
+    CopyBookmarkURL,
     EditBookmark,
     DeleteBookmark,
     ToggleBookmarkPublic,
@@ -20,8 +21,8 @@ from ..messages import (
 
 
 ##############################################################################
-class BookmarkModificationCommands(Provider):
-    """A source of commands for making modifications to bookmarks."""
+class BookmarkCommands(Provider):
+    """A source of commands for doing things with bookmarks."""
 
     async def search(self, query: str) -> Hits:
         """Handle a request to search for commands that match the query.
@@ -38,6 +39,11 @@ class BookmarkModificationCommands(Provider):
                 "Add a new bookmark",
                 AddBookmark,
                 "Add a new bookmark to your bookmark collection",
+            ),
+            (
+                "Copy to clipboard",
+                CopyBookmarkURL,
+                "Copy the URL for the current bookmark to the clipboard",
             ),
             ("Edit bookmark", EditBookmark, "Edit the current bookmark"),
             (
@@ -61,4 +67,4 @@ class BookmarkModificationCommands(Provider):
                 )
 
 
-### bookmark_modification.py ends here
+### bookmarks.py ends here
