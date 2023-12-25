@@ -486,13 +486,14 @@ class Main(Screen[None]):
         elif bookmark.data.href:
             try:
                 to_clipboard(bookmark.data.href)
-                self.notify("URL copied to the clipboard")
             except PyperclipException:
                 self.app.bell()
                 self.notify(
                     "Clipboard support not available in your environment.",
                     severity="error",
                 )
+            else:
+                self.notify("URL copied to the clipboard")
 
     @on(AddBookmark)
     def add(self) -> None:
