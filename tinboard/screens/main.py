@@ -6,6 +6,10 @@ from functools import partial
 from webbrowser import open as open_url
 
 ##############################################################################
+# Pyperclip imports.
+from pyperclip import copy as to_clipboard, PyperclipException
+
+##############################################################################
 # Textual imports.
 from textual import on, work
 from textual.app import ComposeResult
@@ -36,6 +40,7 @@ from ..data import (
 )
 from ..messages import (
     AddBookmark,
+    CopyBookmarkURL,
     ClearTags,
     DeleteBookmark,
     EditBookmark,
@@ -471,6 +476,22 @@ class Main(Screen[None]):
                     title="Save Error",
                     severity="error",
                     timeout=8,
+                )
+
+    @on(CopyBookmarkURL)
+    def copy_bookmark_to_clipboard(self) -> None:
+        """Copy the currently-highlighted bookmark to the clipboard."""
+        if (bookmark := self.query_one(Bookmarks).current_bookmark) is None:
+            self.app.bell()
+        elif bookmark.data.href:
+            try:
+                to_clipboard(bookmark.data.href)
+                self.notify("URL copied to the clipboard")
+            except PyperclipException:
+                self.app.bell()
+                self.notify(
+                    "Clipboard support not available in your environment.",
+                    severity="error",
                 )
 
     @on(AddBookmark)

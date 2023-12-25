@@ -35,4 +35,9 @@ class ToggleBookmarkPublic(Command):
     """Toggle the public status of the current bookmark."""
 
 
+##############################################################################
+class CopyBookmarkURL(Command):
+    """Copy the URL for the bookmark to the clipboard."""
+
+
 ### commands.py ends here
