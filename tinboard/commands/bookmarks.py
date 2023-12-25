@@ -1,4 +1,4 @@
-"""Commands related to modifying bookmarks."""
+"""Commands related to the list of bookmarks."""
 
 ##############################################################################
 # Python imports.
@@ -20,8 +20,8 @@ from ..messages import (
 
 
 ##############################################################################
-class BookmarkModificationCommands(Provider):
-    """A source of commands for making modifications to bookmarks."""
+class BookmarkCommands(Provider):
+    """A source of commands for doing things with bookmarks."""
 
     async def search(self, query: str) -> Hits:
         """Handle a request to search for commands that match the query.
@@ -61,4 +61,4 @@ class BookmarkModificationCommands(Provider):
                 )
 
 
-### bookmark_modification.py ends here
+### bookmarks.py ends here

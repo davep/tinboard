@@ -2,7 +2,7 @@
 
 ##############################################################################
 # Local imports.
-from .bookmark_modification import BookmarkModificationCommands
+from .bookmarks import BookmarkCommands
 from .core_commands import CoreCommands
 from .core_filters import CoreFilteringCommands
 from .tags import TagCommands
@@ -10,7 +10,7 @@ from .tags import TagCommands
 ##############################################################################
 # Public symbols.
 __all__ = [
-    "BookmarkModificationCommands",
+    "BookmarkCommands",
     "CoreCommands",
     "CoreFilteringCommands",
     "TagCommands",

@@ -26,7 +26,7 @@ from .confirm import Confirm
 from .help import Help
 from .search_input import SearchInput
 from ..commands import (
-    BookmarkModificationCommands,
+    BookmarkCommands,
     CoreCommands,
     CoreFilteringCommands,
     TagCommands,
@@ -99,7 +99,7 @@ class Main(Screen[None]):
     TITLE = f"Tinboard v{__version__}"
     SUB_TITLE = "A pinboard.in client"
     COMMANDS = {
-        BookmarkModificationCommands,
+        BookmarkCommands,
         CoreCommands,
         CoreFilteringCommands,
         TagCommands,
