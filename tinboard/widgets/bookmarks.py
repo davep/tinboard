@@ -164,7 +164,7 @@ class Bookmarks(OptionListEx):
     | Key | Command | Description |
     | - | - | - |
     | <kbd>Enter</kbd> | | Visit the current bookmark. |
-    | <kbd>c</kbd> |  | Copy the URL of the bookmark to the clipboard. |
+    | <kbd>c</kbd> | `Copy to clipboard` | Copy the URL of the bookmark to the clipboard. |
     | <kbd>n</kbd> | `Add a new bookmark` | Create a new bookmark. |
     | <kbd>e</kbd> | `Edit bookmark` | Edit the currently-highlighted bookmark. |
     | <kbd>d</kbd> | `Delete bookmark` | Delete the currently-highlighted bookmark. |
