@@ -400,7 +400,7 @@ class Bookmarks(OptionListEx):
         # pylint:disable=attribute-defined-outside-init
         self.screen.sub_title = f"{'; '.join(filter_names) or 'All'} ({len(bookmarks)})"
 
-        # Update the display of bookmarks, trying out best to keep the
+        # Update the display of bookmarks, trying our best to keep the
         # currently-highlighted bookmark as the highlighted bookmark (if it
         # makes sense to, of course).
         highlighted_bookmark = (
