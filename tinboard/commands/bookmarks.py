@@ -12,6 +12,7 @@ from textual.command import Hit, Hits, Provider
 # Local imports.
 from ..messages import (
     AddBookmark,
+    CopyBookmarkURL,
     EditBookmark,
     DeleteBookmark,
     ToggleBookmarkPublic,
@@ -38,6 +39,11 @@ class BookmarkCommands(Provider):
                 "Add a new bookmark",
                 AddBookmark,
                 "Add a new bookmark to your bookmark collection",
+            ),
+            (
+                "Copy to clipboard",
+                CopyBookmarkURL,
+                "Copy the URL for the current bookmark to the clipboard",
             ),
             ("Edit bookmark", EditBookmark, "Edit the current bookmark"),
             (
