@@ -104,7 +104,7 @@ class API:
     """Pinboard API client class."""
 
     AGENT: Final[str] = "Tinboard (https://github.com/davep/tinboard)"
-    """The agent strong to use when talking to the API."""
+    """The agent string to use when talking to the API."""
 
     class Error(Exception):
         """Exception for any sort of error calling on the API."""
