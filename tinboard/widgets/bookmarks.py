@@ -124,7 +124,7 @@ class Bookmark(Option):
         """
         return (
             search_text.casefold()
-            in (self._data.description + self._data.extended).casefold()
+            in f"{self._data.description} {self._data.extended} {self._data.tags}".casefold()
         )
 
     @classmethod

@@ -1,5 +1,11 @@
 # Tinboard ChangeLog
 
+## v0.5.0
+
+**Released: WiP**
+
+- Full text search now searches within tags too.
+
 ## v0.4.0
 
 **Released: 2023-12-25**
