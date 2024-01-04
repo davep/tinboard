@@ -2,7 +2,7 @@
 
 ## v0.5.0
 
-**Released: WiP**
+**Released: 2024-01-04**
 
 - Full text search now searches within tags too.
 
