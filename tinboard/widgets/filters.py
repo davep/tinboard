@@ -37,11 +37,10 @@ class Filters(OptionListEx):
         .option-list--option {
             padding: 0 1;
         }
-    }
 
-    /* https://github.com/Textualize/textual/issues/3961 */
-    Filters:focus {
-        border: blank;
+        &:focus {
+            border: blank;
+        }
     }
     """
 
