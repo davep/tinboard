@@ -69,25 +69,25 @@ class Help(ModalScreen[None]):
     DEFAULT_CSS = """
     Help {
         align: center middle;
-    }
 
-    Help Vertical {
-        width: 75%;
-        height: 90%;
-        background: $surface;
-        border: panel $primary;
-        border-title-color: $accent;
-    }
+        Vertical {
+            width: 75%;
+            height: 90%;
+            background: $surface;
+            border: panel $primary;
+            border-title-color: $accent;
+        }
 
-    Help VerticalScroll {
-        scrollbar-gutter: stable;
-    }
+        VerticalScroll {
+            scrollbar-gutter: stable;
+        }
 
-    Help Center {
-        height: auto;
-        width: 100%;
-        border-top: solid $primary;
-        padding-top: 1;
+        Center {
+            height: auto;
+            width: 100%;
+            border-top: solid $primary;
+            padding-top: 1;
+        }
     }
     """
 

@@ -33,14 +33,14 @@ class Filters(OptionListEx):
     Filters {
         height: auto;
         border: blank;
-    }
 
-    Filters:focus {
-        border: blank;
-    }
+        .option-list--option {
+            padding: 0 1;
+        }
 
-    Filters > .option-list--option {
-        padding: 0 1;
+        &:focus {
+            border: blank;
+        }
     }
     """
 
