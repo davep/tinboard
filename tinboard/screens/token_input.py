@@ -21,45 +21,44 @@ from textual.widgets import Button, Label, Input
 class TokenInput(ModalScreen[str | None]):
     """A modal screen that lets the user enter an API token."""
 
-    # TODO: Trying to change this to nested CSS isn't working out so well.
-    # Need to have another run at that and see if it's down to a bug in
-    # Textual.
     DEFAULT_CSS = """
     TokenInput {
         align: center middle;
-    }
 
-    TokenInput Vertical {
-        padding: 1 2;
-        width: 40%;
-        min-width: 70;
-        height: auto;
-        background: $surface;
-        border: panel $error;
-        border-title-color: $text;
-    }
+        &> Vertical {
+            padding: 1 2;
+            width: 40%;
+            min-width: 70;
+            height: auto;
+            background: $surface;
+            border: panel $error;
+            border-title-color: $text;
 
-    TokenInput Label {
-        width: 1fr;
-        height: auto;
-        padding-left: 1;
-        padding-right: 1;
-        margin-bottom: 1;
-    }
+            &> Horizontal {
+                margin-top: 1;
+                height: auto;
+                align-horizontal: right;
 
-    TokenInput > Vertical > Horizontal {
-        margin-top: 1;
-        height: auto;
-        align-horizontal: right;
-    }
+                &> Horizontal {
+                    margin-left: 1;
+                    height: auto;
 
-    TokenInput > Vertical > Horizontal > Horizontal {
-        margin-left: 1;
-        height: auto;
-    }
+                }
 
-    TokenInput Button {
-        margin-right: 1;
+                Button {
+                    margin-right: 1;
+                }
+            }
+
+            Label {
+                width: 1fr;
+                height: auto;
+                padding-left: 1;
+                padding-right: 1;
+                margin-bottom: 1;
+            }
+
+        }
     }
     """
 
