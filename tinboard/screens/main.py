@@ -128,21 +128,21 @@ class Main(Screen[None]):
         width: 2fr;
         height: 1fr;
         min-width: 28;
-    }
 
-    #menu Filters {
-        padding-left: 1;
-    }
+        Filters {
+            padding-left: 1;
+        }
 
-    #menu TagsMenu {
-        height: 1fr;
-    }
+        TagsMenu {
+            height: 1fr;
+        }
 
-    #menu Rule {
-        height: 1;
-        margin: 0 0 0 0;
-        background: $boost;
-        color: $accent 50%;
+        Rule {
+            height: 1;
+            margin: 0 0 0 0;
+            background: $boost;
+            color: $accent 50%;
+        }
     }
 
     #menu:focus-within Rule {

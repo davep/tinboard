@@ -174,11 +174,12 @@ class Bookmarks(OptionListEx):
 
     DEFAULT_CSS = """
     Bookmarks {
-        scrollbar-gutter: stable;
-    }
 
-    Bookmarks > .option-list--option {
-        padding: 0 1 0 1;
+        scrollbar-gutter: stable;
+
+        .option-list--option {
+            padding: 0 1 0 1;
+        }
     }
     """
 

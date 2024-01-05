@@ -33,14 +33,15 @@ class Filters(OptionListEx):
     Filters {
         height: auto;
         border: blank;
+
+        .option-list--option {
+            padding: 0 1;
+        }
     }
 
+    /* https://github.com/Textualize/textual/issues/3961 */
     Filters:focus {
         border: blank;
-    }
-
-    Filters > .option-list--option {
-        padding: 0 1;
     }
     """
 

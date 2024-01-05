@@ -55,48 +55,48 @@ class Details(VerticalScroll):
     DEFAULT_CSS = """
     Details {
         scrollbar-gutter: stable;
-    }
 
-    Details .hidden {
-        visibility: hidden;
-    }
+        .hidden {
+            visibility: hidden;
+        }
 
-    Details .empty {
-        display: none;
-    }
+        .empty {
+            display: none;
+        }
 
-    Details Label {
-        margin: 0 2 1 2;
-        width: 1fr;
-        color: $text;
-    }
+        Label {
+            margin: 0 2 1 2;
+            width: 1fr;
+            color: $text;
+        }
 
-    Details #title {
-        background: $primary;
-        padding: 1 2 1 2;
-        text-align: center;
-    }
+        #title {
+            background: $primary;
+            padding: 1 2 1 2;
+            text-align: center;
+        }
 
-    Details .detail {
-        background: $boost;
-        padding: 1 2 1 2;
-    }
+        .detail {
+            background: $boost;
+            padding: 1 2 1 2;
+        }
 
-    Details #added-ish {
-        margin: 0 2 0 2;
-        padding: 1 2 0 2;
-    }
+        #added-ish {
+            margin: 0 2 0 2;
+            padding: 1 2 0 2;
+        }
 
-    Details #added-exact {
-        margin: 0 2 1 2;
-        padding: 0 2 1 2;
-        text-align: right;
-        color: $text-muted;
-        text-style: italic;
-    }
+        #added-exact {
+            margin: 0 2 1 2;
+            padding: 0 2 1 2;
+            text-align: right;
+            color: $text-muted;
+            text-style: italic;
+        }
 
-    Details InlineTags, Details InlineTags:focus {
-        margin: 0 2 1 2;
+        InlineTags, InlineTags:focus {
+            margin: 0 2 1 2;
+        }
     }
     """
 

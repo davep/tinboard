@@ -16,34 +16,34 @@ class Confirm(ModalScreen[bool]):
     CSS = """
     Confirm {
         align: center middle;
-    }
 
-    Confirm > Vertical {
-        padding: 1 2;
-        height: auto;
-        width: auto;
-        max-width: 80vw;
-        background: $surface;
-        border: panel $error;
-        border-title-color: $text;
-    }
+        &> Vertical {
+            padding: 1 2;
+            height: auto;
+            width: auto;
+            max-width: 80vw;
+            background: $surface;
+            border: panel $error;
+            border-title-color: $text;
+        }
 
-    Confirm Label {
-        width: auto;
-        max-width: 70vw;
-        padding-left: 1;
-        padding-right: 1;
-        margin-bottom: 1;
-    }
+        Label {
+            width: auto;
+            max-width: 70vw;
+            padding-left: 1;
+            padding-right: 1;
+            margin-bottom: 1;
+        }
 
-    Confirm > Vertical > Horizontal {
-        height: auto;
-        width: 100%;
-        align-horizontal: center;
-    }
+        &> Vertical > Horizontal {
+            height: auto;
+            width: 100%;
+            align-horizontal: center;
+        }
 
-    Confirm Button {
-        margin-right: 1;
+        Button {
+            margin-right: 1;
+        }
     }
     """
 

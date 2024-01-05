@@ -21,6 +21,9 @@ from textual.widgets import Button, Label, Input
 class TokenInput(ModalScreen[str | None]):
     """A modal screen that lets the user enter an API token."""
 
+    # TODO: Trying to change this to nested CSS isn't working out so well.
+    # Need to have another run at that and see if it's down to a bug in
+    # Textual.
     DEFAULT_CSS = """
     TokenInput {
         align: center middle;
