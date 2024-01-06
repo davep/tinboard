@@ -25,6 +25,12 @@ class Confirm(ModalScreen[bool]):
             background: $surface;
             border: panel $error;
             border-title-color: $text;
+
+            &> Horizontal {
+                height: auto;
+                width: 100%;
+                align-horizontal: center;
+            }
         }
 
         Label {
@@ -33,12 +39,6 @@ class Confirm(ModalScreen[bool]):
             padding-left: 1;
             padding-right: 1;
             margin-bottom: 1;
-        }
-
-        &> Vertical > Horizontal {
-            height: auto;
-            width: 100%;
-            align-horizontal: center;
         }
 
         Button {
