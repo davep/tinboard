@@ -37,48 +37,46 @@ class BookmarkInput(ModalScreen[BookmarkData | None]):
     DEFAULT_CSS = """
     BookmarkInput {
         align: center middle;
-    }
 
-    BookmarkInput > Vertical {
-        width: 60%;
-        height: auto;
-        background: $surface;
-        border: panel $primary;
-        border-title-color: $accent;
-    }
+        Vertical {
+            width: 60%;
+            height: auto;
+            background: $surface;
+            border: panel $primary;
+            border-title-color: $accent;
+        }
 
-    BookmarkInput #description {
-        height: 10;
-    }
+        #description {
+            height: 10;
+        }
 
-    BookmarkInput > Vertical > Horizontal {
-        height: auto;
-    }
+        #buttons {
+            height: auto;
+            margin-top: 1;
+            align-horizontal: right;
+        }
 
-    BookmarkInput #buttons {
-        margin-top: 1;
-        align-horizontal: right;
-    }
+        Button {
+            margin-right: 1;
+        }
 
-    BookmarkInput Button {
-        margin-right: 1;
-    }
+        Label {
+            margin: 1 0 0 1;
+        }
 
-    BookmarkInput Label {
-        margin: 1 0 0 1;
-    }
+        #flags {
+            height: auto;
+            margin-top: 1;
+        }
 
-    BookmarkInput #flags {
-        margin-top: 1;
-    }
+        #tag-suggestions {
+            display: none;
+            width: 1fr;
+        }
 
-    BookmarkInput #tag-suggestions {
-        display: none;
-        width: 1fr;
-    }
-
-    BookmarkInput #tag-suggestions.got-suggestions {
-        display: block;
+        #tag-suggestions.got-suggestions {
+            display: block;
+        }
     }
     """
 
