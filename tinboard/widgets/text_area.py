@@ -16,10 +16,10 @@ class TextArea(BaseTextArea):
         color: $text;
         padding: 0 2;
         border: tall $background;
-    }
 
-    TextArea:focus {
-        border: tall $accent;
+        &:focus {
+            border: tall $accent;
+        }
     }
     """
 
