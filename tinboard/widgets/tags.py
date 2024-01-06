@@ -44,12 +44,14 @@ class Tags(OptionListEx):
     """
 
     DEFAULT_CSS = """
-    Tags, Tags:focus {
-        border: blank;
-    }
+    Tags {
+        &:focus {
+            border: blank;
+        }
 
-    Tags > .option-list--option {
-        padding: 0 1;
+        &> .option-list--option {
+            padding: 0 1;
+        }
     }
     """
 
