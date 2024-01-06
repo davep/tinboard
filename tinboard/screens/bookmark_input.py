@@ -72,10 +72,10 @@ class BookmarkInput(ModalScreen[BookmarkData | None]):
         #tag-suggestions {
             display: none;
             width: 1fr;
-        }
 
-        #tag-suggestions.got-suggestions {
-            display: block;
+            &.got-suggestions {
+                display: block;
+            }
         }
     }
     """
