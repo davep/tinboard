@@ -1,5 +1,12 @@
 # Tinboard ChangeLog
 
+## v0.6.0
+
+**Released: WiP**
+
+- Fix tag suggestions being confused by a trailing space
+  ([#21](https://github.com/davep/tinboard/issues/21)).
+
 ## v0.5.0
 
 **Released: 2024-01-04**
