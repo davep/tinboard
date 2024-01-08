@@ -32,6 +32,9 @@ class SuggestTags(Suggester):
     _TAGS: Final[Pattern[str]] = re.compile(r"\s+")
     """Regular expression for splitting a string into individual tags."""
 
+    _SUGGESTABLE: Final[Pattern[str]] = re.compile(r".*[^\s]$")
+    """Regular expression to test if a value deserves a suggestion."""
+
     async def get_suggestion(self, value: str) -> str | None:
         """Get suggestions for the given value.
 
@@ -41,15 +44,15 @@ class SuggestTags(Suggester):
         Returns:
             A suggested completion, or `None` if none could be made.
         """
-        try:
-            *other_tags, last_tag = [tag for tag in self._TAGS.split(value) if tag]
-        except ValueError:
-            return None
-        last_tag = last_tag.casefold()
-        used_tags = set(tag.casefold() for tag in other_tags)
-        for candidate_index, candidate in enumerate(self._candidates):
-            if candidate.startswith(last_tag) and candidate not in used_tags:
-                return value[: -len(last_tag)] + self._tags[candidate_index]
+        if self._SUGGESTABLE.match(value):
+            try:
+                *other_tags, last_tag = [tag for tag in self._TAGS.split(value) if tag]
+            except ValueError:
+                return None
+            used_tags = set(tag.casefold() for tag in other_tags)
+            for candidate_index, candidate in enumerate(self._candidates):
+                if candidate.startswith(last_tag) and candidate not in used_tags:
+                    return value[: -len(last_tag)] + self._tags[candidate_index]
         return None
 
 
