@@ -2,7 +2,7 @@
 
 ## v0.6.0
 
-**Released: WiP**
+**Released: 2024-01-10**
 
 - Fix tag suggestions being confused by a trailing space
   ([#21](https://github.com/davep/tinboard/issues/21)).
