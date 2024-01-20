@@ -6,7 +6,13 @@ from __future__ import annotations
 
 ##############################################################################
 # Python imports.
-from typing_extensions import Final, Self
+from typing import Final
+
+##############################################################################
+# Rich imports.
+from rich.console import RenderableType
+from rich.emoji import Emoji
+from rich.table import Table
 
 ##############################################################################
 # Textual imports.
@@ -17,10 +23,8 @@ from textual.reactive import var
 from textual.widgets.option_list import Option, OptionDoesNotExist
 
 ##############################################################################
-# Rich imports.
-from rich.console import RenderableType
-from rich.emoji import Emoji
-from rich.table import Table
+# Backward-compatible typing.
+from typing_extensions import Self
 
 ##############################################################################
 # Local imports.

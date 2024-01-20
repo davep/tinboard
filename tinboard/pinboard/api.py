@@ -8,15 +8,15 @@ from functools import reduce
 from hashlib import md5
 from json import loads
 from operator import or_
-from typing_extensions import Final
-
-##############################################################################
-# pytz imports.
-from pytz import UTC
+from typing import Final
 
 ##############################################################################
 # HTTPX imports.
 import httpx
+
+##############################################################################
+# pytz imports.
+from pytz import UTC
 
 
 ##############################################################################

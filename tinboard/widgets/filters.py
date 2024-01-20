@@ -6,7 +6,11 @@ from __future__ import annotations
 
 ##############################################################################
 # Python imports.
-from typing_extensions import Final
+from typing import Final
+
+##############################################################################
+# Rich imports.
+from rich.table import Table
 
 ##############################################################################
 # Textual imports.
@@ -14,10 +18,6 @@ from textual import on
 from textual.message import Message
 from textual.reactive import var
 from textual.widgets.option_list import Option
-
-##############################################################################
-# Rich imports.
-from rich.table import Table
 
 ##############################################################################
 # Local imports.

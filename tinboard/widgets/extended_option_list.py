@@ -1,13 +1,13 @@
 """A version of Textual's OptionList with some more navigation options."""
 
 ##############################################################################
-# Python imports.
-from typing_extensions import Self
-
-##############################################################################
 # Textual imports.
 from textual.binding import Binding
 from textual.widgets import OptionList
+
+##############################################################################
+# Backward-compatible typing.
+from typing_extensions import Self
 
 
 ##############################################################################

@@ -7,24 +7,21 @@ from webbrowser import open as open_url
 
 ##############################################################################
 # Pyperclip imports.
-from pyperclip import copy as to_clipboard, PyperclipException
+from pyperclip import PyperclipException
+from pyperclip import copy as to_clipboard
 
 ##############################################################################
 # Textual imports.
 from textual import on, work
 from textual.app import ComposeResult
-from textual.containers import Vertical
 from textual.binding import Binding
+from textual.containers import Vertical
 from textual.screen import Screen
 from textual.widgets import Footer, Header, Rule
 
 ##############################################################################
 # Local imports.
 from .. import __version__
-from .bookmark_input import BookmarkInput
-from .confirm import Confirm
-from .help import Help
-from .search_input import SearchInput
 from ..commands import (
     BookmarkCommands,
     CoreCommands,
@@ -32,16 +29,16 @@ from ..commands import (
     TagCommands,
 )
 from ..data import (
+    ExitStates,
+    bookmarks_file,
     load_configuration,
     save_configuration,
     token_file,
-    bookmarks_file,
-    ExitStates,
 )
 from ..messages import (
     AddBookmark,
-    CopyBookmarkURL,
     ClearTags,
+    CopyBookmarkURL,
     DeleteBookmark,
     EditBookmark,
     ShowAlsoTaggedWith,
@@ -50,7 +47,11 @@ from ..messages import (
     ToggleBookmarkRead,
 )
 from ..pinboard import API, BookmarkData
-from ..widgets import Bookmarks, Bookmark, Details, Filters, TagsMenu
+from ..widgets import Bookmark, Bookmarks, Details, Filters, TagsMenu
+from .bookmark_input import BookmarkInput
+from .confirm import Confirm
+from .help import Help
+from .search_input import SearchInput
 
 
 ##############################################################################

@@ -2,7 +2,7 @@
 
 ##############################################################################
 # Python imports.
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from functools import lru_cache
 from json import dumps, loads
 from pathlib import Path

@@ -5,10 +5,10 @@
 from .commands import (
     AddBookmark,
     CopyBookmarkURL,
-    EditBookmark,
     DeleteBookmark,
-    ToggleBookmarkRead,
+    EditBookmark,
     ToggleBookmarkPublic,
+    ToggleBookmarkRead,
 )
 from .tags import ClearTags, ShowAlsoTaggedWith, ShowTaggedWith
 

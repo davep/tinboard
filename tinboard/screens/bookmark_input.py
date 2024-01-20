@@ -11,7 +11,8 @@ from urllib.parse import urlparse
 
 ##############################################################################
 # Pyperclip imports.
-from pyperclip import paste as from_clipboard, PyperclipException
+from pyperclip import PyperclipException
+from pyperclip import paste as from_clipboard
 
 ##############################################################################
 # Textual imports.

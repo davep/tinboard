@@ -13,8 +13,8 @@ from textual.command import Hit, Hits, Provider
 from ..messages import (
     AddBookmark,
     CopyBookmarkURL,
-    EditBookmark,
     DeleteBookmark,
+    EditBookmark,
     ToggleBookmarkPublic,
     ToggleBookmarkRead,
 )

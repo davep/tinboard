@@ -5,25 +5,17 @@
 from collections import Counter
 from dataclasses import dataclass
 from datetime import datetime
-from json import loads, dumps, JSONEncoder
-from typing import Any, Callable, cast
+from json import JSONEncoder, dumps, loads
+from typing import Any, Callable, Final, cast
 from webbrowser import open as open_url
-from typing_extensions import Final, Self
-
-##############################################################################
-# pytz imports.
-from pytz import UTC
 
 ##############################################################################
 # Humanize imports.
 from humanize import naturaltime
 
 ##############################################################################
-# Textual imports.
-from textual.binding import Binding
-from textual.message import Message
-from textual.reactive import var
-from textual.widgets.option_list import Option, OptionDoesNotExist
+# pytz imports.
+from pytz import UTC
 
 ##############################################################################
 # Rich imports.
@@ -33,16 +25,27 @@ from rich.rule import Rule
 from rich.table import Table
 
 ##############################################################################
+# Textual imports.
+from textual.binding import Binding
+from textual.message import Message
+from textual.reactive import var
+from textual.widgets.option_list import Option, OptionDoesNotExist
+
+##############################################################################
+# Backward-compatible typing.
+from typing_extensions import Self
+
+##############################################################################
 # Local imports.
+from ..data import bookmarks_file
 from ..messages import (
     AddBookmark,
     CopyBookmarkURL,
-    EditBookmark,
     DeleteBookmark,
+    EditBookmark,
     ToggleBookmarkPublic,
     ToggleBookmarkRead,
 )
-from ..data import bookmarks_file
 from ..pinboard import API, BookmarkData
 from .extended_option_list import OptionListEx
 

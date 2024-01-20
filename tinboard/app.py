@@ -15,8 +15,8 @@ from textual.binding import Binding
 
 ##############################################################################
 # Local imports.
+from .data import ExitStates, load_configuration, save_configuration, token_file
 from .screens import Main, TokenInput
-from .data import load_configuration, save_configuration, token_file, ExitStates
 
 
 ##############################################################################

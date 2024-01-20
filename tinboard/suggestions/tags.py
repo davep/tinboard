@@ -3,8 +3,7 @@
 ##############################################################################
 # Python imports.
 import re
-from typing import Iterable, Pattern
-from typing_extensions import Final
+from typing import Final, Iterable, Pattern
 
 ##############################################################################
 # Textual imports.

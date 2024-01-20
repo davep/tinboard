@@ -14,7 +14,7 @@ from textual import on
 from textual.app import ComposeResult
 from textual.containers import Horizontal, Vertical
 from textual.screen import ModalScreen
-from textual.widgets import Button, Label, Input
+from textual.widgets import Button, Input, Label
 
 
 ##############################################################################
