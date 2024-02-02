@@ -111,6 +111,16 @@ class Main(Screen[None]):
         layout: horizontal;
     }
 
+    Header {
+        HeaderIcon {
+            visibility: hidden;
+        }
+
+        &.-tall {
+            height: 1;
+        }
+    }
+
     Main > .focus {
         border: none;
         border-left: tall $accent 50%;
