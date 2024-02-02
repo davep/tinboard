@@ -22,13 +22,12 @@ from textual.containers import Horizontal, Vertical
 from textual.events import DescendantBlur, DescendantFocus
 from textual.screen import ModalScreen
 from textual.validation import Length
-from textual.widgets import Button, Checkbox, Input, Label
+from textual.widgets import Button, Checkbox, Input, Label, TextArea
 
 ##############################################################################
 # Local imports.
 from ..pinboard import API, BookmarkData
 from ..suggestions import SuggestTags
-from ..widgets import TextArea
 
 
 ##############################################################################
