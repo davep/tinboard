@@ -50,12 +50,6 @@ If you need help, or have any ideas, please feel free to [raise an
 issue](https://github.com/davep/tinboard/issues) or [start a
 discussion](https://github.com/davep/tinboard/discussions).
 
-## Known issues
-
-- The description editor doesn't word-wrap. (currently waiting on Textual
-  [to add wrapping support for
-  `TextArea`](https://github.com/Textualize/textual/pull/3711)).
-
 ## TODO
 
 Things I'm considering adding or addressing:

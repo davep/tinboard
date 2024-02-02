@@ -6,7 +6,6 @@ from .bookmarks import Bookmark, Bookmarks
 from .details import Details
 from .filters import Filters
 from .tags import InlineTags, TagsMenu
-from .text_area import TextArea
 
 ##############################################################################
 # Public symbols.
@@ -17,7 +16,6 @@ __all__ = [
     "Filters",
     "InlineTags",
     "TagsMenu",
-    "TextArea",
 ]
 
 ### __init__.py ends here
