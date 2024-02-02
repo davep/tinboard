@@ -1,5 +1,14 @@
 # Tinboard ChangeLog
 
+## v0.7.0
+
+**Released: 2024-02-02**
+
+- Updated to textual v0.48.2.
+- Removed the custom `TextArea` in favour of the revamped native Textual
+  one.
+- Made some small cosmetic tweaks.
+
 ## v0.6.0
 
 **Released: 2024-01-10**
