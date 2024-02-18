@@ -106,14 +106,13 @@ class Filters(OptionListEx):
             disabled: Whether the widget description is disabled or not.
         """
         super().__init__(
-            *[
-                Option(self._prompt(option), id=option.lower())
-                for option in self.OPTIONS
-            ],
             name=name,
             id=id,
             classes=classes,
             disabled=disabled,
+        )
+        self.add_options(
+            [Option(self._prompt(option), id=option.lower()) for option in self.OPTIONS]
         )
 
     class CoreFilter(Message):
