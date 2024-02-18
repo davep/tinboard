@@ -1,5 +1,13 @@
 # Tinboard ChangeLog
 
+## v0.8.0
+
+**Released: 2024-02-18**
+
+- Updated to textual v0.51.0.
+- Fixed filter-widget building crash on startup
+  ([#26](https://github.com/davep/tinboard/issues/26)).
+
 ## v0.7.0
 
 **Released: 2024-02-02**
