@@ -376,6 +376,8 @@ class Main(Screen[None]):
             self.query_one(Bookmarks).focus()
         elif isinstance(self.screen.focused, (Bookmarks, TagsMenu)):
             self.query_one(Filters).focus()
+        elif isinstance(self.screen.focused, Filters):
+            self.app.exit()
 
     @on(Filters.ShowAll)
     def action_show_all(self) -> None:
