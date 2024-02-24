@@ -115,6 +115,11 @@ class Filters(OptionListEx):
             [Option(self._prompt(option), id=option.lower()) for option in self.OPTIONS]
         )
 
+    def on_focus(self) -> None:
+        """Try and ensure an option is highlighted when we get focus."""
+        if self.highlighted is None and self.option_count:
+            self.highlighted = 0
+
     class CoreFilter(Message):
         """Base class for the core filters."""
 
