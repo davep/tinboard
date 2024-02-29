@@ -43,7 +43,7 @@ This version of Tinboard is using [Textual](https://textual.textualize.io/) v{te
 ## Licence
 
 Tinboard - A client for the Pinboard bookmarking service.[EOL]
-Copyright (C) 2023 Dave Pearson
+Copyright (C) 2023-2024 Dave Pearson
 
 This program is free software: you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the Free

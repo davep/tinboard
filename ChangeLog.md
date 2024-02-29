@@ -1,8 +1,8 @@
 # Tinboard ChangeLog
 
-## WiP
+## v0.9.0
 
-**Released: WiP**
+**Released: 2024-02-29**
 
 - Pressing <kbd>Escape</kbd> when in the "top-level" widget (so in the
   filters) now exits the application.
