@@ -6,7 +6,7 @@ from functools import partial
 
 ##############################################################################
 # Textual imports.
-from textual.command import Hit, Hits, Provider
+from textual.command import DiscoveryHit, Hit, Hits, Provider
 
 ##############################################################################
 # Local imports.
@@ -16,6 +16,26 @@ from ..widgets import Filters
 ##############################################################################
 class CoreFilteringCommands(Provider):
     """A source of commands for invoking the core filters."""
+
+    async def discover(self) -> Hits:
+        """Handle a request to discover commands.
+
+        Yields:
+            Command discovery hits for the command palette.
+        """
+        for command in Filters.OPTIONS:
+            yield DiscoveryHit(
+                f"Show {command}",
+                partial(
+                    self.screen.post_message,
+                    Filters.core_filter_message(command),
+                ),
+                help=(
+                    "Show all bookmarks"
+                    if command == "All"
+                    else f"Show all bookmarks that are {command.lower()}"
+                ),
+            )
 
     async def search(self, query: str) -> Hits:
         """Handle a request to search for commands that match the query.
