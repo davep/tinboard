@@ -4,6 +4,7 @@
 # Local imports.
 from .commands import (
     AddBookmark,
+    Command,
     CopyBookmarkURL,
     DeleteBookmark,
     EditBookmark,
@@ -17,6 +18,7 @@ from .tags import ClearTags, ShowAlsoTaggedWith, ShowTaggedWith
 __all__ = [
     "AddBookmark",
     "ClearTags",
+    "Command",
     "CopyBookmarkURL",
     "EditBookmark",
     "DeleteBookmark",

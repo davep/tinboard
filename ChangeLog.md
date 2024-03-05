@@ -10,6 +10,9 @@
 - Added filter command discovery hits to the command palette (that is, the
   command palette now pre-populates with all filter-based commands when
   first opened).
+- Added bookmark command discovery hits to the command palette (that is, the
+  command palette now pre-populates with all bookmark-based commands when
+  first opened).
 
 ## v0.9.0
 
