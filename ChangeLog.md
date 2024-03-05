@@ -7,6 +7,9 @@
 - Added tag command discovery hits to the command palette (that is, the
   command palette now pre-populates with all tag-based commands when first
   opened).
+- Added filter command discovery hits to the command palette (that is, the
+  command palette now pre-populates with all filter-based commands when
+  first opened).
 
 ## v0.9.0
 
