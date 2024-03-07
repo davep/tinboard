@@ -1,8 +1,8 @@
 # Tinboard ChangeLog
 
-## WiP
+## v0.10.0
 
-**Released: WiP**
+**Released: 2024-03-07**
 
 - Added tag command discovery hits to the command palette (that is, the
   command palette now pre-populates with all tag-based commands when first
