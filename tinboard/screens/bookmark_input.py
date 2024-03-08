@@ -163,10 +163,10 @@ class BookmarkInput(ModalScreen[BookmarkData | None]):
         except PyperclipException:
             return
         if clipboard:
-            if urlparse(clipboard).scheme in (
+            if urlparse(clipboard).scheme in (  # pylint:disable=no-member
                 "http",
                 "https",
-            ):  # pylint:disable=no-member
+            ):
 
                 def _paste() -> None:
                     url = self.query_one("#url", Input)
