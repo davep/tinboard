@@ -15,13 +15,13 @@ class SearchInput(ModalScreen[str]):
     DEFAULT_CSS = """
     SearchInput {
         align: center middle;
-    }
 
-    SearchInput Input, SearchInput Input:focus {
-        border: round $accent;
-        width: 60%;
-        padding: 1;
-        height: auto;
+        Input, Input:focus {
+            border: round $accent;
+            width: 60%;
+            padding: 1;
+            height: auto;
+        }
     }
     """
 
