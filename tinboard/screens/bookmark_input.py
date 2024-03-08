@@ -168,7 +168,7 @@ class BookmarkInput(ModalScreen[BookmarkData | None]):
                 "https",
             ):  # pylint:disable=no-member
 
-                def _paste():
+                def _paste() -> None:
                     url = self.query_one("#url", Input)
                     if not url.value:
                         url.value = clipboard
