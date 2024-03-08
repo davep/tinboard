@@ -94,7 +94,7 @@ class Bookmark(Option):
             f"[dim]{', '.join(sorted(self.tags, key = str.casefold))}[/]",
         )
         # Combine them and add a rule afterwards.
-        return Group(title, details, Rule(style="dim"))
+        return Group(title, details, Rule(style="dim blue"))
 
     def is_all(self, *checks: Callable[["Bookmark"], bool]) -> bool:
         """Does this bookmark pass all the given tests?
