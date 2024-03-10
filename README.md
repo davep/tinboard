@@ -10,10 +10,23 @@ manage and search your bookmarks in the terminal.
 
 ## Installing
 
+### pipx
+
 The package can be installed using [`pipx`](https://pypa.github.io/pipx/):
 
 ```sh
 $ pipx install tinboard
+```
+
+Once installed run the `tinboard` command.
+
+### Homebrew
+
+The package is available via Homebrew. Use the following commands to install:
+
+```sh
+$ brew tap davep/homebrew
+$ brew install tinboard
 ```
 
 Once installed run the `tinboard` command.
