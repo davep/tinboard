@@ -65,6 +65,8 @@ def run() -> None:
             print("The locally-held copy of your API token has been removed.")
     elif state == ExitStates.TOKEN_NEEDED:
         print("An API token is needed to be able to connect to Pinboard.")
+    elif state == ExitStates.INLINE_SAVE_ERROR:
+        print("There was an error writing the bookmark to the Pinboard server.")
 
 
 ##############################################################################

@@ -16,8 +16,8 @@ from textual.binding import Binding
 ##############################################################################
 # Local imports.
 from .data import ExitStates, load_configuration, save_configuration, token_file
-from .pinboard import API
-from .screens import Main, TokenInput
+from .pinboard import API, BookmarkData
+from .screens import BookmarkInput, Main, TokenInput
 from .widgets.filters import Filters
 
 
@@ -82,6 +82,20 @@ class Tinboard(App[ExitStates]):
             pass
         return None
 
+    async def inline_add(self, result: BookmarkData | None = None) -> None:
+        """Handle the result adding a bookmark inline.
+
+        Args:
+            result: The result data, or `None` if the entry was cancelled.
+        """
+        if result:
+            try:
+                if token := self.api_token:
+                    await API(token).add_bookmark(result)
+            except API.Error:
+                self.exit(ExitStates.INLINE_SAVE_ERROR)
+        self.exit()
+
     def on_mount(self) -> None:
         """Display the main screen.
 
@@ -91,7 +105,10 @@ class Tinboard(App[ExitStates]):
             once the token has been acquired.
         """
         if token := self.api_token:
-            self.push_screen(Main(API(token), self._initial_filter))
+            if self.is_inline:
+                self.push_screen(BookmarkInput(API(token)), callback=self.inline_add)
+            else:
+                self.push_screen(Main(API(token), self._initial_filter))
         else:
             self.push_screen(TokenInput(), callback=self.token_bounce)
 
