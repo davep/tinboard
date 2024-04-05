@@ -18,5 +18,8 @@ class ExitStates(Enum):
     TOKEN_FORGOTTEN = 2
     """The application exited because the user forgot the token."""
 
+    INLINE_SAVE_ERROR = 3
+    """There was an error with an inline save."""
+
 
 ### exit_states.py ends here
