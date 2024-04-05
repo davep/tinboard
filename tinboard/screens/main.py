@@ -205,17 +205,17 @@ class Main(Screen[None]):
 
     def __init__(
         self,
-        api_token: str,
+        api: API,
         default_filters: set[type[Filters.CoreFilter]] | None = None,
     ) -> None:
         """Initialise the main screen.
 
         Args:
-            api_token: The Pinboard API token.
+            api: The Pinboard API.
             default_filters: Any default filters to apply on startup.
         """
         super().__init__()
-        self._api = API(api_token)
+        self._api = api
         """The Pinboard API client."""
         self._default_filters: set[type[Filters.CoreFilter]] = default_filters or set()
         """The default filters to use on startup."""

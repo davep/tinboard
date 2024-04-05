@@ -16,6 +16,7 @@ from textual.binding import Binding
 ##############################################################################
 # Local imports.
 from .data import ExitStates, load_configuration, save_configuration, token_file
+from .pinboard import API
 from .screens import Main, TokenInput
 from .widgets.filters import Filters
 
@@ -90,7 +91,7 @@ class Tinboard(App[ExitStates]):
             once the token has been acquired.
         """
         if token := self.api_token:
-            self.push_screen(Main(token, self._initial_filter))
+            self.push_screen(Main(API(token), self._initial_filter))
         else:
             self.push_screen(TokenInput(), callback=self.token_bounce)
 
