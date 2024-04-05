@@ -106,6 +106,7 @@ class Tinboard(App[ExitStates]):
         """
         if token := self.api_token:
             if self.is_inline:
+                self.use_command_palette = False
                 self.push_screen(BookmarkInput(API(token)), callback=self.inline_add)
             else:
                 self.push_screen(Main(API(token), self._initial_filter))
