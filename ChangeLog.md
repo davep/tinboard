@@ -4,7 +4,7 @@
 
 **Released: WiP**
 
-- updated to Textual v0.55.1
+- Updated to Textual v0.55.1
 
 ## v0.10.0
 
