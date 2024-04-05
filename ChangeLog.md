@@ -5,6 +5,9 @@
 **Released: WiP**
 
 - Updated to Textual v0.55.1
+- Added a `--help` command line argument.
+- Added a `--version` command line argument.
+- Added a `--filter` command line argument.
 
 ## v0.10.0
 

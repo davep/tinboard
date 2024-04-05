@@ -203,14 +203,22 @@ class Main(Screen[None]):
         Binding("/", "search"),
     ]
 
-    def __init__(self, api_token: str) -> None:
+    def __init__(
+        self,
+        api_token: str,
+        default_filters: set[type[Filters.CoreFilter]] | None = None,
+    ) -> None:
         """Initialise the main screen.
 
         Args:
             api_token: The Pinboard API token.
+            default_filters: Any default filters to apply on startup.
         """
         super().__init__()
         self._api = API(api_token)
+        """The Pinboard API client."""
+        self._default_filters: set[type[Filters.CoreFilter]] = default_filters or set()
+        """The default filters to use on startup."""
 
     def compose(self) -> ComposeResult:
         """Lay out the content of the screen."""
@@ -231,6 +239,8 @@ class Main(Screen[None]):
         self.query_one(Bookmarks).loading = True
         self.query_one(TagsMenu).sort_by_count = configuration.sort_tags_by_count
         self.load_bookmarks()
+        for default_filter in self._default_filters:
+            self.post_message(default_filter())
 
     @work(thread=True)
     def load_bookmarks(self) -> None:

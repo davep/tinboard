@@ -13,7 +13,7 @@ black  := $(run) black
 # Run the app.
 .PHONY: run
 run:
-	$(python) -m $(lib)
+	$(python) -m $(lib) --filter public
 
 .PHONY: debug
 debug:
