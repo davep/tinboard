@@ -44,6 +44,11 @@ class BookmarkInput(ModalScreen[BookmarkData | None]):
             background: $surface;
             border: panel $primary;
             border-title-color: $accent;
+
+            &:inline {
+                width: 100%;
+                border: none;
+            }
         }
 
         #description {
