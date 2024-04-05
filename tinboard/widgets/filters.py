@@ -144,6 +144,38 @@ class Filters(OptionListEx):
     class ShowUntagged(CoreFilter):
         """Show the bookmarks that have no tags."""
 
+    _CORE_FILTERS: Final[dict[str, type[CoreFilter]]] = {
+        "all": ShowAll,
+        "unread": ShowUnread,
+        "read": ShowRead,
+        "public": ShowPublic,
+        "private": ShowPrivate,
+        "tagged": ShowTagged,
+        "untagged": ShowUntagged,
+    }
+    """The core filters and their message mappings."""
+
+    @classmethod
+    def core_filter_names(cls) -> list[str]:
+        """The names for the core filters.
+
+        Return:
+            The names of the core filters.
+        """
+        return list(cls._CORE_FILTERS)
+
+    @classmethod
+    def core_filter_type(cls, name: str) -> type[CoreFilter]:
+        """Get a core filter message type based off its name.
+
+        Args:
+            name: The name of the filter.
+
+        Returns:
+            A message type to request that filter be used.
+        """
+        return cls._CORE_FILTERS[name.lower()]
+
     @classmethod
     def core_filter_message(cls, name: str) -> CoreFilter:
         """Get a core filter message based off its name.
@@ -154,15 +186,7 @@ class Filters(OptionListEx):
         Returns:
             A message to request that filter be used.
         """
-        return {
-            "all": cls.ShowAll,
-            "unread": cls.ShowUnread,
-            "read": cls.ShowRead,
-            "public": cls.ShowPublic,
-            "private": cls.ShowPrivate,
-            "tagged": cls.ShowTagged,
-            "untagged": cls.ShowUntagged,
-        }[name.lower()]()
+        return cls.core_filter_type(name)()
 
     @on(OptionListEx.OptionSelected)
     def handle_selection(self, event: OptionListEx.OptionSelected) -> None:

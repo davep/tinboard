@@ -17,6 +17,7 @@ from textual.binding import Binding
 # Local imports.
 from .data import ExitStates, load_configuration, save_configuration, token_file
 from .screens import Main, TokenInput
+from .widgets.filters import Filters
 
 
 ##############################################################################
@@ -28,10 +29,20 @@ class Tinboard(App[ExitStates]):
         Binding("ctrl+p", "command_palette", priority=True),
     ]
 
-    def __init__(self) -> None:
-        """Initialise the application."""
+    def __init__(self, initial_filter: str | None = None) -> None:
+        """Initialise the application.
+
+        Args:
+            initial_filter: The initial filter to apply when starting up.
+        """
         super().__init__()
         self.dark = load_configuration().dark_mode
+        self._initial_filter: set[type[Filters.CoreFilter]] = (
+            set()
+            if initial_filter is None
+            else {Filters.core_filter_type(initial_filter)}
+        )
+        """The initial filter to apply when showing the main screen."""
 
     def token_bounce(self, token: str | None) -> None:
         """Handle the result of asking the user for their API token.
@@ -79,7 +90,7 @@ class Tinboard(App[ExitStates]):
             once the token has been acquired.
         """
         if token := self.api_token:
-            self.push_screen(Main(token))
+            self.push_screen(Main(token, self._initial_filter))
         else:
             self.push_screen(TokenInput(), callback=self.token_bounce)
 

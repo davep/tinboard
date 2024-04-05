@@ -1,15 +1,60 @@
 """The main entry point for the application."""
 
 ##############################################################################
+# Python imports.
+from argparse import ArgumentParser, Namespace
+
+##############################################################################
+# Textual imports.
+from textual import __version__ as __textual_version__
+
+##############################################################################
 # Local imports.
+from . import __version__
 from .app import Tinboard
 from .data import ExitStates
+from .widgets import Filters
+
+
+##############################################################################
+def get_args() -> Namespace:
+    """Get the command line arguments.
+
+    Returns:
+        The parsed command line arguments.
+    """
+    parser = ArgumentParser(
+        prog="tinboard",
+        description="A terminal-based client for Pinboard.",
+        epilog=f"v{__version__}",
+    )
+
+    # Add --filter
+    parser.add_argument(
+        "-f",
+        "--filter",
+        choices=Filters.core_filter_names(),
+        default=Filters.core_filter_names()[0],
+        help="Set the default filter to use on startup",
+    )
+
+    # Add --version
+    parser.add_argument(
+        "-v",
+        "--version",
+        help="Show version information.",
+        action="version",
+        version=f"%(prog)s {__version__} (Textual v{__textual_version__})",
+    )
+
+    # Return the arguments.
+    return parser.parse_args()
 
 
 ##############################################################################
 def run() -> None:
     """Run the application."""
-    state = Tinboard().run()
+    state = Tinboard(get_args().filter).run()
     if state == ExitStates.TOKEN_FORGOTTEN:
         if Tinboard.environmental_token():
             print(
