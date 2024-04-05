@@ -53,7 +53,7 @@ class Tinboard(App[ExitStates]):
         """
         if token:
             token_file().write_text(token, encoding="utf-8")
-            self.push_screen(Main(API(token)))
+            self.push_screen(Main(API(token), self._initial_filter))
         else:
             self.exit(ExitStates.TOKEN_NEEDED)
 
