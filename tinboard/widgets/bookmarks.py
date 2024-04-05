@@ -26,6 +26,7 @@ from rich.table import Table
 
 ##############################################################################
 # Textual imports.
+from textual.app import DEFAULT_COLORS
 from textual.binding import Binding
 from textual.message import Message
 from textual.reactive import var
@@ -59,6 +60,15 @@ class Bookmark(Option):
 
     UNREAD_ICON: Final[str] = Emoji.replace(":see-no-evil_monkey:")
     """The icon to use for an unread bookmark."""
+
+    RULE: Final[Rule] = Rule(
+        style=(
+            DEFAULT_COLORS["dark"].accent.darken(0.15).rich_color.name
+            if DEFAULT_COLORS["dark"].accent is not None
+            else "blue"
+        )
+    )
+    """The `Rule` to use between each bookmark."""
 
     def __init__(self, data: BookmarkData) -> None:
         """Initialise the bookmark.
@@ -94,7 +104,7 @@ class Bookmark(Option):
             f"[dim]{', '.join(sorted(self.tags, key = str.casefold))}[/]",
         )
         # Combine them and add a rule afterwards.
-        return Group(title, details, Rule(style="dim blue"))
+        return Group(title, details, self.RULE)
 
     def is_all(self, *checks: Callable[["Bookmark"], bool]) -> bool:
         """Does this bookmark pass all the given tests?
