@@ -63,7 +63,9 @@ def get_args() -> Namespace:
 def run() -> None:
     """Run the application."""
     args = get_args()
-    state = Tinboard(args.filter).run(inline=args.command == "add")
+    inline_add = args.command == "add"
+    Tinboard.ENABLE_COMMAND_PALETTE = not inline_add
+    state = Tinboard(args.filter).run(inline=inline_add)
     if state == ExitStates.TOKEN_FORGOTTEN:
         if Tinboard.environmental_token():
             print(
