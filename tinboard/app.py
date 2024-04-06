@@ -106,9 +106,15 @@ class Tinboard(App[ExitStates]):
         """
         if token := self.api_token:
             if self.is_inline:
+                # If we're running as an inline application, that means we
+                # should simply be showing the bookmark input screen for
+                # quick input. Note disabling the command palette too, which
+                # has problems with inline mode.
                 self.use_command_palette = False
                 self.push_screen(BookmarkInput(API(token)), callback=self.inline_add)
             else:
+                # We're not in inline mode so we'll show the normal
+                # application screen.
                 self.push_screen(Main(API(token), self._initial_filter))
         else:
             self.push_screen(TokenInput(), callback=self.token_bounce)
