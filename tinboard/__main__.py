@@ -29,6 +29,14 @@ def get_args() -> Namespace:
         epilog=f"v{__version__}",
     )
 
+    # Add the add command
+    parser.add_argument(
+        "command",
+        choices=["add"],
+        nargs="?",
+        help="A command to modify the startup behaviour",
+    )
+
     # Add --filter
     parser.add_argument(
         "-f",
@@ -54,7 +62,8 @@ def get_args() -> Namespace:
 ##############################################################################
 def run() -> None:
     """Run the application."""
-    state = Tinboard(get_args().filter).run()
+    args = get_args()
+    state = Tinboard(args.filter).run(inline=args.command == "add")
     if state == ExitStates.TOKEN_FORGOTTEN:
         if Tinboard.environmental_token():
             print(
@@ -65,6 +74,8 @@ def run() -> None:
             print("The locally-held copy of your API token has been removed.")
     elif state == ExitStates.TOKEN_NEEDED:
         print("An API token is needed to be able to connect to Pinboard.")
+    elif state == ExitStates.INLINE_SAVE_ERROR:
+        print("There was an error writing the bookmark to the Pinboard server.")
 
 
 ##############################################################################

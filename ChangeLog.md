@@ -8,6 +8,8 @@
 - Added a `--help` command line argument.
 - Added a `--version` command line argument.
 - Added a `--filter` command line argument.
+- Added a `add` command line command, which shows the bookmark addition
+  screen "inline" in the terminal, allows adding a new bookmark, then exits.
 
 ## v0.10.0
 
