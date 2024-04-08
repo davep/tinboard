@@ -8,7 +8,7 @@ from functools import reduce
 from hashlib import md5
 from json import loads
 from operator import or_
-from typing import Final
+from typing import Any, Final
 
 ##############################################################################
 # HTTPX imports.
@@ -32,7 +32,9 @@ def parse_time(text: str) -> datetime:
     Pinboard returns times ending in a `Z`. Python doesn't seem capable of
     parsing that. So we swap that for a `+00:00` and then parse.
     """
-    return datetime.fromisoformat(text.removesuffix("Z") + "+00:00")
+    return datetime.fromisoformat(
+        (text.removesuffix("Z") + "+00:00") if "Z" in text else text
+    )
 
 
 ##############################################################################
@@ -73,7 +75,7 @@ class BookmarkData:
             self.hash = md5(self.href.encode()).hexdigest()
 
     @classmethod
-    def from_json(cls, data: dict[str, str]) -> "BookmarkData":
+    def from_json(cls, data: dict[str, Any]) -> "BookmarkData":
         """Create an instance of `BookmarkData` from JSON data.
 
         Args:
@@ -82,14 +84,18 @@ class BookmarkData:
         Returns:
             An instance of `BookmarkData`.
         """
+
+        def boolify(value: str | bool) -> bool:
+            return value == "yes" if isinstance(value, str) else value
+
         return cls(
             href=data.get("href", ""),
             description=data.get("description", ""),
             extended=data.get("extended", ""),
             hash=data.get("hash", ""),
             time=parse_time(data.get("time", "")),
-            shared=data.get("shared", "") == "yes",
-            to_read=data.get("toread", "") == "yes",
+            shared=boolify(data.get("shared", "")),
+            to_read=boolify(data.get("toread", "")),
             tags=data.get("tags", ""),
         )
 
