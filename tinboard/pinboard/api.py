@@ -104,6 +104,11 @@ class BookmarkData:
         """The bookmark in JSON-friendly form."""
         return asdict(self)
 
+    @property
+    def tag_list(self) -> list[str]:
+        """The tags as a list of individual tags."""
+        return self.tags.split()
+
 
 ##############################################################################
 class API:
