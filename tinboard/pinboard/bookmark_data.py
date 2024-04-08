@@ -5,7 +5,7 @@
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from hashlib import md5
-from typing import Any
+from typing import Any, Callable
 
 ##############################################################################
 # Local imports.
@@ -118,6 +118,17 @@ class BookmarkData:
             search_text.casefold()
             in f"{self.description} {self.extended} {self.tags}".casefold()
         )
+
+    def is_all(self, *checks: Callable[["BookmarkData"], bool]) -> bool:
+        """Does this bookmark pass all the given tests?
+
+        Args:
+            checks: The checks to run against the bookmark.
+
+        Returns:
+            `True` if all tests pass, `False` if not.
+        """
+        return all(check(self) for check in checks)
 
 
 ### bookmark_data.py ends here
