@@ -2,13 +2,12 @@
 
 ##############################################################################
 # Python imports.
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 from functools import reduce
-from hashlib import md5
 from json import loads
 from operator import or_
-from typing import Any, Final
+from typing import Final
 
 ##############################################################################
 # HTTPX imports.
@@ -18,96 +17,10 @@ import httpx
 # pytz imports.
 from pytz import UTC
 
-
 ##############################################################################
-def parse_time(text: str) -> datetime:
-    """Parse a time from the Pinboard API.
-
-    Args:
-        text: The text version of the time to parse.
-
-    Returns:
-        The parsed time.
-
-    Pinboard returns times ending in a `Z`. Python doesn't seem capable of
-    parsing that. So we swap that for a `+00:00` and then parse.
-    """
-    return datetime.fromisoformat(
-        (text.removesuffix("Z") + "+00:00") if "Z" in text else text
-    )
-
-
-##############################################################################
-@dataclass
-class BookmarkData:
-    """Pinboard bookmark data."""
-
-    href: str
-    """The URL for the bookmark."""
-
-    description: str
-    """The description (AKA title) of the bookmark."""
-
-    extended: str
-    """The extended description of the bookmark."""
-
-    hash: str
-    """The hash for the bookmark."""
-
-    time: datetime
-    """The time of the bookmark's modification."""
-
-    shared: bool
-    """Is the bookmark shared with the public?"""
-
-    to_read: bool
-    """Is the bookmark unread?"""
-
-    tags: str
-    """The tags for the bookmark, space-separated."""
-
-    def __post_init__(self) -> None:
-        """Final initialisation of the bookmark data.
-
-        If `hash` is empty, one will be generated.
-        """
-        if not self.hash:
-            self.hash = md5(self.href.encode()).hexdigest()
-
-    @classmethod
-    def from_json(cls, data: dict[str, Any]) -> "BookmarkData":
-        """Create an instance of `BookmarkData` from JSON data.
-
-        Args:
-            data: The data to create the bookmark instance from.
-
-        Returns:
-            An instance of `BookmarkData`.
-        """
-
-        def boolify(value: str | bool) -> bool:
-            return value == "yes" if isinstance(value, str) else value
-
-        return cls(
-            href=data.get("href", ""),
-            description=data.get("description", ""),
-            extended=data.get("extended", ""),
-            hash=data.get("hash", ""),
-            time=parse_time(data.get("time", "")),
-            shared=boolify(data.get("shared", "")),
-            to_read=boolify(data.get("toread", "")),
-            tags=data.get("tags", ""),
-        )
-
-    @property
-    def as_json(self) -> dict[str, str]:
-        """The bookmark in JSON-friendly form."""
-        return asdict(self)
-
-    @property
-    def tag_list(self) -> list[str]:
-        """The tags as a list of individual tags."""
-        return self.tags.split()
+# Local imports.
+from .bookmark_data import BookmarkData
+from .parse_time import parse_time
 
 
 ##############################################################################
