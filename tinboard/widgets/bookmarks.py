@@ -3,7 +3,7 @@
 ##############################################################################
 # Python imports.
 from collections import Counter
-from typing import Any, Callable, Final, cast
+from typing import Callable, Final, cast
 from webbrowser import open as open_url
 
 ##############################################################################
