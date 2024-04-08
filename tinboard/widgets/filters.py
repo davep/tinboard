@@ -21,7 +21,7 @@ from textual.widgets.option_list import Option
 
 ##############################################################################
 # Local imports.
-from .bookmarks import Bookmarks
+from ..data import Bookmarks
 from .extended_option_list import OptionListEx
 
 

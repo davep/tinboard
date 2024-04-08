@@ -158,8 +158,11 @@ class Details(VerticalScroll):
                 f"The bookmark is {'[bold]public[/]' if self.bookmark.data.shared else '[dim]private[/]'}"
             )
             self.query_one(InlineTags).show(
-                [(tag, 1) for tag in sorted(self.bookmark.tags, key=str.casefold)]
-            ).set_class(not bool(self.bookmark.tags), "empty")
+                [
+                    (tag, 1)
+                    for tag in sorted(self.bookmark.data.tag_list, key=str.casefold)
+                ]
+            ).set_class(not self.bookmark.data.has_tags, "empty")
 
         finally:
             self.query("*").set_class(not bool(self.bookmark), "hidden")

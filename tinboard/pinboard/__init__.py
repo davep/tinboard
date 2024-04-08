@@ -2,7 +2,8 @@
 
 ##############################################################################
 # Local imports.
-from .api import API, BookmarkData
+from .api import API
+from .bookmark_data import BookmarkData
 
 ##############################################################################
 # Exports.

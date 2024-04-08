@@ -2,7 +2,7 @@
 
 ##############################################################################
 # Local imports.
-from .bookmarks import bookmarks_file
+from .bookmarks import Bookmarks, bookmarks_file
 from .config import load_configuration, save_configuration
 from .exit_states import ExitStates
 from .token import token_file
@@ -11,6 +11,7 @@ from .token import token_file
 # Exports.
 __all__ = [
     "bookmarks_file",
+    "Bookmarks",
     "ExitStates",
     "load_configuration",
     "save_configuration",

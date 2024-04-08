@@ -15,7 +15,13 @@ from textual.binding import Binding
 
 ##############################################################################
 # Local imports.
-from .data import ExitStates, load_configuration, save_configuration, token_file
+from .data import (
+    Bookmarks,
+    ExitStates,
+    load_configuration,
+    save_configuration,
+    token_file,
+)
 from .pinboard import API, BookmarkData
 from .screens import BookmarkInput, Main, TokenInput
 from .widgets.filters import Filters
@@ -111,7 +117,10 @@ class Tinboard(App[ExitStates]):
                 # quick input. Note disabling the command palette too, which
                 # has problems with inline mode.
                 self.use_command_palette = False
-                self.push_screen(BookmarkInput(API(token)), callback=self.inline_add)
+                self.push_screen(
+                    BookmarkInput(API(token), known_tags=Bookmarks().load().tags),
+                    callback=self.inline_add,
+                )
             else:
                 # We're not in inline mode so we'll show the normal
                 # application screen.

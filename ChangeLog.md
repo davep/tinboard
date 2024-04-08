@@ -10,6 +10,7 @@
 - Added a `--filter` command line argument.
 - Added a `add` command line command, which shows the bookmark addition
   screen "inline" in the terminal, allows adding a new bookmark, then exits.
+- Internal: changed the way that bookmarks are held and managed.
 
 ## v0.10.0
 
