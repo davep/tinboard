@@ -94,18 +94,6 @@ class Bookmark(Option):
         # Combine them and add a rule afterwards.
         return Group(title, details, self.RULE)
 
-    @classmethod
-    def from_json(cls, data: dict[str, Any]) -> "Bookmark":
-        """Create a bookmark from some JSON data.
-
-        Args:
-            data: The data to create the bookmark from.
-
-        Returns:
-            The `Bookmark` instance.
-        """
-        return cls(BookmarkData.from_json(data))
-
     @property
     def data(self) -> BookmarkData:
         """The bookmark as the underlying bookmark data."""
