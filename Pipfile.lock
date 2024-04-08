@@ -149,20 +149,20 @@
         },
         "textual": {
             "hashes": [
-                "sha256:4dac6401a4a1eaaf107a29560b28dc09d9a9867988c8fbb7763cfee4118e9664",
-                "sha256:b48052410d83b26944536511626ded9fa60e2bd7e4ca3d7e3b71865dba25a965"
+                "sha256:5d3efe7266aafc7b5a52ad622a155963fd22ec6043c769ecd7142490a3d9e17e",
+                "sha256:cff8ee993796fc02430aacd7f148894478ff7f3a6b77865da525a8965ecc0ccf"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.8' and python_version < '4.0'",
-            "version": "==0.55.1"
+            "version": "==0.56.2"
         },
         "typing-extensions": {
             "hashes": [
-                "sha256:69b1a937c3a517342112fb4c6df7e72fc39a38e7891a5730ed4985b5214b5475",
-                "sha256:b0abd7c89e8fb96f98db18d86106ff1d90ab692004eb746cf6eda2682f91b3cb"
+                "sha256:83f085bd5ca59c80295fc2a82ab5dac679cbe02b9f33f7d83af68e241bea51b0",
+                "sha256:c1f94d72897edaf4ce775bb7558d5b79d8126906a14ea5ed1635921406c0387a"
             ],
             "markers": "python_version >= '3.8'",
-            "version": "==4.10.0"
+            "version": "==4.11.0"
         },
         "uc-micro-py": {
             "hashes": [
@@ -604,11 +604,11 @@
         },
         "jaraco.context": {
             "hashes": [
-                "sha256:4dad2404540b936a20acedec53355bdaea223acb88fd329fa6de9261c941566e",
-                "sha256:5d9e95ca0faa78943ed66f6bc658dd637430f16125d86988e77844c741ff2f11"
+                "sha256:3e16388f7da43d384a1a7cd3452e72e14732ac9fe459678773a3608a812bf266",
+                "sha256:c2f67165ce1f9be20f32f650f25d8edfc1646a8aeee48ae06fb35f90763576d2"
             ],
-            "markers": "python_version >= '3.7'",
-            "version": "==4.3.0"
+            "markers": "python_version >= '3.8'",
+            "version": "==5.3.0"
         },
         "jaraco.functools": {
             "hashes": [
@@ -1078,12 +1078,12 @@
         },
         "textual": {
             "hashes": [
-                "sha256:4dac6401a4a1eaaf107a29560b28dc09d9a9867988c8fbb7763cfee4118e9664",
-                "sha256:b48052410d83b26944536511626ded9fa60e2bd7e4ca3d7e3b71865dba25a965"
+                "sha256:5d3efe7266aafc7b5a52ad622a155963fd22ec6043c769ecd7142490a3d9e17e",
+                "sha256:cff8ee993796fc02430aacd7f148894478ff7f3a6b77865da525a8965ecc0ccf"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.8' and python_version < '4.0'",
-            "version": "==0.55.1"
+            "version": "==0.56.2"
         },
         "textual-dev": {
             "hashes": [
@@ -1122,11 +1122,11 @@
         },
         "typing-extensions": {
             "hashes": [
-                "sha256:69b1a937c3a517342112fb4c6df7e72fc39a38e7891a5730ed4985b5214b5475",
-                "sha256:b0abd7c89e8fb96f98db18d86106ff1d90ab692004eb746cf6eda2682f91b3cb"
+                "sha256:83f085bd5ca59c80295fc2a82ab5dac679cbe02b9f33f7d83af68e241bea51b0",
+                "sha256:c1f94d72897edaf4ce775bb7558d5b79d8126906a14ea5ed1635921406c0387a"
             ],
             "markers": "python_version >= '3.8'",
-            "version": "==4.10.0"
+            "version": "==4.11.0"
         },
         "uc-micro-py": {
             "hashes": [
