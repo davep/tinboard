@@ -84,6 +84,11 @@ class BookmarkData:
         """The tags as a list of individual tags."""
         return self.tags.split()
 
+    @property
+    def has_tags(self) -> bool:
+        """Does the bookmark have any tags?"""
+        return bool(self.tag_list)
+
     def is_tagged(self, *tags: str) -> bool:
         """Is this bookmark tagged with the given tags?
 
