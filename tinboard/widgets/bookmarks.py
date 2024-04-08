@@ -150,9 +150,7 @@ class Bookmark(Option):
         Returns:
             The `Bookmark` instance.
         """
-        if "time" in data:
-            data["time"] = datetime.fromisoformat(data["time"])
-        return cls(BookmarkData(**data))
+        return cls(BookmarkData.from_json(data))
 
     @property
     def data(self) -> BookmarkData:
