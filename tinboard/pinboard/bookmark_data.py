@@ -84,5 +84,35 @@ class BookmarkData:
         """The tags as a list of individual tags."""
         return self.tags.split()
 
+    def is_tagged(self, *tags: str) -> bool:
+        """Is this bookmark tagged with the given tags?
+
+        Args:
+            tags: The tags to check for.
+
+        Returns:
+            `True` if the bookmark has all the tags, `False` if not.
+        """
+        return {tag.casefold() for tag in tags}.issubset(
+            {tag.casefold() for tag in self.tag_list}
+        )
+
+    def has_text(self, search_text: str) -> bool:
+        """Does the bookmark contain the given text?
+
+        Note that this is a case-insensitive test.
+
+        Args:
+            search_text: The text to search for.
+
+        Returns:
+            `True` if the text was found anywhere in the bookmark, `False`
+            if not.
+        """
+        return (
+            search_text.casefold()
+            in f"{self.description} {self.extended} {self.tags}".casefold()
+        )
+
 
 ### bookmark_data.py ends here
