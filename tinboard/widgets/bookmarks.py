@@ -383,6 +383,14 @@ class Bookmarks(OptionListEx):
 
         Args:
             api: The API to download via.
+
+        Note:
+            As a side-effect of calling this method, the local copy of all
+            the bookmarks will be overwritten.
+
+        Raises:
+            API.RequestError: If there was an error downloading.
+            OSError: If there was an error saving the bookmarks.
         """
         self.bookmarks = (await LocalBookmarks().download(api)).save()
         return self
