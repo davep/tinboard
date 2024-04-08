@@ -3,19 +3,12 @@
 ##############################################################################
 # Python imports.
 from collections import Counter
-from dataclasses import dataclass
-from datetime import datetime
-from json import JSONEncoder, dumps, loads
 from typing import Any, Callable, Final, cast
 from webbrowser import open as open_url
 
 ##############################################################################
 # Humanize imports.
 from humanize import naturaltime
-
-##############################################################################
-# pytz imports.
-from pytz import UTC
 
 ##############################################################################
 # Rich imports.
@@ -38,7 +31,7 @@ from typing_extensions import Self
 
 ##############################################################################
 # Local imports.
-from ..data import bookmarks_file
+from ..data import Bookmarks as LocalBookmarks
 from ..messages import (
     AddBookmark,
     CopyBookmarkURL,
@@ -80,11 +73,6 @@ class Bookmark(Option):
         super().__init__(self.prompt, id=data.hash)
 
     @property
-    def tags(self) -> list[str]:
-        """The tags of the bookmark, as a list."""
-        return self._data.tags.split()
-
-    @property
     def prompt(self) -> Group:
         """The prompt for the bookmark."""
         # Create the title and icons line.
@@ -101,44 +89,10 @@ class Bookmark(Option):
         details.add_column()
         details.add_row(
             f"[dim][i]{naturaltime(self._data.time)}[/][/]",
-            f"[dim]{', '.join(sorted(self.tags, key = str.casefold))}[/]",
+            f"[dim]{', '.join(sorted(self.data.tag_list, key = str.casefold))}[/]",
         )
         # Combine them and add a rule afterwards.
         return Group(title, details, self.RULE)
-
-    def is_all(self, *checks: Callable[["Bookmark"], bool]) -> bool:
-        """Does this bookmark pass all the given tests?
-
-        Args:
-            checks: The checks to run against the bookmark.
-
-        Returns:
-            `True` if all tests pass, `False` if not.
-        """
-        return all(check(self) for check in checks)
-
-    def is_tagged(self, *tags: str) -> bool:
-        """Is this bookmark tagged with the given tags?
-
-        Args:
-            tags: The tags to check for.
-
-        Returns:
-            `True` if the bookmark has all the tags, `False` if not.
-        """
-        return {tag.casefold() for tag in tags}.issubset(
-            {tag.casefold() for tag in self.tags}
-        )
-
-    def has_text(self, search_text: str) -> bool:
-        """Does the bookmark contain the given text?
-
-        Note that this is a case-insensitive test.
-        """
-        return (
-            search_text.casefold()
-            in f"{self._data.description} {self._data.extended} {self._data.tags}".casefold()
-        )
 
     @classmethod
     def from_json(cls, data: dict[str, Any]) -> "Bookmark":
@@ -204,11 +158,8 @@ class Bookmarks(OptionListEx):
         Binding("ctrl+v", "public"),
     ]
 
-    bookmarks: var[list[Bookmark]] = var([], always_update=True, init=False)
-    """The list of all known bookmarks."""
-
-    last_downloaded: var[datetime | None] = var(None)
-    """When the bookmarks were last downloaded."""
+    bookmarks: var[LocalBookmarks] = var(LocalBookmarks, always_update=True, init=False)
+    """The local copy of all the bookmarks."""
 
     read_filter: var[bool | None] = var(None, init=False)
     """The filter for the read status.
@@ -275,45 +226,6 @@ class Bookmarks(OptionListEx):
         """Post the public/private toggle command."""
         self.post_message(ToggleBookmarkPublic())
 
-    @dataclass
-    class Counts:
-        """The various bookmark counts."""
-
-        all: int = 0
-        """The count of all the bookmarks."""
-        unread: int = 0
-        """The count of unread bookmarks."""
-        read: int = 0
-        """The count of read bookmarks."""
-        private: int = 0
-        """The count of private bookmarks."""
-        public: int = 0
-        """The count of public bookmarks."""
-        untagged: int = 0
-        """The count of untagged bookmarks."""
-        tagged: int = 0
-        """The count of tagged bookmarks."""
-
-    @property
-    def counts(self) -> Counts:
-        """The various counts for the bookmarks."""
-        # TODO: cache this.
-        counts = self.Counts(all=len(self.bookmarks))
-        for bookmark in self.bookmarks:
-            if bookmark.data.to_read:
-                counts.unread += 1
-            else:
-                counts.read += 1
-            if bookmark.data.shared:
-                counts.public += 1
-            else:
-                counts.private += 1
-            if bookmark.tags:
-                counts.tagged += 1
-            else:
-                counts.untagged += 1
-        return counts
-
     @property
     def tags(self) -> list[str]:
         """All known tags in the current displayed set of bookmarks"""
@@ -321,15 +233,7 @@ class Bookmarks(OptionListEx):
         for n in range(self.option_count):
             bookmark = self.get_option_at_index(n)
             assert isinstance(bookmark, Bookmark)
-            tags |= set(tag for tag in bookmark.tags)
-        return sorted(list(tags), key=str.casefold)
-
-    @property
-    def all_tags(self) -> list[str]:
-        """All known tags for every saved bookmark."""
-        tags: set[str] = set()
-        for bookmark in self.bookmarks:
-            tags |= set(tag for tag in bookmark.tags)
+            tags |= set(tag for tag in bookmark.data.tag_list)
         return sorted(list(tags), key=str.casefold)
 
     @staticmethod
@@ -351,20 +255,8 @@ class Bookmarks(OptionListEx):
         for n in range(self.option_count):
             bookmark = self.get_option_at_index(n)
             assert isinstance(bookmark, Bookmark)
-            tags.extend(bookmark.tags)
+            tags.extend(bookmark.data.tag_list)
         return sorted(list(Counter(tags).items()), key=self._tag_key)
-
-    @property
-    def latest_modification(self) -> datetime | None:
-        """The latest modification time found in all the bookmarks.
-
-        If there are no bookmarks this will be `None`.
-        """
-        return (
-            sorted([bookmark.data.time for bookmark in self.bookmarks])[-1]
-            if self.bookmarks
-            else None
-        )
 
     class Changed(Message):
         """Message to say the visible collection of bookmarks has changed."""
@@ -372,7 +264,11 @@ class Bookmarks(OptionListEx):
     def _refresh_bookmarks(self) -> Self:
         """Refresh the display of bookmarks.
 
-        Takes core filters and tags into account."""
+        Takes core filters and tags into account.
+
+        Returns:
+            Self.
+        """
 
         # GTFO if we're not supposed to refresh right now.
         if self._suspend_refresh:
@@ -380,21 +276,19 @@ class Bookmarks(OptionListEx):
 
         # Build up the filters.
         filter_names: list[str] = []
-        filter_checks: list[Callable[[Bookmark], bool]] = []
+        filter_checks: list[Callable[[BookmarkData], bool]] = []
         if self.public_filter is not None:
             filter_names.append("Public" if self.public_filter else "Private")
-            filter_checks.append(
-                lambda bookmark: bookmark.data.shared is self.public_filter
-            )
+            filter_checks.append(lambda bookmark: bookmark.shared is self.public_filter)
         if self.read_filter is not None:
             filter_names.append("Read" if self.read_filter else "Unread")
             filter_checks.append(
-                lambda bookmark: bookmark.data.to_read is not self.read_filter
+                lambda bookmark: bookmark.to_read is not self.read_filter
             )
         if self.has_tags_filter is not None:
             filter_names.append("Tagged" if self.has_tags_filter else "Untagged")
             filter_checks.append(
-                lambda bookmark: bool(bookmark.tags) is self.has_tags_filter
+                lambda bookmark: bookmark.has_tags is self.has_tags_filter
             )
         if self.tag_filter:
             filter_names.append(f"Tagged {', '.join(sorted(self.tag_filter))}")
@@ -421,7 +315,9 @@ class Bookmarks(OptionListEx):
             else None
         )
         try:
-            return self.clear_options().add_options(bookmarks)
+            return self.clear_options().add_options(
+                Bookmark(bookmark) for bookmark in bookmarks
+            )
         finally:
             self.post_message(self.Changed())
             if bookmarks:
@@ -480,50 +376,18 @@ class Bookmarks(OptionListEx):
         """Refresh the display when all bookmarks are updated."""
         self._refresh_bookmarks()
 
-    @property
-    def as_json(self) -> dict[str, Any]:
-        """All the bookmarks as a JSON-friendly list."""
-        return {
-            "last_downloaded": None
-            if self.last_downloaded is None
-            else self.last_downloaded.isoformat(),
-            "bookmarks": [bookmark.data.as_json for bookmark in self.bookmarks],
-        }
+    def load(self) -> Self:
+        """Load the bookmarks from the local file.
 
-    def load_json(self, data: dict[str, Any]) -> None:
-        """Load the bookmarks from the given JSON data.
-
-        Args:
-            data: The data to load.
+        Returns:
+            Self.
         """
-        self.last_downloaded = datetime.fromisoformat(data["last_downloaded"])
-        self.bookmarks = [
-            Bookmark.from_json(bookmark) for bookmark in data["bookmarks"]
-        ]
-
-    def load(self) -> bool:
-        """Load the bookmarks from the local file."""
-        if bookmarks_file().exists():
-            self.load_json(loads(bookmarks_file().read_text(encoding="utf-8")))
-            return True
-        return False
-
-    class _Encoder(JSONEncoder):
-        """Encoder for turning the bookmarks into JSON data."""
-
-        def default(self, o: object) -> Any:
-            """Handle unknown values.
-
-            Args:
-                o: The object to handle.
-            """
-            return datetime.isoformat(o) if isinstance(o, datetime) else o
+        self.bookmarks = self.bookmarks.load()
+        return self
 
     def save(self) -> Self:
         """Save the bookmarks to the local file."""
-        bookmarks_file().write_text(
-            dumps(self.as_json, indent=4, cls=self._Encoder), encoding="utf-8"
-        )
+        self.bookmarks.save()
         return self
 
     async def download_all(self, api: API) -> Self:
@@ -532,27 +396,7 @@ class Bookmarks(OptionListEx):
         Args:
             api: The API to download via.
         """
-        self.bookmarks = [Bookmark(bookmark) for bookmark in await api.all_bookmarks()]
-        self.last_downloaded = datetime.now(UTC)
-        return self
-
-    def _add_bookmark(self, bookmark: BookmarkData) -> Self:
-        """Add a bookmark we don't know about locally.
-
-        Args:
-            bookmark: The bookmark to add.
-
-        Returns:
-            Self.
-        """
-        self.bookmarks.insert(0, Bookmark(bookmark))
-        self.bookmarks = self.bookmarks  # Force a watch.
-        self.highlighted = 0
-        # Assume this addition is the "last download" time. While it is true
-        # that the user may have been editing in another client, or on the
-        # web, meanwhile, in almost every case this will be the correct
-        # approach to take *and* they can do a refresh if they want anyway.
-        self.last_downloaded = datetime.now(UTC)
+        self.bookmarks = (await LocalBookmarks().download(api)).save()
         return self
 
     def update_bookmark(self, new_data: BookmarkData) -> Self:
@@ -564,24 +408,7 @@ class Bookmarks(OptionListEx):
         Returns:
             Self.
         """
-
-        try:
-            bookmark = self.get_option(new_data.hash)
-        except OptionDoesNotExist:
-            # We didn't find that bookmark; it must be new.
-            return self._add_bookmark(new_data)
-
-        # It's an existing bookmark so let's update it.
-        assert isinstance(bookmark, Bookmark)
-        bookmark.data = new_data
-        self.replace_option_prompt(new_data.hash, bookmark.prompt)
-
-        # Assume this edit is the "last download" time. While it is true
-        # that the user may have been editing in another client, or on the
-        # web, meanwhile, in almost every case this will be the correct
-        # approach to take *and* they can do a refresh if they want anyway.
-        self.last_downloaded = datetime.now(UTC)
-
+        self.bookmarks.update_bookmark(new_data).mark_downloaded()
         return self._refresh_bookmarks()
 
     def remove_bookmark(self, bookmark: Bookmark) -> Self:
@@ -593,13 +420,7 @@ class Bookmarks(OptionListEx):
         Returns:
             Self.
         """
-        del self.bookmarks[self.bookmarks.index(bookmark)]
-        self.bookmarks = self.bookmarks  # Force a watch.
-        # Assume this deletion is the "last download" time. While it is true
-        # that the user may have been editing in another client, or on the
-        # web, meanwhile, in almost every case this will be the correct
-        # approach to take *and* they can do a refresh if they want anyway.
-        self.last_downloaded = datetime.now(UTC)
+        self.bookmarks = self.bookmarks.remove_bookmark(bookmark.data).mark_downloaded()
         return self
 
     @property

@@ -279,7 +279,7 @@ class Main(Screen[None]):
     @work
     async def maybe_redownload(self) -> None:
         """Redownload the bookmarks if they look newer on the server."""
-        if last_download := self.query_one(Bookmarks).last_downloaded:
+        if last_download := self.query_one(Bookmarks).bookmarks.last_downloaded:
             try:
                 latest_on_server = await self._api.last_update()
             except API.Error:
@@ -311,7 +311,7 @@ class Main(Screen[None]):
         # TODO: if getting the counts starts to look like it causes a wee
         # pause, perhaps calculate them from within a threaded worker.
         # Mostly though, so far, I'm not seeing any impact.
-        self.query_one(Filters).counts = bookmarks.counts
+        self.query_one(Filters).counts = bookmarks.bookmarks.counts
         bookmarks.focus()
 
     @on(Bookmarks.OptionHighlighted, "Bookmarks")
@@ -488,7 +488,9 @@ class Main(Screen[None]):
                 )
                 self.app.push_screen(
                     BookmarkInput(
-                        self._api, result, known_tags=self.query_one(Bookmarks).all_tags
+                        self._api,
+                        result,
+                        known_tags=self.query_one(Bookmarks).bookmarks.tags,
                     ),
                     callback=self.post_result,
                 )
@@ -522,7 +524,9 @@ class Main(Screen[None]):
     def add(self) -> None:
         """Add a new bookmark."""
         self.app.push_screen(
-            BookmarkInput(self._api, known_tags=self.query_one(Bookmarks).all_tags),
+            BookmarkInput(
+                self._api, known_tags=self.query_one(Bookmarks).bookmarks.tags
+            ),
             callback=self.post_result,
         )
 
@@ -536,7 +540,7 @@ class Main(Screen[None]):
                 BookmarkInput(
                     self._api,
                     bookmark.data,
-                    known_tags=self.query_one(Bookmarks).all_tags,
+                    known_tags=self.query_one(Bookmarks).bookmarks.tags,
                 ),
                 callback=self.post_result,
             )
