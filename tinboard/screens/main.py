@@ -257,7 +257,7 @@ class Main(Screen[None]):
             the bookmarks will be overwritten.
         """
         try:
-            (await self.query_one(Bookmarks).download_all(self._api)).save()
+            await self.query_one(Bookmarks).download_all(self._api)
         except API.RequestError:
             self.app.bell()
             self.notify(
