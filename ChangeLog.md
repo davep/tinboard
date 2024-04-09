@@ -1,5 +1,12 @@
 # Tinboard ChangeLog
 
+## v0.11.1
+
+**Released: 2024-04-09**
+
+- Fix an issue introduced in v0.11.0 where the "to read" flag wasn't being
+  correctly read back in from the local copy of the bookmarks.
+
 ## v0.11.0
 
 **Released: 2024-04-09**

@@ -63,6 +63,11 @@ class BookmarkData:
         def boolify(value: str | bool) -> bool:
             return value == "yes" if isinstance(value, str) else value
 
+        # An accident of how this developed means that the Pinboard API
+        # calls this `toread`, but I locally call it `to_read`, and I ended
+        # up using the same code to pull the data back from JSON. So...
+        to_read = "to_read" if "to_read" in data else "toread"
+
         return cls(
             href=data.get("href", ""),
             description=data.get("description", ""),
@@ -70,7 +75,7 @@ class BookmarkData:
             hash=data.get("hash", ""),
             time=parse_time(data.get("time", "")),
             shared=boolify(data.get("shared", "")),
-            to_read=boolify(data.get("toread", "")),
+            to_read=boolify(data.get(to_read, "")),
             tags=data.get("tags", ""),
         )
 
