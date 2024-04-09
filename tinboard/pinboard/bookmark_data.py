@@ -66,7 +66,8 @@ class BookmarkData:
         # An accident of how this developed means that the Pinboard API
         # calls this `toread`, but I locally call it `to_read`, and I ended
         # up using the same code to pull the data back from JSON. So...
-        to_read = "to_read" if "to_read" in data else "toread"
+        if (to_read := "to_read") not in data:
+            to_read = "toread"
 
         return cls(
             href=data.get("href", ""),
