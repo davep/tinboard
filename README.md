@@ -57,6 +57,19 @@ main application you can see this by pressing <kbd>F1</kbd>.
 
 ![Tinboard Help](https://raw.githubusercontent.com/davep/tinboard/main/images/help.png)
 
+### Quick add on the command line
+
+Tinboard has a (currently experimental) quick inline add feature. If you
+run:
+
+```sh
+$ tinboard add
+```
+
+an inline version of the bookmark editor will be shown in your terminal,
+allowing you to quickly add a bookmark and then carry on without running up
+the full application.
+
 ## Getting help
 
 If you need help, or have any ideas, please feel free to [raise an

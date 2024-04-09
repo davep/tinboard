@@ -1,10 +1,10 @@
 # Tinboard ChangeLog
 
-## WiP
+## v0.11.0
 
-**Released: WiP**
+**Released: 2024-04-09**
 
-- Updated to Textual v0.55.1
+- Updated to Textual v0.56.3
 - Added a `--help` command line argument.
 - Added a `--version` command line argument.
 - Added a `--filter` command line argument.
