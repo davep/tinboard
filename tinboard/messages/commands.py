@@ -40,4 +40,9 @@ class CopyBookmarkURL(Command):
     """Copy the URL for the bookmark to the clipboard."""
 
 
+##############################################################################
+class CheckWaybackMachine(Command):
+    """Check if the current bookmark is in the Wayback Machine."""
+
+
 ### commands.py ends here

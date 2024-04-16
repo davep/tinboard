@@ -4,6 +4,7 @@
 # Local imports.
 from .commands import (
     AddBookmark,
+    CheckWaybackMachine,
     Command,
     CopyBookmarkURL,
     DeleteBookmark,
@@ -19,6 +20,7 @@ __all__ = [
     "AddBookmark",
     "ClearTags",
     "Command",
+    "CheckWaybackMachine",
     "CopyBookmarkURL",
     "EditBookmark",
     "DeleteBookmark",

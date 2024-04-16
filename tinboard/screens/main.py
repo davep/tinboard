@@ -37,6 +37,7 @@ from ..data import (
 )
 from ..messages import (
     AddBookmark,
+    CheckWaybackMachine,
     ClearTags,
     CopyBookmarkURL,
     DeleteBookmark,
@@ -52,6 +53,7 @@ from .bookmark_input import BookmarkInput
 from .confirm import Confirm
 from .help import Help
 from .search_input import SearchInput
+from .wayback_checker import WaybackChecker
 
 
 ##############################################################################
@@ -519,6 +521,14 @@ class Main(Screen[None]):
                 )
             else:
                 self.notify("URL copied to the clipboard")
+
+    @on(CheckWaybackMachine)
+    def check_wayback(self) -> None:
+        """Check if the currently-highlighted bookmark is archives."""
+        if (bookmark := self.query_one(Bookmarks).current_bookmark) is None:
+            self.app.bell()
+        elif bookmark.data.href:
+            self.app.push_screen(WaybackChecker(bookmark.data.href))
 
     @on(AddBookmark)
     def add(self) -> None:

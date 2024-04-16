@@ -19,7 +19,6 @@ from rich.table import Table
 
 ##############################################################################
 # Textual imports.
-from textual import work
 from textual.app import DEFAULT_COLORS
 from textual.binding import Binding
 from textual.message import Message
@@ -35,6 +34,7 @@ from typing_extensions import Self
 from ..data import Bookmarks as LocalBookmarks
 from ..messages import (
     AddBookmark,
+    CheckWaybackMachine,
     CopyBookmarkURL,
     DeleteBookmark,
     EditBookmark,
@@ -42,7 +42,6 @@ from ..messages import (
     ToggleBookmarkRead,
 )
 from ..pinboard import API, BookmarkData
-from ..wayback import WaybackError, availability
 from .extended_option_list import OptionListEx
 
 
@@ -218,32 +217,9 @@ class Bookmarks(OptionListEx):
         """Post the public/private toggle command."""
         self.post_message(ToggleBookmarkPublic())
 
-    @work
     async def action_check_wayback(self) -> None:
         """Check if the bookmark is in the Wayback Machine."""
-        if (bookmark := self.highlighted_bookmark) is not None:
-            if bookmark.data.href:
-                try:
-                    if (wayback := await availability(bookmark.data.href)).available:
-                        self.notify(
-                            "The URL is available in the Wayback Machine.\n\n"
-                            f"{bookmark.data.href}\n\n"
-                            f"Timestamp: {wayback.timestamp}\n"
-                            f"Status: {wayback.status}",
-                            title="Available",
-                            timeout=10,
-                        )
-                    else:
-                        self.notify(
-                            "The URL is not available in the Wayback Machine.\n\n"
-                            f"{bookmark.data.href}",
-                            title="Not available",
-                            severity="warning",
-                        )
-                except WaybackError as error:
-                    self.notify(
-                        str(error), title="Wayback Machine Error", severity="error"
-                    )
+        self.post_message(CheckWaybackMachine())
 
     @property
     def tags(self) -> list[str]:
