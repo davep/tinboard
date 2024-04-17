@@ -52,6 +52,10 @@ class WaybackChecker(ModalScreen[None]):
                     margin-right: 1;
                 }
             }
+
+            LoadingIndicator {
+                background: 0%;
+            }
         }
 
         #view {
