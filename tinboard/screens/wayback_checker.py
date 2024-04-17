@@ -25,7 +25,7 @@ from ..wayback import Availability, WaybackError, availability
 
 ##############################################################################
 class WaybackChecker(ModalScreen[None]):
-    """Dialog for checking if a URL is in the Wayback machine."""
+    """Dialog for checking if a URL is in the Wayback Machine."""
 
     CSS = """
     WaybackChecker {
@@ -145,7 +145,7 @@ class WaybackChecker(ModalScreen[None]):
                 self._wayback_data.timestamp, "%Y%m%d%H%M%S"
             )
             self.query_one(Label).update(
-                "The bookmark is available in the Wayback machine.\n\n"
+                "The bookmark is available in the Wayback Machine.\n\n"
                 f"It was last archived {archived_on} with status "
                 f"{self._wayback_data.status}.\n\n"
                 f"That was {naturaltime(archived_on)}."
@@ -155,7 +155,7 @@ class WaybackChecker(ModalScreen[None]):
             self.query_one("#close", Button).variant = "success"
         else:
             self.query_one(Label).update(
-                "The bookmark is not available in the Wayback machine."
+                "The bookmark is not available in the Wayback Machine."
             )
             self.query_one("#close", Button).variant = "warning"
             self.set_class(True, "not-available")
