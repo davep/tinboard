@@ -58,12 +58,21 @@ class WaybackChecker(ModalScreen[None]):
             display: none;
         }
 
-        &.available #view {
-            display: block;
+        &.available {
+            &> Vertical {
+                border: panel $success;
+                background: $success-darken-2;
+                border-title-color: $text;
+            }
+            #view {
+                display: block;
+            }
         }
 
         &.not-available > Vertical {
             border: panel $warning;
+            background: $warning-darken-2;
+            border-title-color: $text;
         }
 
         &.error > Vertical {
@@ -132,10 +141,13 @@ class WaybackChecker(ModalScreen[None]):
                 f"{naturaltime(archived_on)}."
             )
             self.set_class(True, "available")
+            self.query_one("#view", Button).variant = "success"
+            self.query_one("#close", Button).variant = "success"
         else:
             self.query_one(Label).update(
                 "The bookmark is not available in the Wayback machine."
             )
+            self.query_one("#close", Button).variant = "warning"
             self.set_class(True, "not-available")
 
     @on(Button.Pressed, "#view")
