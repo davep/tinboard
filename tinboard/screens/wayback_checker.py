@@ -1,10 +1,14 @@
 """Dialog for checking if a bookmark is in the Wayback Machine."""
 
 ##############################################################################
+# Python imports.
+from webbrowser import open as view_url
+
+##############################################################################
 # Textual imports.
 from textual import on, work
 from textual.app import ComposeResult
-from textual.containers import Center, Vertical
+from textual.containers import Horizontal, Vertical
 from textual.reactive import var
 from textual.screen import ModalScreen
 from textual.widgets import Button, Label
@@ -35,9 +39,22 @@ class WaybackChecker(ModalScreen[None]):
                 margin-bottom: 1;
             }
 
-            Center {
+            Horizontal {
                 width: 100%;
+                height: auto;
+                align: center middle;
+                #view {
+                    margin-right: 1;
+                }
             }
+        }
+
+        #view {
+            display: none;
+        }
+
+        &.available #view {
+            display: block;
         }
 
         &.not-available > Vertical {
@@ -74,8 +91,9 @@ class WaybackChecker(ModalScreen[None]):
             dialog.loading = True
             dialog.border_title = "Wayback Machine"
             yield Label("Loading...")
-            with Center():
-                yield Button("OK")
+            with Horizontal():
+                yield Button("View archive", id="view")
+                yield Button("Close", id="close")
 
     @work
     async def check_availability(self) -> None:
@@ -103,13 +121,23 @@ class WaybackChecker(ModalScreen[None]):
                 "The bookmark is available in the Wayback machine.\n\n"
                 f"It was last archived {self._wayback_data.timestamp}."
             )
+            self.set_class(True, "available")
         else:
             self.query_one(Label).update(
                 "The bookmark is not available in the Wayback machine."
             )
             self.set_class(True, "not-available")
 
-    @on(Button.Pressed)
+    @on(Button.Pressed, "#view")
+    def view_wayback_archive(self) -> None:
+        """View the archive in the Wayback Machine."""
+        if (
+            isinstance(self._wayback_data, Availability)
+            and self._wayback_data.available
+        ):
+            view_url(self._wayback_data.archive_url)
+
+    @on(Button.Pressed, "#close")
     def action_close(self) -> None:
         """Close the help screen."""
         self.dismiss(None)
