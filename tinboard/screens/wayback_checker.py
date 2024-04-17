@@ -144,7 +144,7 @@ class WaybackChecker(ModalScreen[None]):
                 "The bookmark is available in the Wayback machine.\n\n"
                 f"It was last archived {archived_on} with status "
                 f"{self._wayback_data.status}.\n\n"
-                f"{naturaltime(archived_on)}."
+                f"That was {naturaltime(archived_on)}."
             )
             self.set_class(True, "available")
             self.query_one("#view", Button).variant = "success"
