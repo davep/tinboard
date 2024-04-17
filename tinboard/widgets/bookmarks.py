@@ -34,6 +34,7 @@ from typing_extensions import Self
 from ..data import Bookmarks as LocalBookmarks
 from ..messages import (
     AddBookmark,
+    CheckWaybackMachine,
     CopyBookmarkURL,
     DeleteBookmark,
     EditBookmark,
@@ -121,6 +122,7 @@ class Bookmarks(OptionListEx):
     | <kbd>n</kbd> | `Add a new bookmark` | Create a new bookmark. |
     | <kbd>e</kbd> | `Edit bookmark` | Edit the currently-highlighted bookmark. |
     | <kbd>d</kbd> | `Delete bookmark` | Delete the currently-highlighted bookmark. |
+    | <kbd>w</kbd> |  | Check if the bookmark is in the Wayback Machine. |
     | <kbd>Ctrl</kbd>+<kbd>r</kbd> | `Toggle read/unread` | Toggle the read/unread status of the currently-highlighted bookmark. |
     | <kbd>Ctrl</kbd>+<kbd>v</kbd> | `Toggle public/private` | Toggle the visibility of the currently-highlighted bookmark. |
     """
@@ -142,6 +144,7 @@ class Bookmarks(OptionListEx):
         Binding("n", "new", "New"),
         Binding("e", "edit", "Edit"),
         Binding("d", "delete", "Delete"),
+        Binding("w", "check_wayback", "Wayback?"),
         Binding("ctrl+r", "read"),
         Binding("ctrl+v", "public"),
     ]
@@ -213,6 +216,10 @@ class Bookmarks(OptionListEx):
     def action_public(self) -> None:
         """Post the public/private toggle command."""
         self.post_message(ToggleBookmarkPublic())
+
+    async def action_check_wayback(self) -> None:
+        """Check if the bookmark is in the Wayback Machine."""
+        self.post_message(CheckWaybackMachine())
 
     @property
     def tags(self) -> list[str]:
