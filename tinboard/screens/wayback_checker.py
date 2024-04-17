@@ -86,6 +86,8 @@ class WaybackChecker(ModalScreen[None]):
     }
     """
 
+    AUTO_FOCUS = "#close"
+
     BINDINGS = [("escape", "close")]
 
     _wayback_data: var[Availability | WaybackError | None] = var(None, init=False)
