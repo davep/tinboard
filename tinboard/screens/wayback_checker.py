@@ -77,6 +77,8 @@ class WaybackChecker(ModalScreen[None]):
 
         &.error > Vertical {
             border: panel $error;
+            background: $error-darken-2;
+            border-title-color: $text;
         }
 
         &.loading > Vertical {
@@ -130,7 +132,9 @@ class WaybackChecker(ModalScreen[None]):
             self.query_one(Label).update(
                 f"Error talking to the Wayback Machine.\n\n{self._wayback_data}"
             )
+            self.set_class(True, "error")
             self.query_one("#dialog", Vertical).set_class(True, "error")
+            self.query_one("#close", Button).variant = "error"
             return
         if self._wayback_data.available:
             archived_on = datetime.strptime(
