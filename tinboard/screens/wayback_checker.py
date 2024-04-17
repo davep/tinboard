@@ -2,7 +2,12 @@
 
 ##############################################################################
 # Python imports.
+from datetime import datetime
 from webbrowser import open as view_url
+
+##############################################################################
+# Humanize imports.
+from humanize import naturaltime
 
 ##############################################################################
 # Textual imports.
@@ -117,9 +122,14 @@ class WaybackChecker(ModalScreen[None]):
             self.query_one("#dialog", Vertical).set_class(True, "error")
             return
         if self._wayback_data.available:
+            archived_on = datetime.strptime(
+                self._wayback_data.timestamp, "%Y%m%d%H%M%S"
+            )
             self.query_one(Label).update(
                 "The bookmark is available in the Wayback machine.\n\n"
-                f"It was last archived {self._wayback_data.timestamp}."
+                f"It was last archived {archived_on} with status "
+                f"{self._wayback_data.status}.\n\n"
+                f"{naturaltime(archived_on)}."
             )
             self.set_class(True, "available")
         else:
