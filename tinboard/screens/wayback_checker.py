@@ -15,7 +15,7 @@ from ..wayback import Availability, WaybackError, availability
 
 
 ##############################################################################
-class WaybackChecker(ModalScreen):
+class WaybackChecker(ModalScreen[None]):
     """Dialog for checking if a URL is in the Wayback machine."""
 
     CSS = """
