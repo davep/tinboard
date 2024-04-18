@@ -100,9 +100,14 @@ class WaybackChecker(ModalScreen[None]):
     """The wayback availability data."""
 
     def __init__(self, url: str) -> None:
-        """Initialise the dialog."""
+        """Initialise the dialog.
+
+        Args:
+            url: The URL to look up on the Wayback Machine.
+        """
         super().__init__(classes="loading")
         self._url = url
+        """The URL to check the Wayback Machine status for."""
 
     def on_mount(self) -> None:
         """Once the DOM is ready, start looking up the URL."""
