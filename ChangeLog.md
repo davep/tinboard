@@ -1,8 +1,8 @@
 # Tinboard ChangeLog
 
-## Not Released
+## v0.12.0
 
-**Released: Not Released**
+**Released: 2024-04-18**
 
 - Added a dialog for checking if a bookmark is in the Wayback Machine.
   ([#44](https://github.com/davep/tinboard/pull/44))
