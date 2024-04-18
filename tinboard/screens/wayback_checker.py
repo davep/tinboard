@@ -97,7 +97,11 @@ class WaybackChecker(ModalScreen[None]):
     BINDINGS = [("escape", "close")]
 
     _wayback_data: var[Availability | WaybackError | None] = var(None, init=False)
-    """The wayback availability data."""
+    """The wayback availability data.
+
+    This can either be `Availability` data, a `WaybackError` if there was a
+    problem, or `None`.
+    """
 
     def __init__(self, url: str) -> None:
         """Initialise the dialog.
