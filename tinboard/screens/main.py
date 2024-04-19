@@ -511,6 +511,13 @@ class Main(Screen[None]):
         if (bookmark := self.query_one(Bookmarks).current_bookmark) is None:
             self.app.bell()
         elif bookmark.data.href:
+            # Use Textual's own "copy to clipboard" as this will help push
+            # it through remote connections.
+            self.app.copy_to_clipboard(bookmark.data.href)
+            # Having done that, try and use pyperclip anyway, because it's
+            # possible we're within a terminal that doesn't support the
+            # above, but this will at best finally get it there, and at
+            # worst overwrite the clipboard with the same data.
             try:
                 to_clipboard(bookmark.data.href)
             except PyperclipException:
