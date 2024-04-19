@@ -64,7 +64,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 class Help(ModalScreen[None]):
     """The help screen."""
 
-    DEFAULT_CSS = """
+    CSS = """
     Help {
         align: center middle;
 

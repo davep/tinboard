@@ -21,7 +21,7 @@ from textual.widgets import Button, Input, Label
 class TokenInput(ModalScreen[str | None]):
     """A modal screen that lets the user enter an API token."""
 
-    DEFAULT_CSS = """
+    CSS = """
     TokenInput {
         align: center middle;
 

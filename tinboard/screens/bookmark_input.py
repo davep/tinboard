@@ -34,7 +34,7 @@ from ..suggestions import SuggestTags
 class BookmarkInput(ModalScreen[BookmarkData | None]):
     """The bookmark editing dialog."""
 
-    DEFAULT_CSS = """
+    CSS = """
     BookmarkInput {
         align: center middle;
 

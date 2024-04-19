@@ -12,7 +12,7 @@ from textual.widgets import Input
 class SearchInput(ModalScreen[str]):
     """A modal screen to get search text from the user."""
 
-    DEFAULT_CSS = """
+    CSS = """
     SearchInput {
         align: center middle;
 
