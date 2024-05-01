@@ -6,6 +6,8 @@
 
 - When copying a bookmark to the clipboard, a best effort is now made to
   ensure it'll also make it over a remote connection.
+- Small cosmetic change to the bookmark input dialog to properly line up the
+  description content with the rest of the inputs.
 
 ## v0.12.0
 
