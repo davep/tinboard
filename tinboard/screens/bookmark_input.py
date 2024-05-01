@@ -51,6 +51,10 @@ class BookmarkInput(ModalScreen[BookmarkData | None]):
             }
         }
 
+        TextArea {
+            padding: 0 2 0 2;
+        }
+
         #description {
             height: 10;
         }
