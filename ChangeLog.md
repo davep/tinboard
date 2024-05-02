@@ -1,8 +1,8 @@
 # Tinboard ChangeLog
 
-## WiP
+## v0.13.0
 
-**Released: WiP**
+**Released: 2024-05-02**
 
 - When copying a bookmark to the clipboard, a best effort is now made to
   ensure it'll also make it over a remote connection.
