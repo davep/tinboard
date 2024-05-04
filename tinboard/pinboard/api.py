@@ -169,6 +169,16 @@ class API:
         Returns:
             The suggested tags for the URL.
         """
+        # The suggestions come back as a list of dictionaries, but really it
+        # makes more sense to have the suggestions as a single dictionary.
+        # So here I use `reduce` to create that one dictionary, and I use
+        # the fact that `or_` is the functional equivalent of `|` and `d1 |
+        # d2` will result in a combined dictionary.
+        #
+        # In other words:
+        #
+        # >>> reduce(or_, [{"a":1}, {"b":2}])
+        # {'a': 1, 'b': 2}
         suggestions = reduce(or_, loads(await self._call("posts", "suggest", url=url)))
         return self.TagSuggestions(
             url,
