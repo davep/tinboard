@@ -24,13 +24,13 @@ class Availability(NamedTuple):
     url: str
     """The URL that was checked."""
 
-    archive_url: str
+    archive_url: str = ""
     """The URL that is available in the archive."""
 
-    timestamp: str
+    timestamp: str = ""
     """The timestamp of the archive entry."""
 
-    status: str
+    status: str = ""
     """The status in the archive."""
 
 
@@ -76,13 +76,7 @@ async def availability(url: str) -> Availability:
                 timestamp=result["archived_snapshots"]["closest"]["timestamp"],
                 status=result["archived_snapshots"]["closest"]["status"],
             )
-        return Availability(
-            available=False,
-            url=url,
-            archive_url="",
-            timestamp="",
-            status="",
-        )
+        return Availability(available=False, url=url)
 
 
 ### api.py ends here
