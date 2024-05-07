@@ -63,19 +63,19 @@ def get_args() -> Namespace:
 def run() -> None:
     """Run the application."""
     args = get_args()
-    state = Tinboard(args.filter).run(inline=args.command == "add")
-    if state == ExitStates.TOKEN_FORGOTTEN:
-        if Tinboard.environmental_token():
-            print(
-                "It looks like your token is held in an environment variable. "
-                "If you wish to have that forgotten you will need to remove it yourself."
-            )
-        else:
-            print("The locally-held copy of your API token has been removed.")
-    elif state == ExitStates.TOKEN_NEEDED:
-        print("An API token is needed to be able to connect to Pinboard.")
-    elif state == ExitStates.INLINE_SAVE_ERROR:
-        print("There was an error writing the bookmark to the Pinboard server.")
+    match Tinboard(args.filter).run(inline=args.command == "add"):
+        case ExitStates.TOKEN_FORGOTTEN:
+            if Tinboard.environmental_token():
+                print(
+                    "It looks like your token is held in an environment variable. "
+                    "If you wish to have that forgotten you will need to remove it yourself."
+                )
+            else:
+                print("The locally-held copy of your API token has been removed.")
+        case ExitStates.TOKEN_NEEDED:
+            print("An API token is needed to be able to connect to Pinboard.")
+        case ExitStates.INLINE_SAVE_ERROR:
+            print("There was an error writing the bookmark to the Pinboard server.")
 
 
 ##############################################################################
