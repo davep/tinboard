@@ -26,6 +26,7 @@ from textual.widgets import Button, Checkbox, Input, Label, TextArea
 
 ##############################################################################
 # Local imports.
+from ..data import load_configuration
 from ..pinboard import API, BookmarkData
 from ..suggestions import SuggestTags
 
@@ -113,6 +114,7 @@ class BookmarkInput(ModalScreen[BookmarkData | None]):
 
     def compose(self) -> ComposeResult:
         """Compose the layout of the dialog."""
+        config = load_configuration()
         with Vertical() as dialog:
             dialog.border_title = "Bookmark"
             yield Label("URL:")
@@ -131,8 +133,8 @@ class BookmarkInput(ModalScreen[BookmarkData | None]):
             )
             yield Label(id="tag-suggestions")
             with Horizontal(id="flags"):
-                yield Checkbox("Private", id="private")
-                yield Checkbox("Read Later", id="read-later")
+                yield Checkbox("Private", config.default_private, id="private")
+                yield Checkbox("Read Later", config.default_read_later, id="read-later")
             with Horizontal(id="buttons"):
                 yield Button("Save [dim]\\[F2][/]", id="save")
                 yield Button("Cancel [dim]\\[Esc][/]", id="cancel")
