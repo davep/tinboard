@@ -32,6 +32,11 @@ class CoreCommands(Provider):
             "Forget your Pinboard API token and remove the local copies of all bookmarks.",
         ),
         (
+            "Settings",
+            "settings",
+            "Modify the application settings and defaults.",
+        ),
+        (
             "Toggle details",
             "toggle_details",
             "Toggle the display of the details of the highlighted bookmark.",

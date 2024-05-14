@@ -1,5 +1,18 @@
 # Tinboard ChangeLog
 
+## WiP
+
+**Released: WiP**
+
+- Added the ability to set the default value for new bookmark privacy.
+  ([#50](https://github.com/davep/tinboard/pull/50))
+- Added the ability to set the default value for new bookmark read-later
+  status. ([#50](https://github.com/davep/tinboard/pull/50))
+- Added an applications settings dialog.
+  ([#50](https://github.com/davep/tinboard/pull/50))
+- Added a command palette command for the applications settings dialog.
+  ([#50](https://github.com/davep/tinboard/pull/50))
+
 ## v0.13.0
 
 **Released: 2024-05-02**
