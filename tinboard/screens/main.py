@@ -53,6 +53,7 @@ from .bookmark_input import BookmarkInput
 from .confirm import Confirm
 from .help import Help
 from .search_input import SearchInput
+from .settings import Settings
 from .wayback_checker import WaybackChecker
 
 
@@ -84,6 +85,7 @@ class Main(Screen[None]):
     | <kbd>F2</kbd> | `Visit Pinboard` | Visit the main Pinboard website. |
     | <kbd>F3</kbd> | | Toggle the bookmark details pane. |
     | <kbd>F4</kbd> | | Toggle the sort order of the tags menu. |
+    | <kbd>F11</kbd> | `Settings` | Edit the application settings. |
     | <kbd>F12</kbd> | `Logout` | Forgot your API token and remove the local bookmark cache. |
     | <kbd>Ctrl</kbd>+<kbd>l</kbd> | `Redownload/refresh bookmarks` | Reload the local bookmarks from Pinboard. |
     | <kbd>Ctrl</kbd>+<kbd>q</kbd> | `Quit the application` | Shockingly... quit the application! |
@@ -197,6 +199,7 @@ class Main(Screen[None]):
         Binding("f2", "goto_pinboard"),
         Binding("f3", "toggle_details"),
         Binding("f4", "toggle_tag_order"),
+        Binding("f11", "settings"),
         Binding("f12", "logout"),
         Binding("ctrl+l", "redownload"),
         Binding("escape", "escape"),
@@ -360,6 +363,10 @@ class Main(Screen[None]):
             token_file().unlink(True)
             bookmarks_file().unlink(True)
             self.app.exit(ExitStates.TOKEN_FORGOTTEN)
+
+    def action_settings(self) -> None:
+        """Edit the application settings."""
+        self.app.push_screen(Settings())
 
     def action_logout(self) -> None:
         """Perform the logout action."""
