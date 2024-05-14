@@ -26,6 +26,12 @@ class Configuration:
     sort_tags_by_count: bool = False
     """Should the tag menu sort on count?"""
 
+    default_private: bool = True
+    """Should a new bookmark be private by default?"""
+
+    default_read_later: bool = True
+    """should a bookmark be marked for reading later by default?"""
+
 
 ##############################################################################
 def configuration_file() -> Path:
