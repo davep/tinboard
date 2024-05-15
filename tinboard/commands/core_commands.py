@@ -29,17 +29,17 @@ class CoreCommands(Provider):
         (
             "Logout",
             "logout",
-            "Forget your Pinboard API token and remove the local copies of all bookmarks.",
+            "Forget your Pinboard API token and remove the local copies of all bookmarks",
         ),
         (
             "Settings",
             "settings",
-            "Modify the application settings and defaults.",
+            "Modify the application settings and defaults",
         ),
         (
             "Toggle details",
             "toggle_details",
-            "Toggle the display of the details of the highlighted bookmark.",
+            "Toggle the display of the details of the highlighted bookmark",
         ),
     )
 
