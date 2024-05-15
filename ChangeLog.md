@@ -1,8 +1,8 @@
 # Tinboard ChangeLog
 
-## WiP
+## v0.14.0
 
-**Released: WiP**
+**Released: 2024-05-14**
 
 - Added the ability to set the default value for new bookmark privacy.
   ([#50](https://github.com/davep/tinboard/pull/50))
