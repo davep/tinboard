@@ -61,11 +61,11 @@ async def availability(url: str) -> Availability:
                 headers={"user-agent": API.AGENT},
             )
         except httpx.RequestError as error:
-            raise WaybackError(str(error))
+            raise WaybackError(str(error)) from error
         try:
             response.raise_for_status()
         except httpx.HTTPStatusError as error:
-            raise WaybackError(str(error))
+            raise WaybackError(str(error)) from error
 
         result = loads(response.text)
         if "archived_snapshots" in result and "closest" in result["archived_snapshots"]:
