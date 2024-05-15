@@ -57,7 +57,7 @@ class Settings(ModalScreen[None]):
                 "Bookmarks are private by default", config.default_private, id="private"
             )
             yield Checkbox(
-                "Bookmarks read-later by default",
+                "Bookmarks are read-later by default",
                 config.default_read_later,
                 id="read-later",
             )
