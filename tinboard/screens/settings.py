@@ -27,6 +27,7 @@ class Settings(ModalScreen[None]):
             background: $surface;
             border: panel $primary;
             border-title-color: $accent;
+            padding-top: 1;
         }
 
         #buttons {
@@ -37,7 +38,7 @@ class Settings(ModalScreen[None]):
         }
 
         Checkbox {
-            background: $surface;
+            min-width: 1fr;
         }
 
         Button {
