@@ -21,7 +21,7 @@ class SuggestTags(Suggester):
             tags: The collection of tags to suggest from.
         """
         # Note that we're going to be doing a case-insensitive match, but
-        # the suggester API doesn't provided the raw value if you're not
+        # the suggester API doesn't provide the raw value if you're not
         # being case-sensitive; so here we say we *are* going to be case
         # sensitive and then in get_suggestion we'll handle it ourselves.
         super().__init__(use_cache=True, case_sensitive=True)
