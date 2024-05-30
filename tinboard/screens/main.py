@@ -86,7 +86,7 @@ class Main(Screen[None]):
     | <kbd>F3</kbd> | | Toggle the bookmark details pane. |
     | <kbd>F4</kbd> | | Toggle the sort order of the tags menu. |
     | <kbd>F11</kbd> | `Settings` | Edit the application settings. |
-    | <kbd>F12</kbd> | `Logout` | Forgot your API token and remove the local bookmark cache. |
+    | <kbd>F12</kbd> | `Logout` | Forget your API token and remove the local bookmark cache. |
     | <kbd>Ctrl</kbd>+<kbd>l</kbd> | `Redownload/refresh bookmarks` | Reload the local bookmarks from Pinboard. |
     | <kbd>Ctrl</kbd>+<kbd>q</kbd> | `Quit the application` | Shockingly... quit the application! |
     | <kbd>Ctrl</kbd>+<kbd>p</kbd> | | Show the command palette. |
