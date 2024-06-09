@@ -185,6 +185,14 @@ class Main(Screen[None]):
     Main.details-hidden Bookmarks {
         width: 8fr;
     }
+
+    Footer, Footer * {
+        background: $primary;
+    }
+
+    FooterKey .footer-key--key {
+        color: $text;
+    }
     """
 
     BINDINGS = [
@@ -203,7 +211,7 @@ class Main(Screen[None]):
         Binding("f12", "logout"),
         Binding("ctrl+l", "redownload"),
         Binding("escape", "escape"),
-        Binding("ctrl+q", "quit", "Quit"),
+        Binding("ctrl+q", "app.quit", "Quit"),
         Binding("#", "focus('tags-menu')"),
         Binding("/", "search"),
     ]
