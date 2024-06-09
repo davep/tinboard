@@ -203,7 +203,7 @@ class Main(Screen[None]):
         Binding("f12", "logout"),
         Binding("ctrl+l", "redownload"),
         Binding("escape", "escape"),
-        Binding("ctrl+q", "quit", "Quit"),
+        Binding("ctrl+q", "app.quit", "Quit"),
         Binding("#", "focus('tags-menu')"),
         Binding("/", "search"),
     ]
