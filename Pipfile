@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-textual = "<=0.60.1"
+textual = "*"
 xdg-base-dirs = "*"
 pytz = "*"
 humanize = "*"
