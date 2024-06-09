@@ -185,6 +185,14 @@ class Main(Screen[None]):
     Main.details-hidden Bookmarks {
         width: 8fr;
     }
+
+    Footer, Footer * {
+        background: $primary;
+    }
+
+    FooterKey .footer-key--key {
+        color: $text;
+    }
     """
 
     BINDINGS = [
