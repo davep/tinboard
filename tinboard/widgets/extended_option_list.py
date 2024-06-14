@@ -11,8 +11,8 @@ class OptionListEx(OptionList):
     """The Textual `OptionList` with more navigation keys."""
 
     BINDINGS = [
-        Binding("s, j", "cursor_down", show=False),
-        Binding("w, k", "cursor_up", show=False),
+        Binding("j", "cursor_down", show=False),
+        Binding("k", "cursor_up", show=False),
     ]
 
 
