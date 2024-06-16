@@ -1,8 +1,8 @@
 # Tinboard ChangeLog
 
-## WiP
+## v0.15.0
 
-**Released: WiP**
+**Released: 2024-06-16**
 
 - Unpinned Textual, fixed a couple of issues the recent versions have
   introduced, and attempted to undo questionable upstream cosmetic choices.
