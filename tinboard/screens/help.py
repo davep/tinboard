@@ -8,7 +8,6 @@ from webbrowser import open as open_url
 
 ##############################################################################
 # Textual imports.
-from textual import __version__ as textual_version  # pylint:disable=no-name-in-module
 from textual import on
 from textual.app import ComposeResult
 from textual.containers import Center, Vertical, VerticalScroll
@@ -30,15 +29,12 @@ HELP = f"""\
 
 {{context_help}}
 
-## Other
+## About
 
-Tinboard was created by and is maintained by [Dave Pearson](https://www.davep.org/).
+Tinboard was created by and is maintained by [Dave
+Pearson](https://www.davep.org/); it is Free Software and can be [found on
+GitHub](https://github.com/davep/tinboard).
 
-
-Tinboard is Free Software and can be [found on GitHub](https://github.com/davep/tinboard).
-
-
-This version of Tinboard is using [Textual](https://textual.textualize.io/) v{textual_version}.
 
 ## Licence
 
