@@ -1,5 +1,11 @@
 # Tinboard ChangeLog
 
+## v0.15.1
+
+**Released: 2024-06-23**
+
+- Pinned Textual.
+
 ## v0.15.0
 
 **Released: 2024-06-16**
