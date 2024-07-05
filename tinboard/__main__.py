@@ -5,10 +5,6 @@
 from argparse import ArgumentParser, Namespace
 
 ##############################################################################
-# Textual imports.
-from textual import __version__ as __textual_version__
-
-##############################################################################
 # Local imports.
 from . import __version__
 from .app import Tinboard
@@ -52,7 +48,7 @@ def get_args() -> Namespace:
         "--version",
         help="Show version information.",
         action="version",
-        version=f"%(prog)s {__version__} (Textual v{__textual_version__})",
+        version=f"%(prog)s {__version__}",
     )
 
     # Return the arguments.
