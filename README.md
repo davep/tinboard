@@ -76,16 +76,4 @@ If you need help, or have any ideas, please feel free to [raise an
 issue](https://github.com/davep/tinboard/issues) or [start a
 discussion](https://github.com/davep/tinboard/discussions).
 
-## TODO
-
-Things I'm considering adding or addressing:
-
-- [ ] Double-check the rate limits on the API calls to be sure they're correct.
-- [ ] A bookmark export facility.
-- [ ] A bookmark availability checker.
-  - [ ] Check the current bookmark.
-  - [ ] A mode that slowly checks all bookmarks.
-- [ ] Support for Pinboard Notes.
-- [X] Optionally sort the tags by count.
-
 [//]: # (README.md ends here)
