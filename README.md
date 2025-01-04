@@ -1,5 +1,16 @@
 # Tinboard
 
+> [!IMPORTANT]
+>
+> I've [moved away from using
+> Pinboard](https://blog.davep.org/2024/08/18/paindrop.html) and so won't be
+> adding more features to this application. I will attempt to support it
+> where possible, but please don't expect any changes that are anything
+> other than a simple bugfix.
+>
+> You may find my new terminal-based bookmarking client useful:
+> [Braindrop](https://github.com/davep/braindrop/).
+
 ![Tinboard](https://raw.githubusercontent.com/davep/tinboard/main/images/tinboard.png)
 
 ## Introduction
@@ -7,12 +18,6 @@
 Tinboard is a terminal-based client application for the [Pinboard
 bookmarking service](https://pinboard.in/about/). It provides the ability to
 manage and search your bookmarks in the terminal.
-
-**NOTE:** I've [moved away from using
-Pinboard](https://blog.davep.org/2024/08/18/paindrop.html) and so won't be
-adding more features to this application. I will attempt to support it where
-possible, but please don't expect any changes that are anything other than a
-simple bugfix.
 
 ## Installing
 
