@@ -40,6 +40,14 @@ $ brew tap davep/homebrew
 $ brew install tinboard
 ```
 
+### X-CMD
+
+The application can be installed using [x-cmd](https://x-cmd.com):
+
+```sh
+x install tinboard
+```
+
 Once installed run the `tinboard` command.
 
 ## Getting started
