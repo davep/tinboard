@@ -179,7 +179,9 @@ class API:
         #
         # >>> reduce(or_, [{"a":1}, {"b":2}])
         # {'a': 1, 'b': 2}
-        suggestions = reduce(or_, loads(await self._call("posts", "suggest", url=url)))
+        suggestions = reduce(
+            or_, loads(await self._call("posts", "suggest", url=url)), {}
+        )
         return self.TagSuggestions(
             url,
             popular=suggestions.get("popular", []),
